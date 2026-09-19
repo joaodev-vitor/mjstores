@@ -2,12 +2,10 @@
 <html lang="pt-BR">
 
 <head>
-
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <title>Entrar — MJ</title>
-    <meta name="description" content="Entre na sua conta MJ para ver seus pedidos e endereços.">
+    <title>Entrar — MJ Stores</title>
+    <meta name="description" content="Entre na sua conta MJ Stores para ver seus pedidos e endereços.">
     <meta name="theme-color" content="#05070c">
     <meta name="robots" content="noindex, follow">
 
@@ -15,296 +13,152 @@
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-
-    <link
-        href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@400;500;600&display=swap"
-        rel="stylesheet"
-    >
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@400;500;600&display=swap" rel="stylesheet">
 
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="css/cliente.css">
-
 </head>
-
 
 <body class="cliente-page">
 
-
 <a href="#main" class="skip-link">Pular para o conteúdo</a>
 
-
-
-<!-- HEADER -->
 <header class="header" id="header">
-
     <nav class="nav" id="nav" aria-label="Navegação principal">
-
         <button class="nav-close" onclick="fecharMenu()" aria-label="Fechar menu">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
-                <path d="M6 6l12 12M18 6L6 18"/>
-            </svg>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>
         </button>
-
         <a href="index.html">Início</a>
         <a href="streetwear.html">Streetwear</a>
         <a href="acessorios.html">Acessórios</a>
         <a href="old-money.html">Old Money</a>
-
     </nav>
 
-
-    <a href="index.html" class="logo" aria-label="MJ — Página inicial">
-        M<span>J</span>
+    <a href="index.html" class="logo" aria-label="MJ Stores — Página inicial">
+        MJ<span> Stores</span>
     </a>
 
-
     <div class="header-actions">
-
         <button class="search-button" onclick="abrirBusca()" aria-label="Pesquisar">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
-                <circle cx="11" cy="11" r="7"/>
-                <path d="M20.5 20.5l-3.5-3.5"/>
-            </svg>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20.5 20.5l-3.5-3.5"/></svg>
         </button>
-
         <a href="carrinho.html" class="cart-button" aria-label="Abrir carrinho">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
-                <path d="M5 7h14l-1.2 12.5a1 1 0 0 1-1 .9H7.2a1 1 0 0 1-1-.9L5 7z"/>
-                <path d="M9 7V5.5A3 3 0 0 1 15 5.5V7"/>
-            </svg>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M5 7h14l-1.2 12.5a1 1 0 0 1-1 .9H7.2a1 1 0 0 1-1-.9L5 7z"/><path d="M9 7V5.5A3 3 0 0 1 15 5.5V7"/></svg>
             <span id="cart-count">0</span>
         </a>
-
         <button class="menu-button" onclick="abrirMenu()" aria-label="Abrir menu">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
-                <path d="M4 7h16M4 12h16M4 17h16"/>
-            </svg>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
         </button>
-
     </div>
-
 </header>
 
-
-
-<!-- BUSCA -->
 <div class="search-overlay" id="searchOverlay" role="dialog" aria-modal="true" aria-label="Busca">
-
     <div class="search-box">
-
         <button class="close-search" onclick="fecharBusca()" aria-label="Fechar">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
-                <path d="M6 6l12 12M18 6L6 18"/>
-            </svg>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>
         </button>
-
         <p>O que você está procurando?</p>
-
         <input type="text" id="searchInput" placeholder="Moletom, relógio, mocassim..." autocomplete="off">
-
         <button onclick="pesquisarProduto()">Buscar</button>
-
     </div>
-
 </div>
 
-
-
-<!-- MAIN -->
 <main id="main" class="cliente-main">
-
 
     <div class="auth-wrap">
 
-
-        <!-- LADO ESQUERDO — FORM -->
         <div class="auth-form-wrap">
+            <span class="auth-kicker"><span>—</span>SUA CONTA</span>
+            <h1 class="auth-title">Bem-vindo<em>de volta.</em></h1>
+            <p class="auth-sub">Entre para ver seus pedidos, endereços e continuar de onde parou.</p>
 
-            <span class="auth-kicker">
-                <span>—</span>
-                SUA CONTA
-            </span>
-
-            <h1 class="auth-title">
-                Bem-vindo
-                <em>de volta.</em>
-            </h1>
-
-            <p class="auth-sub">
-                Entre para ver seus pedidos, endereços
-                e continuar de onde parou.
-            </p>
-
-
-            <!-- TABS -->
             <div class="auth-tabs">
-
-                <button class="auth-tab active" onclick="trocarAba('login', this)">
-                    Entrar
-                </button>
-
-                <button class="auth-tab" onclick="trocarAba('cadastro', this)">
-                    Criar conta
-                </button>
-
+                <button class="auth-tab active" onclick="trocarAba('login', this)">Entrar</button>
+                <button class="auth-tab" onclick="trocarAba('cadastro', this)">Criar conta</button>
             </div>
 
-
-            <!-- FORM LOGIN -->
             <form class="auth-form" id="formLogin" autocomplete="on">
-
                 <div class="auth-field">
                     <label for="loginEmail">E-mail</label>
                     <input type="email" id="loginEmail" required autocomplete="email" placeholder="seu@email.com">
                 </div>
-
                 <div class="auth-field">
                     <label for="loginSenha">Senha</label>
                     <input type="password" id="loginSenha" required autocomplete="current-password" placeholder="••••••••">
                 </div>
-
                 <p class="auth-erro" id="loginErro"></p>
-
                 <button type="submit" class="btn-primary btn-block">
                     <span>Entrar</span>
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
                 </button>
-
-                <a href="#" class="auth-forgot" onclick="event.preventDefault(); recuperarSenha()">
-                    Esqueci minha senha
-                </a>
-
+                <a href="#" class="auth-forgot" onclick="event.preventDefault(); recuperarSenha()">Esqueci minha senha</a>
             </form>
 
-
-            <!-- FORM CADASTRO -->
             <form class="auth-form" id="formCadastro" autocomplete="on" style="display:none;">
-
                 <div class="auth-field">
                     <label for="cadNome">Nome completo</label>
                     <input type="text" id="cadNome" required autocomplete="name" placeholder="João Silva">
                 </div>
-
                 <div class="auth-field">
                     <label for="cadEmail">E-mail</label>
                     <input type="email" id="cadEmail" required autocomplete="email" placeholder="seu@email.com">
                 </div>
-
                 <div class="auth-field">
                     <label for="cadTelefone">Telefone (opcional)</label>
                     <input type="tel" id="cadTelefone" autocomplete="tel" placeholder="(11) 99999-9999" oninput="mascaraTelefone(this)">
                 </div>
-
                 <div class="auth-field">
                     <label for="cadSenha">Senha</label>
                     <input type="password" id="cadSenha" required autocomplete="new-password" placeholder="Mínimo 6 caracteres">
                 </div>
-
                 <div class="auth-field">
                     <label for="cadSenha2">Confirmar senha</label>
                     <input type="password" id="cadSenha2" required autocomplete="new-password" placeholder="Repita a senha">
                 </div>
-
                 <p class="auth-erro" id="cadErro"></p>
-
                 <button type="submit" class="btn-primary btn-block">
                     <span>Criar minha conta</span>
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
                 </button>
-
-                <p class="auth-terms">
-                    Ao criar conta você aceita nossos
-                    <a href="#">termos de uso</a> e
-                    <a href="#">política de privacidade</a>.
-                </p>
-
+                <p class="auth-terms">Ao criar conta você aceita nossos <a href="#">termos de uso</a> e <a href="#">política de privacidade</a>.</p>
             </form>
-
-
         </div>
 
-
-
-        <!-- LADO DIREITO — VISUAL -->
         <div class="auth-visual">
-
             <div class="auth-visual-content">
-
                 <div class="auth-visual-mark">MJ</div>
-
                 <div class="auth-visual-text">
-
-                    <h2>
-                        Vista o que
-                        <em>você pensa.</em>
-                    </h2>
-
+                    <h2>Vista o que<em>você pensa.</em></h2>
                     <ul class="auth-benefits">
-                        <li>
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20 6L9 17l-5-5"/></svg>
-                            Histórico completo de pedidos
-                        </li>
-                        <li>
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20 6L9 17l-5-5"/></svg>
-                            Endereços salvos para checkout rápido
-                        </li>
-                        <li>
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20 6L9 17l-5-5"/></svg>
-                            Acesso antecipado a lançamentos
-                        </li>
-                        <li>
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20 6L9 17l-5-5"/></svg>
-                            Descontos exclusivos para clientes
-                        </li>
+                        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20 6L9 17l-5-5"/></svg>Histórico completo de pedidos</li>
+                        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20 6L9 17l-5-5"/></svg>Endereços salvos para checkout rápido</li>
+                        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20 6L9 17l-5-5"/></svg>Acesso antecipado a lançamentos</li>
+                        <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20 6L9 17l-5-5"/></svg>Descontos exclusivos para clientes</li>
                     </ul>
-
                 </div>
-
             </div>
-
         </div>
-
 
     </div>
-
 
 </main>
 
-
-
-<!-- FOOTER -->
 <footer class="footer">
-
-    <div class="footer-logo">
-        M<span>J</span>
-    </div>
-
+    <div class="footer-logo">MJ<span> Stores</span></div>
     <nav class="footer-links" aria-label="Rodapé">
         <a href="streetwear.html">Streetwear</a>
         <a href="acessorios.html">Acessórios</a>
         <a href="old-money.html">Old Money</a>
-
-        <a href="admin.html" class="admin-link">
-            Área administrativa
-        </a>
+        <a href="admin.html" class="admin-link">Área administrativa</a>
     </nav>
-
-    <p>
-        © 2026 MJ — Todos os direitos reservados.
-    </p>
-
+    <p>© 2026 MJ Stores — Todos os direitos reservados.</p>
 </footer>
 
-
-
 <div class="toast-stack" id="toastStack"></div>
-
-
 
 <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-auth-compat.js"></script>
-
 <script src="js/firebase-config.js"></script>
 <script src="js/firebase-service.js"></script>
 <script src="js/products.js"></script>
@@ -313,5 +167,4 @@
 <script src="js/cliente.js"></script>
 
 </body>
-
 </html>
