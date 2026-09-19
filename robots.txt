@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://artefatoos.netlify.app/sitemap.xml
+Sitemap: https://mjstoress.netlify.app/sitemap.xml

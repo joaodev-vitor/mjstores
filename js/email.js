@@ -1,6 +1,6 @@
 /* =========================================================
    EMAIL.JS — Notificações por e-mail (EmailJS)
-   v7 — adiciona e-mail pro admin em novo reembolso
+   v8 — URLs atualizadas para mjstoress.netlify.app
    ========================================================= */
 
 'use strict';
@@ -12,7 +12,7 @@ const EMAILJS_CONFIG = {
     publicKey:        'KNDpGOBBNU1ZZtQhC',
     serviceId:        'service_t6woudm',
     templateId:       'template_03qg6x2',
-    templateIdAdmin:  'template_03qg6x2',   /* ← troca se criar um template só pro admin */
+    templateIdAdmin:  'template_03qg6x2',
     adminEmail:       'mjstores.contato@gmail.com'
 };
 
@@ -53,7 +53,7 @@ const STATUS_EMAIL = {
         titulo:      'Aguardando confirmação de pagamento',
         mensagem:    'Recebemos seu pedido! Estamos aguardando a confirmação do pagamento pra começar a preparar tudo com cuidado.',
         botao_texto: 'Acompanhar pedido',
-        botao_url:   'https://artefatoos.netlify.app/minha-conta.html'
+        botao_url:   'https://mjstoress.netlify.app/minha-conta.html'
     },
 
     'pago': {
@@ -61,7 +61,7 @@ const STATUS_EMAIL = {
         titulo:      'Pagamento confirmado — pedido em preparação',
         mensagem:    'Confirmamos o recebimento do seu pagamento! Seu pedido já entrou na fila de separação e nossa equipe está embalando cada peça com cuidado. Em breve você recebe um novo e-mail avisando quando ele sair para entrega.',
         botao_texto: 'Acompanhar pedido',
-        botao_url:   'https://artefatoos.netlify.app/minha-conta.html'
+        botao_url:   'https://mjstoress.netlify.app/minha-conta.html'
     },
 
     'processando': {
@@ -69,7 +69,7 @@ const STATUS_EMAIL = {
         titulo:      'Seu pedido está sendo processado',
         mensagem:    'Estamos processando seu pedido. Em breve ele será preparado para envio.',
         botao_texto: 'Acompanhar pedido',
-        botao_url:   'https://artefatoos.netlify.app/minha-conta.html'
+        botao_url:   'https://mjstoress.netlify.app/minha-conta.html'
     },
 
     'preparando': {
@@ -77,7 +77,7 @@ const STATUS_EMAIL = {
         titulo:      'Estamos separando o seu pedido',
         mensagem:    'Boas notícias! Seu pedido já entrou na fila de separação e está sendo embalado com cuidado. Em breve ele sai para entrega.',
         botao_texto: 'Acompanhar pedido',
-        botao_url:   'https://artefatoos.netlify.app/minha-conta.html'
+        botao_url:   'https://mjstoress.netlify.app/minha-conta.html'
     },
 
     'enviado': {
@@ -85,7 +85,7 @@ const STATUS_EMAIL = {
         titulo:      'Seu pedido saiu para entrega',
         mensagem:    'Seu pedido já está em rota! A transportadora foi acionada e o prazo começa a contar a partir de agora. Fique de olho no seu e-mail e telefone para eventuais avisos de entrega.',
         botao_texto: 'Acompanhar pedido',
-        botao_url:   'https://artefatoos.netlify.app/minha-conta.html'
+        botao_url:   'https://mjstoress.netlify.app/minha-conta.html'
     },
 
     'entregue': {
@@ -93,7 +93,7 @@ const STATUS_EMAIL = {
         titulo:      'Pedido entregue',
         mensagem:    'Seu pedido chegou! Esperamos que você ame as peças. Se tiver qualquer problema, é só falar com a gente — e se quiser, deixe sua avaliação no site.',
         botao_texto: 'Avaliar produtos',
-        botao_url:   'https://artefatoos.netlify.app/minha-conta.html'
+        botao_url:   'https://mjstoress.netlify.app/minha-conta.html'
     },
 
     'cancelado': {
@@ -101,7 +101,7 @@ const STATUS_EMAIL = {
         titulo:      'Pedido cancelado — acompanhe seu reembolso',
         mensagem:    'Confirmamos o cancelamento do seu pedido. A solicitação de reembolso foi aberta automaticamente e nossa equipe vai analisar em até 3 dias úteis. Você pode acompanhar o status do reembolso a qualquer momento na sua conta, na aba "Meus pedidos".',
         botao_texto: 'Acompanhar reembolso',
-        botao_url:   'https://artefatoos.netlify.app/minha-conta.html'
+        botao_url:   'https://mjstoress.netlify.app/minha-conta.html'
     }
 };
 
@@ -182,7 +182,7 @@ async function enviarEmailMudancaStatus(pedido, novoStatus, observacaoAdmin) {
         mensagem:      mensagemFinal,
         itens_html:    gerarItensHTML(pedido.itens),
         botao_texto:   info.botao_texto || 'Acompanhar pedido',
-        botao_url:     info.botao_url   || 'https://artefatoos.netlify.app/minha-conta.html'
+        botao_url:     info.botao_url   || 'https://mjstoress.netlify.app/minha-conta.html'
     };
 
     try {
@@ -224,28 +224,28 @@ async function enviarEmailReembolso(refund, novoStatus, observacaoAdmin) {
             titulo:      'Solicitação de reembolso recebida',
             mensagem:    'Recebemos sua solicitação de reembolso. Nossa equipe vai analisar e responder em até 3 dias úteis.',
             botao_texto: 'Acompanhar reembolso',
-            botao_url:   'https://artefatoos.netlify.app/minha-conta.html'
+            botao_url:   'https://mjstoress.netlify.app/minha-conta.html'
         },
         'aprovado': {
             emoji:       '✅',
             titulo:      'Reembolso aprovado',
             mensagem:    'Sua solicitação foi aprovada! O valor será devolvido em até 5 dias úteis. Fique de olho no e-mail e na conta bancária.',
             botao_texto: 'Acompanhar reembolso',
-            botao_url:   'https://artefatoos.netlify.app/minha-conta.html'
+            botao_url:   'https://mjstoress.netlify.app/minha-conta.html'
         },
         'pago': {
             emoji:       '💰',
             titulo:      'Reembolso pago',
             mensagem:    'O valor do reembolso já foi devolvido. Obrigado pela confiança — esperamos te ver de novo em breve.',
             botao_texto: 'Voltar à loja',
-            botao_url:   'https://artefatoos.netlify.app/index.html'
+            botao_url:   'https://mjstoress.netlify.app/index.html'
         },
         'negado': {
             emoji:       '⚠️',
             titulo:      'Reembolso negado',
             mensagem:    'Analisamos sua solicitação e infelizmente não foi possível aprovar. Entre em contato conosco pra entender melhor.',
             botao_texto: 'Falar com o ateliê',
-            botao_url:   'https://artefatoos.netlify.app/minha-conta.html'
+            botao_url:   'https://mjstoress.netlify.app/minha-conta.html'
         }
     };
 
@@ -268,7 +268,7 @@ async function enviarEmailReembolso(refund, novoStatus, observacaoAdmin) {
         mensagem:      mensagemFinal,
         itens_html:    gerarItensHTML(refund.itens),
         botao_texto:   info.botao_texto || 'Acompanhar pedido',
-        botao_url:     info.botao_url   || 'https://artefatoos.netlify.app/minha-conta.html'
+        botao_url:     info.botao_url   || 'https://mjstoress.netlify.app/minha-conta.html'
     };
 
     try {
@@ -291,7 +291,7 @@ async function enviarEmailReembolso(refund, novoStatus, observacaoAdmin) {
 
 
 /* =========================================================
-   🆕 ENVIAR E-MAIL PRO ADMIN — NOVO REEMBOLSO SOLICITADO
+   ENVIAR E-MAIL PRO ADMIN — NOVO REEMBOLSO SOLICITADO
    ========================================================= */
 async function enviarEmailAdminReembolso(refund) {
 
@@ -334,7 +334,7 @@ async function enviarEmailAdminReembolso(refund) {
         mensagem:      mensagemAdmin,
         itens_html:    gerarItensHTML(refund.itens),
         botao_texto:   'Abrir painel administrativo',
-        botao_url:     'https://artefatoos.netlify.app/admin.html?section=reembolsos'
+        botao_url:     'https://mjstoress.netlify.app/admin.html?section=reembolsos'
     };
 
     try {

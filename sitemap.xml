@@ -2,31 +2,31 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 
     <url>
-        <loc>https://artefatoos.netlify.app/</loc>
+        <loc>https://mjstoress.netlify.app/</loc>
         <changefreq>daily</changefreq>
         <priority>1.0</priority>
     </url>
 
     <url>
-        <loc>https://artefatoos.netlify.app/streetwear.html</loc>
+        <loc>https://mjstoress.netlify.app/streetwear.html</loc>
         <changefreq>weekly</changefreq>
         <priority>0.9</priority>
     </url>
 
     <url>
-        <loc>https://artefatoos.netlify.app/acessorios.html</loc>
+        <loc>https://mjstoress.netlify.app/acessorios.html</loc>
         <changefreq>weekly</changefreq>
         <priority>0.9</priority>
     </url>
 
     <url>
-        <loc>https://artefatoos.netlify.app/old-money.html</loc>
+        <loc>https://mjstoress.netlify.app/old-money.html</loc>
         <changefreq>weekly</changefreq>
         <priority>0.9</priority>
     </url>
 
     <url>
-        <loc>https://artefatoos.netlify.app/busca.html</loc>
+        <loc>https://mjstoress.netlify.app/busca.html</loc>
         <changefreq>monthly</changefreq>
         <priority>0.5</priority>
     </url>

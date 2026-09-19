@@ -1,6 +1,6 @@
 /* =========================================================
    ADMIN-AUTH.JS — Login via Firebase Auth
-   v5 — é o ÚNICO que dispara iniciarPainel() após login
+   v4 — recria listeners DEPOIS do login (fix reembolsos)
    ========================================================= */
 
 'use strict';
@@ -24,6 +24,8 @@ document.addEventListener('DOMContentLoaded', function () {
     auth.setPersistence(firebase.auth.Auth.Persistence.SESSION)
         .then(function () {
 
+            console.log('[admin] ✅ Persistência SESSION configurada');
+
             auth.onAuthStateChanged(function (user) {
 
                 console.log('[admin] onAuthStateChanged →', user ? user.email : 'null');
@@ -36,15 +38,26 @@ document.addEventListener('DOMContentLoaded', function () {
 
                 if (user.email !== ADMIN_EMAIL) {
                     console.warn('[admin] ❌ Email não autorizado:', user.email);
+
                     auth.signOut().then(function () {
                         mostrarLogin(overlay, input);
                     });
+
                     return;
                 }
 
                 console.log('[admin] ✅ Admin autenticado:', user.email);
+                console.log('[admin] UID:', user.uid);
+
                 esconderLogin(overlay);
-                iniciarPainelQuandoPronto();
+
+                /* Espera firebase-ready pra carregar tudo */
+                aguardarFirebaseEIniciar();
+
+                /* 🔥 E DEPOIS recria os listeners autenticado */
+                setTimeout(function () {
+                    reiniciarListenersAutenticado();
+                }, 1500);
             });
 
         })
@@ -62,23 +75,87 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
 /* ---------------------------------------------------------
-   Aguarda firebase-ready E chama iniciarPainel() (só uma vez)
+   AGUARDA FIREBASE-READY E CARREGA DADOS INICIAIS
    --------------------------------------------------------- */
-function iniciarPainelQuandoPronto() {
+function aguardarFirebaseEIniciar() {
 
-    var iniciar = function () {
-        if (typeof iniciarPainel === 'function') {
-            console.log('[admin] Chamando iniciarPainel()');
-            iniciarPainel();
-        } else {
-            console.warn('[admin] iniciarPainel não definido ainda');
+    var iniciarDados = function () {
+
+        console.log('[admin] firebase pronto — carregando dados iniciais');
+
+        if (typeof carregarPedidosRemotos === 'function') {
+            carregarPedidosRemotos()
+                .then(function () {
+                    console.log('[admin] ✅ Pedidos carregados:', (window.__pedidos || []).length);
+                    if (typeof renderizarDashboard === 'function') renderizarDashboard();
+                    if (typeof renderizarPedidos === 'function') renderizarPedidos();
+                    if (typeof renderizarClientes === 'function') renderizarClientes();
+                    if (typeof renderizarRelatorios === 'function') renderizarRelatorios();
+                })
+                .catch(function (e) {
+                    console.error('[admin] ❌ Erro carregar pedidos:', e);
+                });
+        }
+
+        /* 🔥 Carrega reembolsos uma vez também */
+        if (typeof carregarReembolsosUmaVez === 'function') {
+            carregarReembolsosUmaVez();
         }
     };
 
     if (window.__firebasePronto) {
-        iniciar();
+        iniciarDados();
     } else {
-        window.addEventListener('firebase-ready', iniciar, { once: true });
+        window.addEventListener('firebase-ready', iniciarDados, { once: true });
+    }
+}
+
+
+/* ---------------------------------------------------------
+   🔥 RECRIA LISTENERS JÁ AUTENTICADO
+   Essa é a chave do problema — os listeners criados antes
+   do login falhavam por permission-denied e nunca mais
+   eram recriados. Aqui a gente recria depois do login OK.
+   --------------------------------------------------------- */
+function reiniciarListenersAutenticado() {
+
+    console.log('[admin] 🔥 Recriando listeners autenticado...');
+
+    /* Só roda se o admin estiver logado */
+    if (!auth.currentUser || auth.currentUser.email !== ADMIN_EMAIL) {
+        console.log('[admin] Não está logado ainda — abortando recriação');
+        return;
+    }
+
+    /* Recria listener de pedidos */
+    if (typeof escutarPedidosRealtime === 'function') {
+        try {
+            escutarPedidosRealtime();
+            console.log('[admin] ✅ Listener de pedidos recriado');
+        } catch (e) {
+            console.warn('[admin] Erro listener pedidos:', e);
+        }
+    }
+
+    /* Recria listener de reembolsos */
+    if (typeof escutarReembolsosRealtime === 'function') {
+        try {
+            escutarReembolsosRealtime();
+            console.log('[admin] ✅ Listener de reembolsos recriado');
+        } catch (e) {
+            console.warn('[admin] Erro listener reembolsos:', e);
+        }
+    }
+
+    /* Recarrega reembolsos uma vez também */
+    if (typeof carregarReembolsosUmaVez === 'function') {
+        carregarReembolsosUmaVez()
+            .then(function () {
+                console.log('[admin] ✅ Reembolsos recarregados após login');
+            })
+            .catch(function (e) {
+                console.warn('[admin] Erro recarregar reembolsos:', e);
+            });
     }
 }
 
@@ -119,14 +196,20 @@ function tentarLogin() {
 
     if (erro) erro.textContent = 'Verificando...';
 
+    console.log('[admin] Tentando login com:', ADMIN_EMAIL);
+
     auth.signInWithEmailAndPassword(ADMIN_EMAIL, senha)
         .then(function (cred) {
             console.log('[admin] ✅ Login OK:', cred.user.email);
             if (erro) erro.textContent = '';
-            /* O onAuthStateChanged vai cuidar de chamar iniciarPainel */
+
+            /* 🔥 Recria listeners após login */
+            setTimeout(function () {
+                reiniciarListenersAutenticado();
+            }, 800);
         })
         .catch(function (e) {
-            console.error('[admin] ❌ Erro login:', e.code);
+            console.error('[admin] ❌ Erro login:', e.code, e.message);
 
             if (erro) {
                 if (e.code === 'auth/wrong-password' || e.code === 'auth/invalid-credential') {
@@ -155,7 +238,6 @@ function tentarLogin() {
    --------------------------------------------------------- */
 function fazerLogout() {
     if (!confirm('Deseja sair da área administrativa?')) return;
-    window.__adminIniciado = false;
     auth.signOut().then(function () { window.location.href = 'index.html'; });
 }
 
@@ -180,6 +262,7 @@ function alternarSenha() {
 /* ---------------------------------------------------------
    EXPÕE
    --------------------------------------------------------- */
-window.tentarLogin   = tentarLogin;
-window.fazerLogout   = fazerLogout;
-window.alternarSenha = alternarSenha;
+window.tentarLogin                = tentarLogin;
+window.fazerLogout                = fazerLogout;
+window.alternarSenha              = alternarSenha;
+window.reiniciarListenersAutenticado = reiniciarListenersAutenticado;
