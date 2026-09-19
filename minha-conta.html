@@ -1,0 +1,794 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Minha Conta — ARTEFATOS</title>
+    <meta name="description" content="Sua conta ARTEFATOS. Pedidos, favoritos, carrinho, endereços e dados.">
+    <meta name="theme-color" content="#05070c">
+    <meta name="robots" content="noindex, nofollow">
+
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' fill='%231a4dff'/><text y='.9em' x='50%25' text-anchor='middle' font-size='70' font-family='Georgia,serif' font-style='italic' font-weight='700' fill='white'>A</text></svg>">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@400;500;600&display=swap"
+        rel="stylesheet"
+    >
+
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/cliente.css">
+
+</head>
+
+
+<body class="cliente-page">
+
+
+<a href="#main" class="skip-link">Pular para o conteúdo</a>
+
+
+
+<!-- HEADER -->
+<header class="header" id="header">
+
+    <nav class="nav" id="nav" aria-label="Navegação principal">
+
+        <button class="nav-close" onclick="fecharMenu()" aria-label="Fechar menu">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+                <path d="M6 6l12 12M18 6L6 18"/>
+            </svg>
+        </button>
+
+        <a href="index.html">Início</a>
+        <a href="streetwear.html">Streetwear</a>
+        <a href="acessorios.html">Acessórios</a>
+        <a href="old-money.html">Old Money</a>
+
+    </nav>
+
+
+    <a href="index.html" class="logo" aria-label="ARTEFATOS — Página inicial">
+        ARTE<span>FATOS</span>
+    </a>
+
+
+    <div class="header-actions">
+
+        <button class="search-button" onclick="abrirBusca()" aria-label="Pesquisar">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+                <circle cx="11" cy="11" r="7"/>
+                <path d="M20.5 20.5l-3.5-3.5"/>
+            </svg>
+        </button>
+
+        <a href="carrinho.html" class="cart-button" aria-label="Abrir carrinho">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+                <path d="M5 7h14l-1.2 12.5a1 1 0 0 1-1 .9H7.2a1 1 0 0 1-1-.9L5 7z"/>
+                <path d="M9 7V5.5A3 3 0 0 1 15 5.5V7"/>
+            </svg>
+            <span id="cart-count">0</span>
+        </a>
+
+        <button class="menu-button" onclick="abrirMenu()" aria-label="Abrir menu">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+                <path d="M4 7h16M4 12h16M4 17h16"/>
+            </svg>
+        </button>
+
+    </div>
+
+</header>
+
+
+
+<!-- BUSCA -->
+<div class="search-overlay" id="searchOverlay" role="dialog" aria-modal="true" aria-label="Busca">
+
+    <div class="search-box">
+
+        <button class="close-search" onclick="fecharBusca()" aria-label="Fechar">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+                <path d="M6 6l12 12M18 6L6 18"/>
+            </svg>
+        </button>
+
+        <p>O que você está procurando?</p>
+
+        <input type="text" id="searchInput" placeholder="Moletom, relógio, mocassim..." autocomplete="off">
+
+        <button onclick="pesquisarProduto()">Buscar</button>
+
+    </div>
+
+</div>
+
+
+
+<!-- MAIN -->
+<main id="main" class="cliente-main">
+
+
+    <!-- CARREGANDO -->
+    <div class="conta-loading" id="contaLoading">
+        <div class="conta-loading-spinner"></div>
+        <p>Carregando sua conta...</p>
+    </div>
+
+
+
+    <!-- NÃO LOGADO -->
+    <div class="conta-nao-logado" id="contaNaoLogado" style="display:none;">
+
+        <div class="empty-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                <circle cx="12" cy="8" r="4"/>
+                <path d="M4 21c0-4.4 3.6-8 8-8s8 3.6 8 8"/>
+            </svg>
+        </div>
+
+        <h2>Você precisa entrar</h2>
+        <p>Faça login para ver seus pedidos, favoritos e dados.</p>
+
+        <a href="login.html" class="btn-primary">
+            Entrar na minha conta
+        </a>
+
+    </div>
+
+
+
+    <!-- CONTEÚDO LOGADO -->
+    <div class="conta-wrap" id="contaWrap" style="display:none;">
+
+
+        <!-- CABEÇALHO -->
+        <header class="conta-head">
+
+            <div class="conta-head-user">
+
+                <div class="conta-avatar" id="contaAvatarHero">A</div>
+
+                <div class="conta-head-info">
+                    <span class="conta-head-label">Minha conta</span>
+                    <h1>Olá, <em id="contaNome">cliente.</em></h1>
+                    <p id="contaEmail">—</p>
+                </div>
+
+            </div>
+
+            <button class="conta-logout" onclick="fazerLogoutCliente()">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                    <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4M16 17l5-5-5-5M21 12H9"/>
+                </svg>
+                Sair
+            </button>
+
+        </header>
+
+
+
+        <!-- GRID: SIDEBAR + CONTEÚDO -->
+        <div class="conta-grid">
+
+
+            <!-- SIDEBAR -->
+            <aside class="conta-sidebar">
+
+                <nav class="conta-nav" aria-label="Seções da conta">
+
+                    <button class="conta-nav-item active" onclick="trocarSecaoConta('pedidos', this)">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                            <path d="M5 3h14v18l-7-4-7 4V3z"/>
+                        </svg>
+                        <span>Meus pedidos</span>
+                        <em id="contaBadgePedidos">0</em>
+                    </button>
+
+                    <button class="conta-nav-item" onclick="trocarSecaoConta('favoritos', this)">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                            <path d="M12 20.5l-7.5-7.2a4.7 4.7 0 0 1 6.6-6.7l.9.9.9-.9a4.7 4.7 0 0 1 6.6 6.7z"/>
+                        </svg>
+                        <span>Favoritos</span>
+                        <em id="contaBadgeFavoritos">0</em>
+                    </button>
+
+                    <button class="conta-nav-item" onclick="trocarSecaoConta('carrinho', this)">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                            <path d="M5 7h14l-1.2 12.5a1 1 0 0 1-1 .9H7.2a1 1 0 0 1-1-.9L5 7z"/>
+                            <path d="M9 7V5.5A3 3 0 0 1 15 5.5V7"/>
+                        </svg>
+                        <span>Minha sacola</span>
+                        <em id="contaBadgeCarrinho">0</em>
+                    </button>
+
+                    <button class="conta-nav-item" onclick="trocarSecaoConta('dados', this)">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                            <circle cx="12" cy="8" r="4"/>
+                            <path d="M4 21c0-4.4 3.6-8 8-8s8 3.6 8 8"/>
+                        </svg>
+                        <span>Meus dados</span>
+                    </button>
+
+                    <button class="conta-nav-item" onclick="trocarSecaoConta('enderecos', this)">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                            <path d="M12 2l9 7-9 13L3 9z"/>
+                            <circle cx="12" cy="9" r="2"/>
+                        </svg>
+                        <span>Endereços</span>
+                    </button>
+
+                    <button class="conta-nav-item" onclick="trocarSecaoConta('notificacoes', this)">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                            <path d="M18 8a6 6 0 1 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/>
+                            <path d="M13.7 21a2 2 0 0 1-3.4 0"/>
+                        </svg>
+                        <span>Notificações</span>
+                    </button>
+
+                </nav>
+
+            </aside>
+
+
+
+            <!-- CONTEÚDO -->
+            <div class="conta-content">
+
+
+                <!-- ═══════════ PEDIDOS ═══════════ -->
+                <section class="conta-section active" data-section="pedidos">
+
+                    <header class="conta-section-head">
+                        <h2>Meus pedidos</h2>
+                        <p>Acompanhe cada etapa em tempo real.</p>
+                    </header>
+
+                    <!-- Filtros -->
+                    <div class="pedidos-filtros">
+                        <button class="pedido-filtro active" onclick="filtrarPedidos('todos', this)">
+                            Todos <em id="countTodos">0</em>
+                        </button>
+                        <button class="pedido-filtro" onclick="filtrarPedidos('andamento', this)">
+                            Em andamento <em id="countAndamento">0</em>
+                        </button>
+                        <button class="pedido-filtro" onclick="filtrarPedidos('entregues', this)">
+                            Entregues <em id="countEntregues">0</em>
+                        </button>
+                        <button class="pedido-filtro" onclick="filtrarPedidos('cancelados', this)">
+                            Cancelados <em id="countCancelados">0</em>
+                        </button>
+                    </div>
+
+                    <div class="pedidos-list" id="pedidosList"></div>
+
+                </section>
+
+
+
+                <!-- ═══════════ FAVORITOS ═══════════ -->
+                <section class="conta-section" data-section="favoritos">
+
+                    <header class="conta-section-head">
+                        <h2>Meus favoritos</h2>
+                        <p>As peças que você salvou com o coração.</p>
+                    </header>
+
+                    <div class="favoritos-list" id="favoritosList"></div>
+
+                </section>
+
+
+
+                <!-- ═══════════ CARRINHO ═══════════ -->
+                <section class="conta-section" data-section="carrinho">
+
+                    <header class="conta-section-head">
+                        <h2>Minha sacola</h2>
+                        <p>Peças que você adicionou e ainda não finalizou.</p>
+                    </header>
+
+                    <div class="carrinho-list" id="carrinhoList"></div>
+
+                </section>
+
+
+
+                <!-- ═══════════ DADOS ═══════════ -->
+                <section class="conta-section" data-section="dados">
+
+                    <header class="conta-section-head">
+                        <h2>Meus dados</h2>
+                        <p>Atualize suas informações pessoais.</p>
+                    </header>
+
+                    <form class="conta-form" id="formDados">
+
+                        <div class="conta-field">
+                            <label for="dadosNome">Nome completo</label>
+                            <input type="text" id="dadosNome" required>
+                        </div>
+
+                        <div class="conta-field">
+                            <label for="dadosTelefone">Telefone</label>
+                            <input type="tel" id="dadosTelefone" oninput="mascaraTelefone(this)">
+                        </div>
+
+                        <div class="conta-field">
+                            <label for="dadosEmail">E-mail</label>
+                            <input type="email" id="dadosEmail" disabled>
+                            <small id="dadosEmailHint">O e-mail não pode ser alterado aqui.</small>
+                        </div>
+
+                        <div class="conta-field" id="emailAlterarWrap">
+                            <button type="button" class="btn-ghost-sm" onclick="abrirAlterarEmail()">
+                                Alterar e-mail
+                            </button>
+                        </div>
+
+                        <div class="conta-field" id="emailNovoWrap" style="display:none;">
+                            <label for="novoEmail">Novo e-mail</label>
+                            <input type="email" id="novoEmail" placeholder="novo@email.com" autocomplete="email">
+                        </div>
+
+                        <div class="conta-field" id="emailSenhaWrap" style="display:none;">
+                            <label for="senhaAtualEmail">Senha atual</label>
+                            <input type="password" id="senhaAtualEmail" placeholder="••••••••" autocomplete="current-password">
+                            <small>Por segurança, confirme sua senha atual.</small>
+                        </div>
+
+                        <div class="conta-form-actions" id="emailAcoesWrap" style="display:none;">
+                            <button type="button" class="btn-secondary" onclick="fecharAlterarEmail()">Cancelar</button>
+                            <button type="button" class="btn-primary" onclick="alterarEmailCliente()">
+                                <span>Salvar novo e-mail</span>
+                            </button>
+                        </div>
+
+                        <button type="submit" class="btn-primary">
+                            <span>Salvar alterações</span>
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+                        </button>
+
+                    </form>
+
+                </section>
+
+
+
+                <!-- ═══════════ ENDEREÇOS ═══════════ -->
+                <section class="conta-section" data-section="enderecos">
+
+                    <header class="conta-section-head">
+                        <h2>Meus endereços</h2>
+                        <p>Endereços salvos para agilizar o checkout.</p>
+                    </header>
+
+                    <div class="enderecos-list" id="enderecosList"></div>
+
+                    <button class="btn-add-endereco" onclick="abrirFormEndereco()">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 5v14M5 12h14"/></svg>
+                        Adicionar novo endereço
+                    </button>
+
+                    <form class="conta-form endereco-form" id="formEndereco" style="display:none;">
+
+                        <input type="hidden" id="enderecoId">
+
+                        <div class="conta-field-row">
+                            <div class="conta-field">
+                                <label for="endCep">CEP</label>
+                                <input type="text" id="endCep" required placeholder="00000-000" oninput="mascaraCep(this)">
+                            </div>
+                            <div class="conta-field conta-field-grow">
+                                <label for="endRua">Endereço</label>
+                                <input type="text" id="endRua" required>
+                            </div>
+                        </div>
+
+                        <div class="conta-field-row">
+                            <div class="conta-field">
+                                <label for="endNumero">Número</label>
+                                <input type="text" id="endNumero" required>
+                            </div>
+                            <div class="conta-field conta-field-grow">
+                                <label for="endComplemento">Complemento</label>
+                                <input type="text" id="endComplemento">
+                            </div>
+                        </div>
+
+                        <div class="conta-field-row">
+                            <div class="conta-field">
+                                <label for="endBairro">Bairro</label>
+                                <input type="text" id="endBairro" required>
+                            </div>
+                            <div class="conta-field conta-field-grow">
+                                <label for="endCidade">Cidade</label>
+                                <input type="text" id="endCidade" required>
+                            </div>
+                            <div class="conta-field" style="max-width:80px;">
+                                <label for="endEstado">UF</label>
+                                <input type="text" id="endEstado" required maxlength="2" style="text-transform:uppercase;">
+                            </div>
+                        </div>
+
+                        <div class="conta-form-actions">
+                            <button type="button" class="btn-secondary" onclick="fecharFormEndereco()">Cancelar</button>
+                            <button type="submit" class="btn-primary">
+                                <span>Salvar endereço</span>
+                            </button>
+                        </div>
+
+                    </form>
+
+                </section>
+
+
+
+                <!-- ═══════════ NOTIFICAÇÕES ═══════════ -->
+                <section class="conta-section" data-section="notificacoes">
+
+                    <header class="conta-section-head">
+                        <h2>Notificações</h2>
+                        <p>Escolha como quer ser avisado sobre seus pedidos.</p>
+                    </header>
+
+                    <div class="notif-config">
+
+                        <div class="notif-opcao">
+                            <div class="notif-icon">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                                    <path d="M18 8a6 6 0 1 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/>
+                                    <path d="M13.7 21a2 2 0 0 1-3.4 0"/>
+                                </svg>
+                            </div>
+                            <div class="notif-text">
+                                <strong>Notificações no celular</strong>
+                                <small>Receba um aviso quando o status do seu pedido mudar.</small>
+                            </div>
+                            <button type="button" class="btn-notificacoes" id="btnNotificacoes" onclick="ativarNotificacoes()">
+                                🔔 Ativar
+                            </button>
+                        </div>
+
+                        <div class="notif-opcao">
+                            <div class="notif-icon">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                                    <rect x="3" y="5" width="18" height="14" rx="2"/>
+                                    <path d="M3 7l9 6 9-6"/>
+                                </svg>
+                            </div>
+                            <div class="notif-text">
+                                <strong>E-mail de atualização</strong>
+                                <small>Enviamos automaticamente para <span id="notifEmailCliente">—</span></small>
+                            </div>
+                            <span class="notif-badge ativo">Ativo</span>
+                        </div>
+
+                    </div>
+
+                </section>
+
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+</main>
+
+
+
+<!-- =========================================================
+     MODAL SOLICITAR REEMBOLSO
+     ========================================================= -->
+<div class="reembolso-modal" id="reembolsoModal">
+
+    <div class="reembolso-backdrop" onclick="fecharModalReembolso()"></div>
+
+    <div class="reembolso-dialog">
+
+        <button class="reembolso-close" onclick="fecharModalReembolso()" aria-label="Fechar">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                <path d="M6 6l12 12M18 6L6 18"/>
+            </svg>
+        </button>
+
+        <header class="reembolso-head">
+            <span class="reembolso-kicker">
+                <span>—</span>
+                SOLICITAR REEMBOLSO
+            </span>
+            <h2>
+                Qual o motivo
+                <em>do reembolso?</em>
+            </h2>
+            <p class="reembolso-pedido">
+                Pedido <strong id="reembolsoNumeroPedido">#0000</strong> · <span id="reembolsoValorPedido">R$ 0,00</span>
+            </p>
+        </header>
+
+        <div class="reembolso-body">
+
+            <label class="reembolso-label">Escolha o motivo</label>
+
+            <div class="reembolso-motivos" id="reembolsoMotivos">
+
+                <label class="reembolso-motivo">
+                    <input type="radio" name="motivoReembolso" value="Produto com defeito">
+                    <span class="reembolso-radio"></span>
+                    <span class="reembolso-motivo-texto">
+                        <strong>Produto com defeito</strong>
+                        <small>Chegou com problema de fabricação</small>
+                    </span>
+                </label>
+
+                <label class="reembolso-motivo">
+                    <input type="radio" name="motivoReembolso" value="Produto diferente do anunciado">
+                    <span class="reembolso-radio"></span>
+                    <span class="reembolso-motivo-texto">
+                        <strong>Produto diferente do anunciado</strong>
+                        <small>Não corresponde à descrição ou foto</small>
+                    </span>
+                </label>
+
+                <label class="reembolso-motivo">
+                    <input type="radio" name="motivoReembolso" value="Produto chegou danificado">
+                    <span class="reembolso-radio"></span>
+                    <span class="reembolso-motivo-texto">
+                        <strong>Produto chegou danificado</strong>
+                        <small>Avaria causada no transporte</small>
+                    </span>
+                </label>
+
+                <label class="reembolso-motivo">
+                    <input type="radio" name="motivoReembolso" value="Não recebi o produto">
+                    <span class="reembolso-radio"></span>
+                    <span class="reembolso-motivo-texto">
+                        <strong>Não recebi o produto</strong>
+                        <small>Prazo de entrega vencido</small>
+                    </span>
+                </label>
+
+                <label class="reembolso-motivo">
+                    <input type="radio" name="motivoReembolso" value="Desisti da compra">
+                    <span class="reembolso-radio"></span>
+                    <span class="reembolso-motivo-texto">
+                        <strong>Desisti da compra</strong>
+                        <small>Mudei de ideia após o pedido</small>
+                    </span>
+                </label>
+
+                <label class="reembolso-motivo">
+                    <input type="radio" name="motivoReembolso" value="Tamanho errado">
+                    <span class="reembolso-radio"></span>
+                    <span class="reembolso-motivo-texto">
+                        <strong>Tamanho errado</strong>
+                        <small>O tamanho não serviu</small>
+                    </span>
+                </label>
+
+                <label class="reembolso-motivo">
+                    <input type="radio" name="motivoReembolso" value="Outro motivo">
+                    <span class="reembolso-radio"></span>
+                    <span class="reembolso-motivo-texto">
+                        <strong>Outro motivo</strong>
+                        <small>Vou explicar abaixo</small>
+                    </span>
+                </label>
+
+            </div>
+
+            <label class="reembolso-label" style="margin-top:20px;">
+                Detalhes (opcional)
+            </label>
+
+            <textarea
+                class="reembolso-textarea"
+                id="reembolsoDetalhes"
+                rows="3"
+                maxlength="500"
+                placeholder="Conte mais sobre o motivo do reembolso..."
+            ></textarea>
+
+            <small class="reembolso-hint" id="reembolsoHint">
+                Escolha um motivo acima pra continuar.
+            </small>
+
+        </div>
+
+        <footer class="reembolso-foot">
+            <button type="button" class="reembolso-btn-cancelar" onclick="fecharModalReembolso()">
+                Cancelar
+            </button>
+            <button type="button" class="reembolso-btn-confirmar" id="reembolsoConfirmarBtn" onclick="confirmarReembolso()" disabled>
+                Enviar solicitação
+            </button>
+        </footer>
+
+    </div>
+
+</div>
+
+
+
+<!-- FOOTER -->
+<footer class="footer">
+
+    <div class="footer-logo">
+        ARTE<span>FATOS</span>
+    </div>
+
+    <nav class="footer-links" aria-label="Rodapé">
+        <a href="streetwear.html">Streetwear</a>
+        <a href="acessorios.html">Acessórios</a>
+        <a href="old-money.html">Old Money</a>
+
+        <a href="admin.html" class="admin-link">
+            Área administrativa
+        </a>
+    </nav>
+
+    <p>
+        © 2026 ARTEFATOS — Todos os direitos reservados.
+    </p>
+
+</footer>
+
+
+
+<div class="toast-stack" id="toastStack"></div>
+
+
+
+<script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-auth-compat.js"></script>
+
+<script src="js/firebase-config.js"></script>
+<script src="js/firebase-service.js"></script>
+<script src="js/products.js"></script>
+<script src="js/cart.js"></script>
+<script src="js/script.js"></script>
+<script src="js/cliente.js"></script>
+
+<script>
+/* =========================================================
+   EXTRA — Carrinho na tela "Minha conta"
+   ========================================================= */
+
+function formatarMoedaConta(valor) {
+    return Number(valor || 0).toLocaleString('pt-BR', {
+        style: 'currency',
+        currency: 'BRL'
+    });
+}
+
+function renderizarCarrinhoConta() {
+
+    var lista = document.getElementById('carrinhoList');
+    if (!lista) return;
+
+    var carrinho = (typeof lerCarrinho === 'function') ? lerCarrinho() : [];
+
+    var badge = document.getElementById('contaBadgeCarrinho');
+    if (badge) badge.textContent = carrinho.reduce(function (s, i) { return s + (i.quantidade || 1); }, 0);
+
+    if (carrinho.length === 0) {
+        lista.innerHTML =
+            '<div class="pedidos-empty">' +
+                '<div class="pedidos-empty-mark">∅</div>' +
+                '<h3>Sacola vazia</h3>' +
+                '<p>Você ainda não adicionou nenhuma peça.</p>' +
+                '<a href="index.html" class="btn-primary">Explorar coleção</a>' +
+            '</div>';
+        return;
+    }
+
+    var total = 0;
+
+    var html = '<div class="carrinho-itens">';
+
+    carrinho.forEach(function (item) {
+
+        var subtotal = (item.preco || 0) * (item.quantidade || 1);
+        total += subtotal;
+
+        html +=
+            '<article class="carrinho-item">' +
+
+                '<div class="carrinho-item-media">' +
+                    '<a href="produto.html?id=' + item.id + '">' +
+                        '<img src="' + (item.imagem || '') + '" alt="' + (item.nome || '') + '" loading="lazy">' +
+                    '</a>' +
+                '</div>' +
+
+                '<div class="carrinho-item-info">' +
+                    '<span class="carrinho-item-cat">' + (item.categoria || '') + '</span>' +
+                    '<h3 class="carrinho-item-nome">' +
+                        '<a href="produto.html?id=' + item.id + '">' + (item.nome || 'Produto') + '</a>' +
+                    '</h3>' +
+                    '<small class="carrinho-item-qtd">' +
+                        formatarMoedaConta(item.preco) + ' × ' + (item.quantidade || 1) +
+                    '</small>' +
+                '</div>' +
+
+                '<div class="carrinho-item-actions">' +
+                    '<strong class="carrinho-item-subtotal">' + formatarMoedaConta(subtotal) + '</strong>' +
+                    '<button type="button" class="carrinho-item-remover" onclick="removerItemConta(\'' + item.id + '\')">' +
+                        'Remover' +
+                    '</button>' +
+                '</div>' +
+
+            '</article>';
+    });
+
+    html += '</div>';
+
+    html +=
+        '<div class="carrinho-rodape">' +
+            '<div class="carrinho-total">' +
+                '<span>Total</span>' +
+                '<strong>' + formatarMoedaConta(total) + '</strong>' +
+            '</div>' +
+            '<a href="carrinho.html" class="btn-primary carrinho-finalizar">' +
+                'Ir para o checkout' +
+            '</a>' +
+        '</div>';
+
+    lista.innerHTML = html;
+}
+
+
+function removerItemConta(id) {
+
+    if (typeof removerDoCarrinho === 'function') {
+        removerDoCarrinho(id);
+    } else {
+        var carrinho = (typeof lerCarrinho === 'function') ? lerCarrinho() : [];
+        carrinho = carrinho.filter(function (i) { return i.id !== id; });
+        localStorage.setItem('artefatos_carrinho', JSON.stringify(carrinho));
+        window.dispatchEvent(new Event('cartUpdated'));
+    }
+
+    renderizarCarrinhoConta();
+}
+
+
+/* ────── Hook: roda o render do carrinho ao entrar na aba ────── */
+(function () {
+
+    if (typeof window.trocarSecaoConta !== 'function') return;
+
+    var original = window.trocarSecaoConta;
+
+    window.trocarSecaoConta = function (nome, botao) {
+
+        original(nome, botao);
+
+        if (nome === 'carrinho') renderizarCarrinhoConta();
+    };
+
+})();
+
+
+/* ────── Render inicial do carrinho assim que a página abre ────── */
+document.addEventListener('DOMContentLoaded', function () {
+    renderizarCarrinhoConta();
+});
+
+window.addEventListener('cartUpdated', renderizarCarrinhoConta);
+window.removerItemConta = removerItemConta;
+window.renderizarCarrinhoConta = renderizarCarrinhoConta;
+
+</script>
+
+</body>
+
+</html>
