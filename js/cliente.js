@@ -103,10 +103,18 @@ document.addEventListener('DOMContentLoaded', function () {
                 return;
             }
 
-            /* Cliente normal → vai pra conta dele */
-            window.location.href = 'minha-conta.html';
-            return;
-        }
+            /* Cliente normal → checa se tem redirect */ 
+            
+        var params = new URLSearchParams(window.location.search);
+        var redirect = params.get('redirect');
+
+        if (redirect === 'finalizar') {
+        window.location.href = 'finalizar.html';
+        } else {
+        window.location.href = 'minha-conta.html';
+       }
+       return;
+       }
 
         var contaWrap = document.getElementById('contaWrap');
         var contaNaoLogado = document.getElementById('contaNaoLogado');

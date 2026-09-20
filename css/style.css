@@ -529,7 +529,7 @@ code, kbd, samp { font-family: var(--ff-mono); font-size: .9em; }
 }
 
 .conta-button {
-    position: relative;   /* ← ADICIONADO: pra bolinha verde funcionar */
+    position: relative;
     display: flex;
     align-items: center;
     gap: 8px;
@@ -567,7 +567,6 @@ code, kbd, samp { font-family: var(--ff-mono); font-size: .9em; }
     white-space: nowrap;
 }
 
-/* ↓↓↓ AQUI ESTÁ O FIX — antes era .conta-wrap.logado ↓↓↓ */
 .conta-button.logado .conta-nome { display: inline; }
 
 .conta-button.logado {
@@ -595,7 +594,6 @@ code, kbd, samp { font-family: var(--ff-mono); font-size: .9em; }
     box-shadow: 0 0 8px #10b981;
 }
 
-/* --------- Dropdown da conta --------- */
 .conta-dropdown {
     position: absolute;
     top: calc(100% + 12px);
@@ -1525,7 +1523,6 @@ code, kbd, samp { font-family: var(--ff-mono); font-size: .9em; }
 .product-wish.active { color: var(--blue-1); border-color: var(--blue-1); }
 .product-wish svg { width: 16px; height: 16px; }
 
-/* -------- Container dos 2 botões de ação -------- */
 .product-actions {
     position: absolute;
     left: 14px;
@@ -3545,7 +3542,6 @@ code, kbd, samp { font-family: var(--ff-mono); font-size: .9em; }
     .product-sizes { display: none; }
     .product-wish { opacity: 1; transform: none; width: 32px; height: 32px; }
 
-    /* Botões de ação no mobile — sempre visíveis, empilhados */
     .product-actions {
         opacity: 1;
         transform: none;
@@ -3567,6 +3563,85 @@ code, kbd, samp { font-family: var(--ff-mono); font-size: .9em; }
     .admin-form { grid-template-columns: 1fr; padding: 24px; }
     .field--full, .admin-form button { grid-column: span 1; }
     .admin-item { grid-template-columns: 60px 1fr; }
+
+    /* Carrinho */
+    .cart-page { padding: 30px 18px 80px; }
+    .cart-page .cart-layout { grid-template-columns: 1fr; }
+    .cart-page .cart-summary { position: static; }
+    .cart-page .cart-item { grid-template-columns: 74px 1fr; gap: 14px; padding: 18px 0; }
+    .cart-page .cart-item-media { width: 74px; height: 92px; }
+    .cart-page .cart-item-actions {
+        grid-column: 1 / -1;
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+    }
+    .cart-page .cart-heading { margin-bottom: 40px; padding-bottom: 24px; }
+    .cart-page .cart-summary { padding: 22px; }
+
+    /* Checkout */
+    .search-main,
+    .checkout-main { padding: 30px 18px 90px; }
+
+    .checkout-layout { grid-template-columns: 1fr; }
+    .checkout-summary { position: static; }
+    .checkout-step { padding: 24px 20px; }
+    .payment-methods { grid-template-columns: 1fr; }
+    .btn-finish-mobile { display: block; }
+    .checkout-form > .btn-primary { display: none; }
+    .summary-content { padding: 22px; }
+
+    /* PIX */
+    .pix-dialog { padding: 24px 20px; }
+    .pix-body { grid-template-columns: 1fr; justify-items: center; }
+    .pix-qr-wrap { width: 180px; height: 180px; }
+    .pix-info { width: 100%; }
+    .pix-foot { grid-template-columns: 1fr; }
+    .pix-confirmar { width: 100%; }
+
+    .success-box { padding: 40px 24px; }
+
+    .loader-brand { font-size: 1.8rem; }
+    .loader-line { width: 160px; }
+
+    .cursor-halo { display: none; }
+}
+
+@media (max-width: 520px) {
+    .hero h1 { font-size: clamp(2.2rem, 8vw, 3.2rem); }
+    .hero-small { font-size: .6rem; letter-spacing: .28em; }
+
+    .section-title h2 { font-size: clamp(1.8rem, 7vw, 2.6rem); }
+    .pull-quote blockquote { font-size: 1.35rem; }
+
+    .final-cta h2 { font-size: clamp(1.8rem, 7vw, 2.8rem); }
+
+    .footer-logo { font-size: 1.5rem; }
+    .footer-links a { font-size: .62rem; letter-spacing: .2em; }
+
+    .toast-stack { left: 16px; right: 16px; transform: none; bottom: 20px; }
+    .toast { width: 100%; }
+
+    .category-hero h1 { font-size: clamp(2rem, 8vw, 3rem); }
+    .category-hero-meta strong { font-size: .95rem; }
+
+    .cart-page .cart-heading h1 { font-size: clamp(1.7rem, 7vw, 2.4rem); }
+    .cart-page .cart-summary-title { font-size: 1.15rem; }
+    .cart-page .cart-summary-row--total strong { font-size: 1.3rem; }
+
+    .search-head h1,
+    .checkout-head h1 { font-size: clamp(1.7rem, 7vw, 2.4rem); }
+
+    .step-num { width: 36px; height: 36px; font-size: .95rem; }
+    .step-head h2 { font-size: 1.15rem; }
+
+    .success-icon { width: 60px; height: 60px; }
+    .success-icon svg { width: 26px; height: 26px; }
+    .success-code strong { font-size: 1.3rem; }
+
+    .pix-qr-wrap { width: 150px; height: 150px; }
+    .pix-valor-row strong { font-size: 1.2rem; }
+    .pix-countdown-row strong { font-size: 1.05rem; }
 }
 
 @media (max-width: 420px) {
@@ -3645,12 +3720,11 @@ code, kbd, samp { font-family: var(--ff-mono); font-size: .9em; }
     transform: none;
 }
 
+
 /* =========================================================
-   32. CHECKOUT — RESUMO (correção de contexto)
-   As classes .cart-summary-kicker e .cart-summary-title
-   estavam presas dentro de .cart-page e não aplicavam
-   em finalizar.html, que usa .checkout-summary / .summary-content.
-   Estas regras genéricas resolvem em qualquer contexto.
+   32. CHECKOUT — RESUMO (fora do contexto .cart-page)
+   Classes usadas em finalizar.html que antes só existiam
+   aninhadas dentro de .cart-page.
    ========================================================= */
 
 .cart-summary-kicker {
@@ -3682,49 +3756,9 @@ code, kbd, samp { font-family: var(--ff-mono); font-size: .9em; }
     color: var(--blue-3);
 }
 
-/* Mantém o override específico do carrinho caso já exista */
-.cart-page .cart-summary-kicker { /* nada muda aqui */ }
-.cart-page .cart-summary-title  { /* nada muda aqui */ }    
 
 /* =========================================================
-   32. CHECKOUT — RESUMO (correção de contexto)
-   As classes .cart-summary-kicker e .cart-summary-title
-   estavam presas dentro de .cart-page e não aplicavam
-   em finalizar.html (que usa .checkout-summary / .summary-content).
-   Estas regras genéricas funcionam em qualquer contexto.
-   ========================================================= */
-
-.cart-summary-kicker {
-    display: block;
-    margin-bottom: 14px;
-    font-family: var(--ff-sans);
-    font-size: 11px;
-    font-weight: 600;
-    letter-spacing: .32em;
-    text-transform: uppercase;
-    color: var(--blue-3);
-}
-
-.cart-summary-title {
-    margin: 0 0 24px;
-    padding-bottom: 22px;
-    font-family: var(--ff-display);
-    font-size: 22px;
-    font-style: italic;
-    font-weight: 400;
-    line-height: 1.15;
-    color: var(--paper-0);
-    border-bottom: 1px solid var(--line-1);
-}
-
-.cart-summary-title em {
-    font-style: normal;
-    font-weight: 700;
-    color: var(--blue-3);
-}
-
-/* =========================================================
-   FOOTER — contatos (e-mail + WhatsApp)
+   33. FOOTER — contatos (e-mail + WhatsApp)
    ========================================================= */
 
 .footer-contato {
@@ -3767,14 +3801,12 @@ code, kbd, samp { font-family: var(--ff-mono); font-size: .9em; }
     flex-shrink: 0;
 }
 
-/* Cor oficial do WhatsApp no hover */
 .footer-contato-link[href*="wa.me"]:hover {
     color: #25D366;
     border-color: rgba(37, 211, 102, .45);
     background: rgba(37, 211, 102, .08);
 }
 
-/* Mobile */
 @media (max-width: 480px) {
     .footer-contato {
         flex-direction: column;
@@ -3787,3 +3819,3534 @@ code, kbd, samp { font-family: var(--ff-mono); font-size: .9em; }
         padding: 9px 16px;
     }
 }
+/* =========================================================
+   TEMA CLARO — v2 (corrigido e completo)
+   Substitui todas as seções anteriores de tema claro
+   ========================================================= */
+
+/* ---------------------------------------------------------
+   VARIÁVEIS
+   --------------------------------------------------------- */
+[data-tema="claro"] {
+    --ink-0: #f5f7ff;
+    --ink-1: #eef1f8;
+    --ink-2: #e5eaf5;
+    --ink-3: #dde3f0;
+    --ink-4: #ccd4e5;
+
+    --paper-0: #050810;
+    --paper-1: #0b1120;
+    --paper-2: #38455c;
+    --paper-3: #5d6b83;
+    --paper-4: #7a8aa8;
+
+    --line-0: rgba(10, 20, 50, .10);
+    --line-1: rgba(10, 20, 50, .18);
+    --line-2: rgba(10, 20, 50, .30);
+    --line-3: rgba(10, 20, 50, .45);
+    --line-4: rgba(10, 20, 50, .65);
+
+    --blue-3: #1a4dff;
+    --blue-4: #0a2fa8;
+}
+
+/* ---------------------------------------------------------
+   BASE / FUNDOS
+   --------------------------------------------------------- */
+[data-tema="claro"] body {
+    background: var(--ink-0);
+    color: var(--paper-1);
+}
+
+[data-tema="claro"] body::before {
+    background:
+        radial-gradient(1200px 800px at 15% -10%, rgba(26, 77, 255, .06), transparent 60%),
+        radial-gradient(900px 700px at 105% 15%, rgba(10, 47, 168, .04), transparent 65%),
+        radial-gradient(1100px 900px at 50% 120%, rgba(26, 77, 255, .04), transparent 70%);
+}
+
+[data-tema="claro"] body::after { opacity: .12; }
+
+/* ---------------------------------------------------------
+   HEADER
+   --------------------------------------------------------- */
+[data-tema="claro"] .header {
+    background: rgba(245, 247, 255, .85);
+    border-bottom-color: rgba(10, 20, 50, .08);
+}
+
+[data-tema="claro"] .header.scrolled {
+    background: rgba(245, 247, 255, .96);
+    box-shadow: 0 1px 0 rgba(10, 20, 50, .06), 0 20px 60px rgba(0, 0, 0, .08);
+}
+
+[data-tema="claro"] .header::after { opacity: .35; }
+
+/* ---------------------------------------------------------
+   NAV / MENU MOBILE
+   --------------------------------------------------------- */
+[data-tema="claro"] .nav-backdrop { background: rgba(245, 247, 255, .72); }
+
+[data-tema="claro"] .nav.open {
+    background: #eef1f8;
+    border-left-color: rgba(10, 20, 50, .2);
+}
+
+[data-tema="claro"] .nav a {
+    color: #050810;
+    border-bottom-color: rgba(10, 20, 50, .08);
+}
+
+[data-tema="claro"] .nav a:hover,
+[data-tema="claro"] .nav a.active { color: #1a4dff; }
+
+/* ---------------------------------------------------------
+   CONTA (botão + dropdown)  ← CORRIGIDO
+   --------------------------------------------------------- */
+[data-tema="claro"] .conta-button {
+    color: #38455c;
+    background: transparent;
+    border-color: transparent;
+}
+
+[data-tema="claro"] .conta-button:hover {
+    color: #050810;
+    background: rgba(26, 77, 255, .08);
+    border-color: rgba(26, 77, 255, .3);
+}
+
+[data-tema="claro"] .conta-button.logado {
+    color: #059669;
+    border-color: rgba(5, 150, 105, .35);
+    background: rgba(16, 185, 129, .1);
+}
+
+[data-tema="claro"] .conta-button.logado:hover {
+    color: #047857;
+    border-color: #059669;
+    background: rgba(16, 185, 129, .18);
+}
+
+[data-tema="claro"] .conta-button.logado::after {
+    border-color: #f5f7ff;
+}
+
+[data-tema="claro"] .conta-dropdown {
+    background: #ffffff;
+    border-color: rgba(10, 20, 50, .18);
+    box-shadow:
+        0 30px 80px rgba(0, 0, 0, .12),
+        0 0 40px rgba(26, 77, 255, .06);
+}
+
+[data-tema="claro"] .conta-dropdown-head {
+    border-bottom-color: rgba(10, 20, 50, .12);
+}
+
+[data-tema="claro"] .conta-dropdown-head strong {
+    color: #050810;
+}
+
+[data-tema="claro"] .conta-dropdown-head small {
+    color: #5d6b83;
+}
+
+[data-tema="claro"] .conta-dropdown ul li a {
+    color: #38455c;
+}
+
+[data-tema="claro"] .conta-dropdown ul li a:hover {
+    color: #050810;
+    background: #eef1f8;
+}
+
+[data-tema="claro"] .conta-dropdown ul li a svg {
+    color: #1a4dff;
+}
+
+[data-tema="claro"] .conta-dropdown-foot {
+    border-top-color: rgba(10, 20, 50, .12);
+}
+
+[data-tema="claro"] .conta-dropdown-foot button {
+    color: #dc2626;
+}
+
+[data-tema="claro"] .conta-dropdown-foot button:hover {
+    background: rgba(239, 68, 68, .08);
+    color: #b91c1c;
+}
+
+/* ---------------------------------------------------------
+   BOTÕES  ← CORREÇÃO CRÍTICA
+   --------------------------------------------------------- */
+[data-tema="claro"] .btn-primary {
+    color: #ffffff;
+}
+
+[data-tema="claro"] .btn-primary:hover {
+    color: #ffffff;
+}
+
+[data-tema="claro"] .btn-secondary {
+    color: #050810;
+    border-color: rgba(10, 20, 50, .35);
+    background: transparent;
+}
+
+[data-tema="claro"] .btn-secondary:hover {
+    background: rgba(26, 77, 255, .1);
+    border-color: #1a4dff;
+    color: #1a4dff;
+}
+
+[data-tema="claro"] .btn-ghost {
+    color: #38455c;
+    border-color: rgba(10, 20, 50, .28);
+}
+
+[data-tema="claro"] .btn-ghost:hover {
+    color: #050810;
+    background: #e5eaf5;
+    border-color: rgba(10, 20, 50, .45);
+}
+
+/* ---------------------------------------------------------
+   OVERLAYS / MODAIS
+   --------------------------------------------------------- */
+[data-tema="claro"] .search-overlay { background: rgba(245, 247, 255, .96); }
+
+[data-tema="claro"] .pix-backdrop {
+    background: rgba(10, 20, 50, .55);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+}
+
+[data-tema="claro"] .checkout-success {
+    background: rgba(10, 20, 50, .55);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+}
+
+[data-tema="claro"] .cursor-halo {
+    background: radial-gradient(circle, rgba(26, 77, 255, .08), transparent 65%);
+}
+
+/* ---------------------------------------------------------
+   HERO
+   --------------------------------------------------------- */
+[data-tema="claro"] .hero {
+    background:
+        radial-gradient(1000px 800px at 78% 10%, rgba(26, 77, 255, .14), transparent 60%),
+        radial-gradient(800px 600px at 8% 92%, rgba(10, 47, 168, .10), transparent 65%),
+        linear-gradient(180deg, var(--ink-0) 0%, var(--ink-1) 60%, var(--ink-0) 100%);
+}
+
+/* ---------------------------------------------------------
+   CATEGORIAS — cards
+   --------------------------------------------------------- */
+[data-tema="claro"] .street-card,
+[data-tema="claro"] .access-card,
+[data-tema="claro"] .old-card {
+    background:
+        linear-gradient(180deg, transparent 42%, rgba(245, 247, 255, .94) 100%),
+        radial-gradient(600px 550px at 22% 28%, rgba(26, 77, 255, .18), transparent 65%),
+        linear-gradient(160deg, #e5eaf5 0%, #f5f7ff 100%);
+}
+
+[data-tema="claro"] .category-card::before {
+    background-image:
+        repeating-linear-gradient(45deg,
+            transparent 0, transparent 10px,
+            rgba(10, 20, 50, .05) 10px, rgba(10, 20, 50, .05) 11px);
+}
+
+/* ---------------------------------------------------------
+   CATEGORY HERO
+   --------------------------------------------------------- */
+[data-tema="claro"] .category-hero--street,
+[data-tema="claro"] .category-hero--access,
+[data-tema="claro"] .category-hero--old {
+    background:
+        radial-gradient(900px 700px at 78% 15%, rgba(26, 77, 255, .12), transparent 62%),
+        radial-gradient(700px 500px at 8% 90%, rgba(10, 47, 168, .08), transparent 65%),
+        linear-gradient(180deg, var(--ink-0) 0%, var(--ink-1) 100%);
+}
+
+/* ---------------------------------------------------------
+   TICKER / NEWSLETTER / CTA
+   --------------------------------------------------------- */
+[data-tema="claro"] .newsletter,
+[data-tema="claro"] .ticker { background: var(--ink-1); }
+
+[data-tema="claro"] .ticker::before { background: linear-gradient(90deg, var(--ink-1), transparent); }
+[data-tema="claro"] .ticker::after  { background: linear-gradient(270deg, var(--ink-1), transparent); }
+
+[data-tema="claro"] .ticker-track > * { color: #38455c; }
+
+[data-tema="claro"] .final-cta {
+    background: radial-gradient(900px 500px at 50% 50%, rgba(26, 77, 255, .10), transparent 65%);
+}
+
+/* ---------------------------------------------------------
+   TEXTO DECORATIVO OUTLINE (stroke)  ← Boost de contraste
+   --------------------------------------------------------- */
+[data-tema="claro"] .search-overlay::before,
+[data-tema="claro"] .final-cta::before,
+[data-tema="claro"] .category-hero-mark {
+    -webkit-text-stroke: 1px rgba(10, 20, 50, .28);
+}
+
+[data-tema="claro"] .hero::after,
+[data-tema="claro"] .hero-decoration span {
+    -webkit-text-stroke: 1px rgba(10, 20, 50, .30);
+}
+
+/* ---------------------------------------------------------
+   PLACEHOLDERS
+   --------------------------------------------------------- */
+[data-tema="claro"] input::placeholder,
+[data-tema="claro"] textarea::placeholder {
+    color: rgba(10, 20, 50, .45);
+}
+
+/* ---------------------------------------------------------
+   AZUIS CLAROS → AZUIS ESCUROS (contraste)
+   --------------------------------------------------------- */
+[data-tema="claro"] .hero-small,
+[data-tema="claro"] .section-kicker,
+[data-tema="claro"] .section-title > p,
+[data-tema="claro"] .category-label,
+[data-tema="claro"] .category-content > span,
+[data-tema="claro"] .quick-card span,
+[data-tema="claro"] .lookbook-item small,
+[data-tema="claro"] .final-cta p,
+[data-tema="claro"] .pull-quote cite,
+[data-tema="claro"] .product-cat,
+[data-tema="claro"] .footer-links a:hover,
+[data-tema="claro"] .breadcrumb a,
+[data-tema="claro"] .breadcrumb [aria-current],
+[data-tema="claro"] .cart-summary-kicker,
+[data-tema="claro"] .summary-item-info small,
+[data-tema="claro"] .shipping-price,
+[data-tema="claro"] .pix-kicker,
+[data-tema="claro"] .pix-countdown-row strong {
+    color: #1a4dff;
+}
+
+/* ---------------------------------------------------------
+   PAPÉIS CLAROS → PAPÉIS ESCUROS
+   --------------------------------------------------------- */
+[data-tema="claro"] .nav a,
+[data-tema="claro"] .nav a.active,
+[data-tema="claro"] .category-content strong,
+[data-tema="claro"] .category-content h3,
+[data-tema="claro"] .pull-quote blockquote,
+[data-tema="claro"] .hero h1,
+[data-tema="claro"] .section-title h2,
+[data-tema="claro"] .lookbook-item h4,
+[data-tema="claro"] .quick-card h3,
+[data-tema="claro"] .newsletter h3,
+[data-tema="claro"] .product-name,
+[data-tema="claro"] .product-price strong,
+[data-tema="claro"] .detail-title,
+[data-tema="claro"] .detail-price,
+[data-tema="claro"] .detail-label-value,
+[data-tema="claro"] .cart-summary-title,
+[data-tema="claro"] .cart-summary-row strong,
+[data-tema="claro"] .summary-row strong,
+[data-tema="claro"] .summary-item-info strong,
+[data-tema="claro"] .checkout-head h1,
+[data-tema="claro"] .checkout-step h2,
+[data-tema="claro"] .footer-logo,
+[data-tema="claro"] .footer > p,
+[data-tema="claro"] .conta-head h1,
+[data-tema="claro"] .conta-section-head h2,
+[data-tema="claro"] .conta-head-info > p,
+[data-tema="claro"] .auth-title,
+[data-tema="claro"] .auth-visual-text h2,
+[data-tema="claro"] .pedido-num,
+[data-tema="claro"] .pedido-foot strong,
+[data-tema="claro"] .carrinho-item-nome,
+[data-tema="claro"] .carrinho-item-subtotal,
+[data-tema="claro"] .carrinho-total strong,
+[data-tema="claro"] .endereco-info strong,
+[data-tema="claro"] .notif-text strong,
+[data-tema="claro"] .review-name,
+[data-tema="claro"] .review-comentario,
+[data-tema="claro"] .reviews-summary-nota,
+[data-tema="claro"] .pix-head h2,
+[data-tema="claro"] .pix-valor-row strong,
+[data-tema="claro"] .reembolso-head h2,
+[data-tema="claro"] .modal-head h3,
+[data-tema="claro"] .step-head h2,
+[data-tema="claro"] .step-num,
+[data-tema="claro"] .field label,
+[data-tema="claro"] .checkout-step label {
+    color: #050810;
+}
+
+/* ---------------------------------------------------------
+   CINZAS CLAROS → CINZAS ESCUROS
+   --------------------------------------------------------- */
+[data-tema="claro"] .hero-description,
+[data-tema="claro"] .section-head-right p,
+[data-tema="claro"] .category-content p,
+[data-tema="claro"] .category-hero p,
+[data-tema="claro"] .newsletter p,
+[data-tema="claro"] .product-desc,
+[data-tema="claro"] .detail-desc,
+[data-tema="claro"] .summary-info,
+[data-tema="claro"] .cart-summary-info,
+[data-tema="claro"] .checkout-head p,
+[data-tema="claro"] .step-head p,
+[data-tema="claro"] .auth-sub,
+[data-tema="claro"] .payment-note,
+[data-tema="claro"] .shipping-info small,
+[data-tema="claro"] .summary-row span,
+[data-tema="claro"] .cart-summary-row > span,
+[data-tema="claro"] .conta-head-label,
+[data-tema="claro"] .conta-section-head p,
+[data-tema="claro"] .pedido-data,
+[data-tema="claro"] .pedido-foot span,
+[data-tema="claro"] .carrinho-item-qtd,
+[data-tema="claro"] .carrinho-item-cat,
+[data-tema="claro"] .endereco-info p,
+[data-tema="claro"] .endereco-info small,
+[data-tema="claro"] .notif-text small,
+[data-tema="claro"] .reviews-summary-total,
+[data-tema="claro"] .review-date,
+[data-tema="claro"] .pix-aviso,
+[data-tema="claro"] .footer-contato-link {
+    color: #38455c;
+}
+
+/* ---------------------------------------------------------
+   PAINÉIS / INPUTS / CARDS
+   --------------------------------------------------------- */
+[data-tema="claro"] .checkout-step,
+[data-tema="claro"] .summary-content,
+[data-tema="claro"] .cart-summary,
+[data-tema="claro"] .modal-dialog,
+[data-tema="claro"] .pix-dialog,
+[data-tema="claro"] .reembolso-dialog,
+[data-tema="claro"] .success-box {
+    background: #eef1f8;
+    border-color: rgba(10, 20, 50, .18);
+}
+
+[data-tema="claro"] input,
+[data-tema="claro"] textarea,
+[data-tema="claro"] select,
+[data-tema="claro"] .checkout-step input,
+[data-tema="claro"] .checkout-step select,
+[data-tema="claro"] .field input,
+[data-tema="claro"] .field textarea,
+[data-tema="claro"] .field select,
+[data-tema="claro"] .conta-field input,
+[data-tema="claro"] .auth-field input,
+[data-tema="claro"] .shipping-option,
+[data-tema="claro"] .payment-method {
+    background: #ffffff;
+    color: #050810;
+    border-color: rgba(10, 20, 50, .25);
+}
+
+[data-tema="claro"] input:hover,
+[data-tema="claro"] textarea:hover,
+[data-tema="claro"] select:hover { border-color: rgba(10, 20, 50, .4); }
+
+[data-tema="claro"] input:focus,
+[data-tema="claro"] textarea:focus,
+[data-tema="claro"] select:focus { border-color: #1a4dff; }
+
+[data-tema="claro"] select option {
+    background: #ffffff;
+    color: #050810;
+}
+
+[data-tema="claro"] .pedido-card,
+[data-tema="claro"] .endereco-card,
+[data-tema="claro"] .review-card,
+[data-tema="claro"] .carrinho-item,
+[data-tema="claro"] .notif-opcao,
+[data-tema="claro"] .conta-nav {
+    background: #eef1f8;
+    border-color: rgba(10, 20, 50, .15);
+}
+
+[data-tema="claro"] .review-card--minha {
+    background: linear-gradient(180deg, rgba(26, 77, 255, .08), rgba(26, 77, 255, .02));
+    border-color: rgba(26, 77, 255, .4);
+}
+
+[data-tema="claro"] .pix-codigo-wrap,
+[data-tema="claro"] .reembolso-motivo,
+[data-tema="claro"] .order-item,
+[data-tema="claro"] .order-totals,
+[data-tema="claro"] .success-code,
+[data-tema="claro"] .payment-detail {
+    background: #ffffff;
+    border-color: rgba(10, 20, 50, .12);
+}
+
+[data-tema="claro"] .reembolso-textarea,
+[data-tema="claro"] #reembolsoModalObs {
+    background: #ffffff !important;
+    color: #050810 !important;
+    border-color: rgba(10, 20, 50, .18) !important;
+}
+
+/* QR PIX — fundo branco obrigatório  ← NOVO */
+[data-tema="claro"] .pix-qr-wrap {
+    background: #ffffff;
+    box-shadow: 0 0 0 1px rgba(10, 20, 50, .15) inset;
+}
+
+[data-tema="claro"] .pix-qr-logo { border-color: #ffffff; }
+
+/* ---------------------------------------------------------
+   AUTH (login)
+   --------------------------------------------------------- */
+[data-tema="claro"] .auth-visual {
+    background:
+        radial-gradient(700px 500px at 30% 20%, rgba(26, 77, 255, .1), transparent 65%),
+        linear-gradient(160deg, #eef1f8 0%, #f5f7ff 100%);
+    border-color: rgba(10, 20, 50, .12);
+}
+
+[data-tema="claro"] .auth-benefits li { color: #38455c; }
+
+[data-tema="claro"] .auth-tabs {
+    background: #eef1f8;
+    border-color: rgba(10, 20, 50, .12);
+}
+
+[data-tema="claro"] .auth-tab { color: #5d6b83; }
+
+[data-tema="claro"] .auth-tab:hover {
+    color: #050810;
+    background: #e5eaf5;
+}
+
+/* ---------------------------------------------------------
+   TOAST
+   --------------------------------------------------------- */
+[data-tema="claro"] .toast {
+    background: #ffffff;
+    border-color: rgba(10, 20, 50, .15);
+    color: #050810;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, .12), 0 0 40px rgba(26, 77, 255, .1);
+}
+
+/* ---------------------------------------------------------
+   BUSCA
+   --------------------------------------------------------- */
+[data-tema="claro"] .search-box input {
+    color: #050810;
+    border-bottom-color: rgba(10, 20, 50, .25);
+}
+
+[data-tema="claro"] .search-box > button:last-child { color: #38455c; }
+[data-tema="claro"] .search-box > button:last-child:hover { color: #050810; }
+
+/* ---------------------------------------------------------
+   BREADCRUMB
+   --------------------------------------------------------- */
+[data-tema="claro"] .breadcrumb { color: #5d6b83; }
+[data-tema="claro"] .breadcrumb a { color: #38455c; }
+
+/* ---------------------------------------------------------
+   FOOTER
+   --------------------------------------------------------- */
+[data-tema="claro"] .footer {
+    background: #eef1f8;
+    border-top-color: rgba(10, 20, 50, .12);
+}
+
+[data-tema="claro"] .footer > p {
+    border-top-color: rgba(10, 20, 50, .12);
+}
+
+[data-tema="claro"] .footer-contato-link {
+    color: #38455c;
+    border-color: rgba(10, 20, 50, .25);
+}
+
+[data-tema="claro"] .footer-contato-link:hover {
+    color: #1a4dff;
+    border-color: #1a4dff;
+    background: rgba(26, 77, 255, .08);
+}
+
+[data-tema="claro"] .footer-contato-link[href*="wa.me"]:hover {
+    color: #128C7E;
+    background: rgba(37, 211, 102, .1);
+    border-color: rgba(37, 211, 102, .5);
+}
+
+/* ---------------------------------------------------------
+   CARDS DE PRODUTO
+   --------------------------------------------------------- */
+[data-tema="claro"] .product-media::after {
+    background: linear-gradient(180deg, transparent, rgba(245, 247, 255, .55));
+}
+
+[data-tema="claro"] .product-card:hover .product-media {
+    border-color: rgba(10, 20, 50, .35);
+}
+
+[data-tema="claro"] .product-card:hover .product-name { color: #1a4dff; }
+
+[data-tema="claro"] .product-quick-add {
+    background: rgba(255, 255, 255, .9);
+    color: #050810;
+    border-color: rgba(26, 77, 255, .35);
+}
+
+[data-tema="claro"] .product-quick-add:hover:not(:disabled) {
+    background: rgba(26, 77, 255, .1);
+    border-color: rgba(26, 77, 255, .7);
+}
+
+[data-tema="claro"] .product-badge {
+    background: rgba(255, 255, 255, .9);
+    color: #050810;
+    border-color: rgba(10, 20, 50, .2);
+}
+
+[data-tema="claro"] .product-badge--new,
+[data-tema="claro"] .product-badge--sale {
+    color: #fff;
+    border-color: transparent;
+}
+
+[data-tema="claro"] .product-badge--out {
+    background: rgba(255, 255, 255, .95);
+    color: #5d6b83;
+    border-color: rgba(10, 20, 50, .15);
+}
+
+[data-tema="claro"] .product-skeleton {
+    background: linear-gradient(100deg, #e5eaf5 0%, #dde3f0 50%, #e5eaf5 100%);
+    background-size: 200% 100%;
+}
+
+/* ---------------------------------------------------------
+   FAVORITOS (coração)
+   --------------------------------------------------------- */
+[data-tema="claro"] .product-wish {
+    color: #38455c;
+    background: rgba(255, 255, 255, .9);
+    border-color: rgba(10, 20, 50, .15);
+}
+
+[data-tema="claro"] .product-wish:hover {
+    color: #1a4dff;
+    background: #ffffff;
+    border-color: #1a4dff;
+}
+
+[data-tema="claro"] .product-wish.active {
+    color: #1a4dff;
+    background: rgba(26, 77, 255, .1);
+    border-color: #1a4dff;
+}
+
+[data-tema="claro"] .product-wish.active svg { fill: #1a4dff; }
+
+[data-tema="claro"] .btn-wish-large {
+    color: #38455c;
+    background: rgba(255, 255, 255, .9);
+    border-color: rgba(10, 20, 50, .18);
+}
+
+[data-tema="claro"] .btn-wish-large:hover {
+    color: #1a4dff;
+    background: #ffffff;
+    border-color: #4d7cff;
+}
+
+[data-tema="claro"] .btn-wish-large.active {
+    color: #1a4dff;
+    background: rgba(26, 77, 255, .1);
+    border-color: #1a4dff;
+}
+
+[data-tema="claro"] .btn-wish-large.active svg { fill: #1a4dff; }
+
+/* ---------------------------------------------------------
+   BOTÕES SECUNDÁRIOS / GHOST / ESPECÍFICOS
+   --------------------------------------------------------- */
+[data-tema="claro"] .cart-page .cart-qty { border-color: rgba(10, 20, 50, .28); }
+[data-tema="claro"] .cart-page .cart-qty button { color: #38455c; }
+[data-tema="claro"] .cart-page .cart-qty button:hover {
+    color: #050810;
+    background: rgba(26, 77, 255, .1);
+}
+
+[data-tema="claro"] .detail-size {
+    color: #38455c;
+    border-color: rgba(10, 20, 50, .28);
+}
+
+[data-tema="claro"] .detail-size:hover {
+    color: #050810;
+    border-color: rgba(10, 20, 50, .5);
+}
+
+[data-tema="claro"] .pedido-filtro {
+    color: #38455c;
+    border-color: rgba(10, 20, 50, .25);
+}
+
+[data-tema="claro"] .pedido-filtro:hover {
+    color: #050810;
+    border-color: rgba(10, 20, 50, .45);
+}
+
+[data-tema="claro"] .btn-add-endereco {
+    color: #050810;
+    border-color: rgba(10, 20, 50, .35);
+}
+
+[data-tema="claro"] .btn-add-endereco:hover {
+    border-color: #1a4dff;
+    background: rgba(26, 77, 255, .08);
+    color: #1a4dff;
+}
+
+[data-tema="claro"] .btn-notificacoes {
+    color: #050810;
+    border-color: rgba(10, 20, 50, .28);
+}
+
+[data-tema="claro"] .btn-notificacoes:hover:not(:disabled) {
+    border-color: #1a4dff;
+    background: rgba(26, 77, 255, .08);
+}
+
+/* ---------------------------------------------------------
+   LINHAS / SEPARADORES
+   --------------------------------------------------------- */
+[data-tema="claro"] .summary-divider,
+[data-tema="claro"] .cart-summary-divider,
+[data-tema="claro"] .panel-head,
+[data-tema="claro"] .modal-section,
+[data-tema="claro"] .step-head,
+[data-tema="claro"] .conta-head,
+[data-tema="claro"] .conta-section-head,
+[data-tema="claro"] .table td,
+[data-tema="claro"] .table th,
+[data-tema="claro"] .quick-grid,
+[data-tema="claro"] .quick-card {
+    border-color: rgba(10, 20, 50, .18);
+}
+
+/* ---------------------------------------------------------
+   SCROLLBAR
+   --------------------------------------------------------- */
+[data-tema="claro"] ::-webkit-scrollbar-thumb {
+    background: rgba(10, 20, 50, .25);
+    border-color: var(--ink-0);
+}
+
+[data-tema="claro"] ::-webkit-scrollbar-thumb:hover {
+    background: rgba(10, 20, 50, .4);
+}
+
+[data-tema="claro"] ::-webkit-scrollbar-track {
+    border-left-color: rgba(10, 20, 50, .08);
+}
+
+/* ---------------------------------------------------------
+   BOTÃO DE TEMA
+   --------------------------------------------------------- */
+.theme-button {
+    position: relative;
+    width: 42px;
+    height: 42px;
+    display: grid;
+    place-items: center;
+    color: var(--paper-2);
+    background: none;
+    border: 1px solid transparent;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: all .35s cubic-bezier(.22, 1, .36, 1);
+}
+
+.theme-button:hover {
+    color: var(--paper-0);
+    background: rgba(127, 176, 255, .06);
+    border-color: var(--line-2);
+    transform: translateY(-2px);
+}
+
+[data-tema="claro"] .theme-button:hover {
+    background: rgba(26, 77, 255, .08);
+}
+
+.theme-button svg {
+    width: 18px;
+    height: 18px;
+    transition: transform .4s cubic-bezier(.34, 1.56, .64, 1);
+}
+
+.theme-button:hover svg { transform: rotate(20deg); }
+
+.theme-button .icone-sol { display: block; }
+.theme-button .icone-lua { display: none; }
+
+[data-tema="claro"] .theme-button .icone-sol { display: none; }
+[data-tema="claro"] .theme-button .icone-lua { display: block; }
+
+@media (max-width: 720px) {
+    .theme-button { width: 38px; height: 38px; }
+    .theme-button svg { width: 16px; height: 16px; }
+}
+
+/* ---------------------------------------------------------
+   TRANSIÇÕES SUAVES AO TROCAR TEMA
+   --------------------------------------------------------- */
+[data-tema] body,
+[data-tema] .header,
+[data-tema] .footer,
+[data-tema] .product-card,
+[data-tema] .cart-item,
+[data-tema] .pedido-card,
+[data-tema] .conta-button,
+[data-tema] .btn-primary,
+[data-tema] .btn-secondary {
+    transition:
+        background-color .35s ease,
+        color .35s ease,
+        border-color .35s ease;
+}
+
+/* =========================================================
+   FIM — ARTEFATOS CSS v6.0 (tema claro v2)
+   ========================================================= */
+   /* =========================================================
+   TEMA CLARO — v3 SUPER FIX (LEGIBILIDADE MÁXIMA)
+   Cola no FINAL do arquivo CSS — sobrescreve tudo acima
+   ========================================================= */
+
+/* ---------------------------------------------------------
+   1. PALETA CLARA REFORÇADA — contraste alto
+   --------------------------------------------------------- */
+[data-tema="claro"] {
+    --ink-0: #ffffff;
+    --ink-1: #f7f9fc;
+    --ink-2: #eef2f8;
+    --ink-3: #e2e8f0;
+    --ink-4: #cbd5e1;
+
+    --paper-0: #000000;   /* títulos: preto puro */
+    --paper-1: #111827;   /* texto principal */
+    --paper-2: #1f2937;   /* corpo/secundário */
+    --paper-3: #374151;   /* apoio */
+    --paper-4: #4b5563;   /* detalhe */
+
+    --line-0: rgba(0, 0, 0, .10);
+    --line-1: rgba(0, 0, 0, .18);
+    --line-2: rgba(0, 0, 0, .30);
+    --line-3: rgba(0, 0, 0, .45);
+    --line-4: rgba(0, 0, 0, .65);
+
+    --blue-0: #0a2fa8;
+    --blue-1: #1a4dff;
+    --blue-2: #3b6aff;
+    --blue-3: #0a2fa8;   /* ← textos "azuis" ficam ESCUROS */
+    --blue-4: #0a2fa8;
+}
+
+/* ---------------------------------------------------------
+   2. BASE / BODY
+   --------------------------------------------------------- */
+[data-tema="claro"] body {
+    background: #ffffff;
+    color: #1f2937;
+}
+
+[data-tema="claro"] body::before {
+    background:
+        radial-gradient(1200px 800px at 15% -10%, rgba(26, 77, 255, .05), transparent 60%),
+        radial-gradient(900px 700px at 105% 15%, rgba(10, 47, 168, .03), transparent 65%),
+        radial-gradient(1100px 900px at 50% 120%, rgba(26, 77, 255, .03), transparent 70%);
+}
+
+[data-tema="claro"] body::after { opacity: .04; }
+
+/* ---------------------------------------------------------
+   3. TIPOGRAFIA FORÇADA
+   --------------------------------------------------------- */
+[data-tema="claro"] h1,
+[data-tema="claro"] h2,
+[data-tema="claro"] h3,
+[data-tema="claro"] h4,
+[data-tema="claro"] h5,
+[data-tema="claro"] h6 {
+    color: #000000;
+}
+
+[data-tema="claro"] p,
+[data-tema="claro"] li,
+[data-tema="claro"] small,
+[data-tema="claro"] dt,
+[data-tema="claro"] dd {
+    color: #1f2937;
+}
+
+[data-tema="claro"] strong,
+[data-tema="claro"] b {
+    color: #000000;
+}
+
+[data-tema="claro"] em,
+[data-tema="claro"] i,
+[data-tema="claro"] cite,
+[data-tema="claro"] blockquote {
+    color: #111827;
+}
+
+[data-tema="claro"] code,
+[data-tema="claro"] kbd,
+[data-tema="claro"] samp {
+    color: #111827;
+}
+
+/* ---------------------------------------------------------
+   4. HEADER
+   --------------------------------------------------------- */
+[data-tema="claro"] .header {
+    background: rgba(255, 255, 255, .92);
+    border-bottom-color: rgba(0, 0, 0, .08);
+}
+
+[data-tema="claro"] .header.scrolled {
+    background: rgba(255, 255, 255, .98);
+    border-bottom-color: rgba(0, 0, 0, .12);
+    box-shadow: 0 1px 0 rgba(0, 0, 0, .05), 0 20px 60px rgba(0, 0, 0, .08);
+}
+
+[data-tema="claro"] .logo {
+    color: #000000;
+}
+
+[data-tema="claro"] .logo span {
+    color: #1a4dff;
+}
+
+[data-tema="claro"] .nav a {
+    color: #1f2937;
+}
+
+[data-tema="claro"] .nav a:hover,
+[data-tema="claro"] .nav a.active {
+    color: #000000;
+}
+
+[data-tema="claro"] .search-button,
+[data-tema="claro"] .cart-button,
+[data-tema="claro"] .menu-button {
+    color: #374151;
+}
+
+[data-tema="claro"] .search-button:hover,
+[data-tema="claro"] .cart-button:hover,
+[data-tema="claro"] .menu-button:hover {
+    color: #000000;
+    background: rgba(26, 77, 255, .08);
+    border-color: rgba(26, 77, 255, .3);
+}
+
+[data-tema="claro"] #cart-count {
+    color: #ffffff;
+    background: #1a4dff;
+    box-shadow: 0 0 0 2px #ffffff;
+}
+
+/* ---------------------------------------------------------
+   5. BOTÃO DE CONTA — CORREÇÃO CRÍTICA
+   --------------------------------------------------------- */
+[data-tema="claro"] .conta-button {
+    color: #1f2937 !important;
+    background: transparent;
+    border-color: rgba(0, 0, 0, .15);
+}
+
+[data-tema="claro"] .conta-button svg {
+    color: #1f2937;
+    stroke: currentColor;
+}
+
+[data-tema="claro"] .conta-nome {
+    color: #1f2937 !important;
+}
+
+[data-tema="claro"] .conta-button:hover {
+    color: #000000 !important;
+    background: rgba(26, 77, 255, .1);
+    border-color: #1a4dff;
+}
+
+[data-tema="claro"] .conta-button.logado {
+    color: #047857 !important;
+    border-color: rgba(4, 120, 87, .5);
+    background: rgba(16, 185, 129, .12);
+}
+
+[data-tema="claro"] .conta-button.logado .conta-nome {
+    color: #047857 !important;
+}
+
+[data-tema="claro"] .conta-button.logado::after {
+    border-color: #ffffff;
+    background: #059669;
+    box-shadow: 0 0 8px #059669;
+}
+
+/* Dropdown da conta — fundo BRANCO */
+[data-tema="claro"] .conta-dropdown {
+    background: #ffffff;
+    border-color: rgba(0, 0, 0, .12);
+    box-shadow:
+        0 30px 80px rgba(0, 0, 0, .15),
+        0 0 40px rgba(26, 77, 255, .06);
+}
+
+[data-tema="claro"] .conta-dropdown-head {
+    border-bottom-color: rgba(0, 0, 0, .1);
+}
+
+[data-tema="claro"] .conta-dropdown-head strong {
+    color: #000000 !important;
+}
+
+[data-tema="claro"] .conta-dropdown-head small {
+    color: #4b5563 !important;
+}
+
+[data-tema="claro"] .conta-dropdown ul li a {
+    color: #1f2937 !important;
+}
+
+[data-tema="claro"] .conta-dropdown ul li a:hover {
+    color: #000000 !important;
+    background: #eef2f8;
+}
+
+[data-tema="claro"] .conta-dropdown ul li a svg {
+    color: #1a4dff;
+    stroke: currentColor;
+}
+
+[data-tema="claro"] .conta-dropdown-foot {
+    border-top-color: rgba(0, 0, 0, .1);
+}
+
+[data-tema="claro"] .conta-dropdown-foot button {
+    color: #dc2626 !important;
+}
+
+[data-tema="claro"] .conta-dropdown-foot button:hover {
+    background: rgba(239, 68, 68, .1);
+    color: #991b1b !important;
+}
+
+/* ---------------------------------------------------------
+   6. HERO
+   --------------------------------------------------------- */
+[data-tema="claro"] .hero {
+    background:
+        radial-gradient(1000px 800px at 78% 10%, rgba(26, 77, 255, .12), transparent 60%),
+        radial-gradient(800px 600px at 8% 92%, rgba(10, 47, 168, .08), transparent 65%),
+        linear-gradient(180deg, #ffffff 0%, #f7f9fc 60%, #ffffff 100%);
+}
+
+[data-tema="claro"] .hero-small {
+    color: #0a2fa8 !important;
+    border-bottom-color: rgba(0, 0, 0, .2);
+}
+
+[data-tema="claro"] .hero h1 {
+    color: #000000 !important;
+}
+
+[data-tema="claro"] .hero h1 span {
+    color: #1a4dff !important;
+}
+
+[data-tema="claro"] .hero-description {
+    color: #1f2937 !important;
+}
+
+[data-tema="claro"] .hero::after {
+    color: #6b7280;
+}
+
+[data-tema="claro"] .hero-decoration span {
+    -webkit-text-stroke: 1px rgba(0, 0, 0, .35);
+}
+
+/* ---------------------------------------------------------
+   7. BOTÕES — CORREÇÃO CRÍTICA
+   --------------------------------------------------------- */
+[data-tema="claro"] .btn-primary {
+    color: #ffffff !important;
+    background: #1a4dff;
+}
+
+[data-tema="claro"] .btn-primary:hover {
+    color: #ffffff !important;
+    background: #0a2fa8;
+}
+
+[data-tema="claro"] .btn-secondary {
+    color: #000000 !important;
+    border-color: rgba(0, 0, 0, .35);
+    background: transparent;
+}
+
+[data-tema="claro"] .btn-secondary:hover {
+    background: rgba(26, 77, 255, .1);
+    border-color: #1a4dff;
+    color: #1a4dff !important;
+}
+
+[data-tema="claro"] .btn-buy-now {
+    color: #ffffff !important;
+    background: #1a4dff;
+}
+
+[data-tema="claro"] .btn-buy-now:hover {
+    background: #0a2fa8;
+}
+
+[data-tema="claro"] .btn-buy-now[disabled] {
+    background: #cbd5e1;
+    color: #64748b !important;
+}
+
+/* ---------------------------------------------------------
+   8. TICKER / DIVISORES
+   --------------------------------------------------------- */
+[data-tema="claro"] .ticker {
+    background: #f7f9fc;
+    border-color: rgba(0, 0, 0, .1);
+}
+
+[data-tema="claro"] .ticker::before { background: linear-gradient(90deg, #f7f9fc, transparent); }
+[data-tema="claro"] .ticker::after  { background: linear-gradient(270deg, #f7f9fc, transparent); }
+
+[data-tema="claro"] .ticker-track > * {
+    color: #1f2937 !important;
+}
+
+[data-tema="claro"] .ticker-track > *::after {
+    color: #1a4dff;
+}
+
+[data-tema="claro"] .divider-marker {
+    color: #4b5563;
+}
+
+/* ---------------------------------------------------------
+   9. SECTION TITLES
+   --------------------------------------------------------- */
+[data-tema="claro"] .section-title > p,
+[data-tema="claro"] .section-kicker {
+    color: #0a2fa8 !important;
+}
+
+[data-tema="claro"] .section-title h2 {
+    color: #000000 !important;
+}
+
+[data-tema="claro"] .section-title h2 span {
+    color: #1a4dff !important;
+}
+
+/* ---------------------------------------------------------
+   10. CATEGORIAS
+   --------------------------------------------------------- */
+[data-tema="claro"] .street-card,
+[data-tema="claro"] .access-card,
+[data-tema="claro"] .old-card {
+    background:
+        linear-gradient(180deg, transparent 42%, rgba(255, 255, 255, .96) 100%),
+        radial-gradient(600px 550px at 22% 28%, rgba(26, 77, 255, .14), transparent 65%),
+        linear-gradient(160deg, #eef2f8 0%, #ffffff 100%);
+}
+
+[data-tema="claro"] .category-card {
+    border-color: rgba(0, 0, 0, .12);
+}
+
+[data-tema="claro"] .category-card::before {
+    background-image:
+        repeating-linear-gradient(45deg,
+            transparent 0, transparent 10px,
+            rgba(0, 0, 0, .05) 10px, rgba(0, 0, 0, .05) 11px);
+}
+
+[data-tema="claro"] .category-content > span {
+    color: #0a2fa8 !important;
+}
+
+[data-tema="claro"] .category-content h3 {
+    color: #000000 !important;
+}
+
+[data-tema="claro"] .category-content p {
+    color: #1f2937 !important;
+}
+
+[data-tema="claro"] .category-content strong {
+    color: #000000 !important;
+    border-bottom-color: rgba(0, 0, 0, .3);
+}
+
+[data-tema="claro"] .category-card:hover .category-content strong {
+    color: #0a2fa8 !important;
+    border-bottom-color: #1a4dff;
+}
+
+/* ---------------------------------------------------------
+   11. LOOKBOOK / QUICK CATEGORIES / PULL-QUOTE
+   --------------------------------------------------------- */
+[data-tema="claro"] .lookbook-item {
+    background: #f7f9fc;
+    border-color: rgba(0, 0, 0, .12);
+}
+
+[data-tema="claro"] .lookbook-item h4 {
+    color: #000000 !important;
+}
+
+[data-tema="claro"] .lookbook-item small {
+    color: #0a2fa8 !important;
+}
+
+[data-tema="claro"] .quick-card {
+    border-color: rgba(0, 0, 0, .12);
+}
+
+[data-tema="claro"] .quick-card span {
+    color: #0a2fa8 !important;
+}
+
+[data-tema="claro"] .quick-card h3 {
+    color: #000000 !important;
+}
+
+[data-tema="claro"] .quick-card:hover h3 {
+    color: #1a4dff !important;
+}
+
+[data-tema="claro"] .quick-card p {
+    color: #1f2937 !important;
+}
+
+[data-tema="claro"] .pull-quote blockquote {
+    color: #000000 !important;
+}
+
+[data-tema="claro"] .pull-quote cite {
+    color: #0a2fa8 !important;
+}
+
+[data-tema="claro"] .pull-quote::before {
+    color: #1a4dff;
+    opacity: .35;
+}
+
+/* ---------------------------------------------------------
+   12. CARDS DE PRODUTO
+   --------------------------------------------------------- */
+[data-tema="claro"] .product-media {
+    background: #eef2f8;
+    border-color: rgba(0, 0, 0, .12);
+}
+
+[data-tema="claro"] .product-card:hover .product-media {
+    border-color: rgba(0, 0, 0, .35);
+}
+
+[data-tema="claro"] .product-media::after {
+    background: linear-gradient(180deg, transparent, rgba(255, 255, 255, .7));
+}
+
+[data-tema="claro"] .product-badge {
+    background: rgba(255, 255, 255, .95);
+    color: #000000 !important;
+    border-color: rgba(0, 0, 0, .18);
+}
+
+[data-tema="claro"] .product-badge--new,
+[data-tema="claro"] .product-badge--sale {
+    color: #ffffff !important;
+    background: #1a4dff;
+    border-color: transparent;
+}
+
+[data-tema="claro"] .product-badge--out {
+    background: rgba(255, 255, 255, .95);
+    color: #4b5563 !important;
+    border-color: rgba(0, 0, 0, .15);
+}
+
+[data-tema="claro"] .product-wish {
+    color: #374151 !important;
+    background: rgba(255, 255, 255, .95);
+    border-color: rgba(0, 0, 0, .15);
+}
+
+[data-tema="claro"] .product-wish:hover {
+    color: #1a4dff !important;
+    background: #ffffff;
+    border-color: #1a4dff;
+}
+
+[data-tema="claro"] .product-wish.active {
+    color: #1a4dff !important;
+    background: rgba(26, 77, 255, .1);
+    border-color: #1a4dff;
+}
+
+[data-tema="claro"] .product-wish.active svg { fill: #1a4dff; }
+
+[data-tema="claro"] .product-quick-add {
+    color: #000000 !important;
+    background: rgba(255, 255, 255, .95);
+    border-color: rgba(0, 0, 0, .25);
+}
+
+[data-tema="claro"] .product-quick-add:hover:not(:disabled) {
+    background: rgba(26, 77, 255, .1);
+    border-color: #1a4dff;
+    color: #1a4dff !important;
+}
+
+[data-tema="claro"] .product-quick-add svg,
+[data-tema="claro"] .product-buy-now svg {
+    stroke: currentColor;
+}
+
+[data-tema="claro"] .product-buy-now {
+    color: #ffffff !important;
+    background: #1a4dff;
+    border-color: #1a4dff;
+}
+
+[data-tema="claro"] .product-buy-now:hover:not(:disabled) {
+    background: #0a2fa8;
+    border-color: #0a2fa8;
+}
+
+[data-tema="claro"] .product-cat {
+    color: #0a2fa8 !important;
+}
+
+[data-tema="claro"] .product-name {
+    color: #000000 !important;
+}
+
+[data-tema="claro"] .product-card:hover .product-name {
+    color: #1a4dff !important;
+}
+
+[data-tema="claro"] .product-desc {
+    color: #1f2937 !important;
+}
+
+[data-tema="claro"] .product-price strong {
+    color: #000000 !important;
+}
+
+[data-tema="claro"] .product-price s {
+    color: #4b5563 !important;
+}
+
+[data-tema="claro"] .product-price em {
+    color: #0a2fa8 !important;
+}
+
+[data-tema="claro"] .product-color {
+    border-color: rgba(0, 0, 0, .25);
+}
+
+[data-tema="claro"] .product-size {
+    color: #1f2937 !important;
+    border-color: rgba(0, 0, 0, .22);
+}
+
+[data-tema="claro"] .product-size:hover {
+    color: #000000 !important;
+    border-color: rgba(0, 0, 0, .5);
+}
+
+[data-tema="claro"] .product-size.active {
+    color: #ffffff !important;
+    background: #1a4dff;
+    border-color: #1a4dff;
+}
+
+[data-tema="claro"] .product-skeleton {
+    background: linear-gradient(100deg, #eef2f8 0%, #e2e8f0 50%, #eef2f8 100%);
+    background-size: 200% 100%;
+}
+
+/* ---------------------------------------------------------
+   13. BREADCRUMB / CATEGORIA
+   --------------------------------------------------------- */
+[data-tema="claro"] .breadcrumb {
+    color: #4b5563 !important;
+}
+
+[data-tema="claro"] .breadcrumb a {
+    color: #1f2937 !important;
+}
+
+[data-tema="claro"] .breadcrumb a:hover {
+    color: #1a4dff !important;
+}
+
+[data-tema="claro"] .breadcrumb [aria-current] {
+    color: #0a2fa8 !important;
+}
+
+[data-tema="claro"] .category-label {
+    color: #0a2fa8 !important;
+    border-bottom-color: rgba(0, 0, 0, .2);
+}
+
+[data-tema="claro"] .category-label span {
+    color: #1a4dff !important;
+}
+
+[data-tema="claro"] .category-hero h1 {
+    color: #000000 !important;
+}
+
+[data-tema="claro"] .category-hero h1 em {
+    color: #1a4dff !important;
+}
+
+[data-tema="claro"] .category-hero p {
+    color: #1f2937 !important;
+}
+
+[data-tema="claro"] .category-hero--street,
+[data-tema="claro"] .category-hero--access,
+[data-tema="claro"] .category-hero--old {
+    background:
+        radial-gradient(900px 700px at 78% 15%, rgba(26, 77, 255, .1), transparent 62%),
+        radial-gradient(700px 500px at 8% 90%, rgba(10, 47, 168, .06), transparent 65%),
+        linear-gradient(180deg, #ffffff 0%, #f7f9fc 100%);
+}
+
+[data-tema="claro"] .category-hero-mark {
+    -webkit-text-stroke: 1px rgba(0, 0, 0, .25);
+}
+
+[data-tema="claro"] .category-hero-meta {
+    border-top-color: rgba(0, 0, 0, .15);
+}
+
+[data-tema="claro"] .category-hero-meta span {
+    color: #4b5563 !important;
+}
+
+[data-tema="claro"] .category-hero-meta strong {
+    color: #000000 !important;
+}
+
+[data-tema="claro"] .category-result-count {
+    color: #4b5563 !important;
+}
+
+[data-tema="claro"] .category-sort > span {
+    color: #4b5563 !important;
+}
+
+[data-tema="claro"] .category-sort select {
+    color: #000000 !important;
+}
+
+[data-tema="claro"] .category-sort select option {
+    background: #ffffff;
+    color: #000000;
+}
+
+[data-tema="claro"] .category-sort svg {
+    color: #4b5563;
+}
+
+/* ---------------------------------------------------------
+   14. NO PRODUCTS / EMPTY
+   --------------------------------------------------------- */
+[data-tema="claro"] .no-products-mark {
+    color: rgba(0, 0, 0, .2);
+}
+
+[data-tema="claro"] .no-products h3 {
+    color: #000000 !important;
+}
+
+[data-tema="claro"] .no-products h3 em {
+    color: #1a4dff !important;
+}
+
+[data-tema="claro"] .no-products p {
+    color: #1f2937 !important;
+}
+
+/* ---------------------------------------------------------
+   15. NEWSLETTER / FINAL CTA
+   --------------------------------------------------------- */
+[data-tema="claro"] .newsletter {
+    background:
+        radial-gradient(700px 500px at 20% 30%, rgba(26, 77, 255, .1), transparent 65%),
+        #f7f9fc;
+    border-color: rgba(0, 0, 0, .12);
+}
+
+[data-tema="claro"] .newsletter h3 {
+    color: #000000 !important;
+}
+
+[data-tema="claro"] .newsletter h3 span {
+    color: #1a4dff !important;
+}
+
+[data-tema="claro"] .newsletter p {
+    color: #1f2937 !important;
+}
+
+[data-tema="claro"] .newsletter-form {
+    border-bottom-color: rgba(0, 0, 0, .25);
+}
+
+[data-tema="claro"] .newsletter-form input {
+    color: #000000 !important;
+}
+
+[data-tema="claro"] .newsletter-form input::placeholder {
+    color: #6b7280 !important;
+}
+
+[data-tema="claro"] .newsletter-form button {
+    color: #000000 !important;
+}
+
+[data-tema="claro"] .newsletter-form button:hover {
+    color: #1a4dff !important;
+}
+
+[data-tema="claro"] .final-cta {
+    background: radial-gradient(900px 500px at 50% 50%, rgba(26, 77, 255, .08), transparent 65%);
+    border-color: rgba(0, 0, 0, .12);
+}
+
+[data-tema="claro"] .final-cta::before {
+    -webkit-text-stroke: 1px rgba(0, 0, 0, .2);
+}
+
+[data-tema="claro"] .final-cta p {
+    color: #0a2fa8 !important;
+}
+
+[data-tema="claro"] .final-cta h2 {
+    color: #000000 !important;
+}
+
+[data-tema="claro"] .final-cta h2 span {
+    color: #1a4dff !important;
+}
+
+/* ---------------------------------------------------------
+   16. FOOTER
+   --------------------------------------------------------- */
+[data-tema="claro"] .footer {
+    background: #f7f9fc;
+    border-top-color: rgba(0, 0, 0, .12);
+}
+
+[data-tema="claro"] .footer-logo {
+    color: #000000 !important;
+}
+
+[data-tema="claro"] .footer-logo span {
+    color: #1a4dff !important;
+}
+
+[data-tema="claro"] .footer-links a {
+    color: #1f2937 !important;
+}
+
+[data-tema="claro"] .footer-links a:hover {
+    color: #1a4dff !important;
+}
+
+[data-tema="claro"] .admin-link {
+    border-left-color: rgba(0, 0, 0, .15);
+}
+
+[data-tema="claro"] .admin-link:hover {
+    color: #0a2fa8 !important;
+}
+
+[data-tema="claro"] .footer > p {
+    color: #4b5563 !important;
+    border-top-color: rgba(0, 0, 0, .1);
+}
+
+[data-tema="claro"] .footer-contato-link {
+    color: #1f2937 !important;
+    border-color: rgba(0, 0, 0, .25);
+}
+
+[data-tema="claro"] .footer-contato-link:hover {
+    color: #1a4dff !important;
+    border-color: #1a4dff;
+    background: rgba(26, 77, 255, .08);
+}
+
+[data-tema="claro"] .footer-contato-link[href*="wa.me"]:hover {
+    color: #128C7E !important;
+    background: rgba(37, 211, 102, .12);
+    border-color: rgba(18, 140, 126, .5);
+}
+
+[data-tema="claro"] .footer-contato-link svg {
+    stroke: currentColor;
+}
+
+/* ---------------------------------------------------------
+   17. FORMS / INPUTS (leitura)
+   --------------------------------------------------------- */
+[data-tema="claro"] input,
+[data-tema="claro"] textarea,
+[data-tema="claro"] select,
+[data-tema="claro"] .field input,
+[data-tema="claro"] .field textarea,
+[data-tema="claro"] .field select,
+[data-tema="claro"] .checkout-step input,
+[data-tema="claro"] .checkout-step select,
+[data-tema="claro"] .conta-field input,
+[data-tema="claro"] .auth-field input {
+    background: #ffffff;
+    color: #000000 !important;
+    border-color: rgba(0, 0, 0, .25);
+}
+
+[data-tema="claro"] input::placeholder,
+[data-tema="claro"] textarea::placeholder {
+    color: #6b7280 !important;
+}
+
+[data-tema="claro"] input:focus,
+[data-tema="claro"] textarea:focus,
+[data-tema="claro"] select:focus {
+    border-color: #1a4dff;
+    outline: none;
+}
+
+[data-tema="claro"] select option {
+    background: #ffffff;
+    color: #000000;
+}
+
+[data-tema="claro"] .field label,
+[data-tema="claro"] .checkout-step label {
+    color: #0a2fa8 !important;
+}
+
+[data-tema="claro"] .field label span,
+[data-tema="claro"] .checkout-step label span {
+    color: #dc2626 !important;
+}
+
+/* ---------------------------------------------------------
+   18. CARRINHO
+   --------------------------------------------------------- */
+[data-tema="claro"] .cart-page {
+    background: #ffffff;
+    color: #1f2937;
+}
+
+[data-tema="claro"] .cart-page .cart-heading h1 {
+    color: #000000 !important;
+}
+
+[data-tema="claro"] .cart-page .cart-heading h1 em {
+    color: #1a4dff !important;
+}
+
+[data-tema="claro"] .cart-page .cart-heading p {
+    color: #1f2937 !important;
+}
+
+[data-tema="claro"] .cart-page .cart-item {
+    border-bottom-color: rgba(0, 0, 0, .12);
+}
+
+[data-tema="claro"] .cart-page .cart-item-media {
+    background: #eef2f8;
+    border-color: rgba(0, 0, 0, .12);
+}
+
+[data-tema="claro"] .cart-page .cart-item-cat {
+    color: #0a2fa8 !important;
+}
+
+[data-tema="claro"] .cart-page .cart-item-name {
+    color: #000000 !important;
+}
+
+[data-tema="claro"] .cart-page .cart-item-price {
+    color: #1f2937 !important;
+}
+
+[data-tema="claro"] .cart-page .cart-qty {
+    border-color: rgba(0, 0, 0, .25);
+}
+
+[data-tema="claro"] .cart-page .cart-qty button {
+    color: #1f2937 !important;
+}
+
+[data-tema="claro"] .cart-page .cart-qty button:hover {
+    color: #000000 !important;
+    background: rgba(26, 77, 255, .12);
+}
+
+[data-tema="claro"] .cart-page .cart-qty span {
+    color: #000000 !important;
+}
+
+[data-tema="claro"] .cart-page .cart-item-remove {
+    color: #4b5563 !important;
+}
+
+[data-tema="claro"] .cart-page .cart-item-remove:hover {
+    color: #dc2626 !important;
+}
+
+[data-tema="claro"] .cart-page .cart-summary {
+    background: #f7f9fc;
+    border-color: rgba(0, 0, 0, .12);
+}
+
+[data-tema="claro"] .cart-page .cart-summary-kicker {
+    color: #0a2fa8 !important;
+}
+
+[data-tema="claro"] .cart-page .cart-summary-title {
+    color: #000000 !important;
+    border-bottom-color: rgba(0, 0, 0, .12);
+}
+
+[data-tema="claro"] .cart-page .cart-summary-title em {
+    color: #1a4dff !important;
+}
+
+[data-tema="claro"] .cart-page .cart-summary-row > span {
+    color: #1f2937 !important;
+}
+
+[data-tema="claro"] .cart-page .cart-summary-row strong {
+    color: #000000 !important;
+}
+
+[data-tema="claro"] .cart-page .cart-summary-row--total strong {
+    color: #000000 !important;
+}
+
+[data-tema="claro"] .cart-page .cart-summary-divider {
+    background: rgba(0, 0, 0, .12);
+}
+
+[data-tema="claro"] .cart-page .cart-summary-info {
+    color: #4b5563 !important;
+}
+
+[data-tema="claro"] .cart-page .checkout-button {
+    color: #ffffff !important;
+    background: #1a4dff;
+}
+
+[data-tema="claro"] .cart-page .checkout-button:hover {
+    background: #0a2fa8;
+}
+
+[data-tema="claro"] .cart-page .continue-shopping {
+    color: #1f2937 !important;
+}
+
+[data-tema="claro"] .cart-page .continue-shopping:hover {
+    color: #1a4dff !important;
+}
+
+[data-tema="claro"] .cart-page .cart-empty-mark {
+    color: rgba(0, 0, 0, .2);
+}
+
+[data-tema="claro"] .cart-page .cart-empty h2 {
+    color: #000000 !important;
+}
+
+[data-tema="claro"] .cart-page .cart-empty h2 em {
+    color: #1a4dff !important;
+}
+
+[data-tema="claro"] .cart-page .cart-empty p {
+    color: #1f2937 !important;
+}
+
+[data-tema="claro"] .cart-page .pull-quote blockquote {
+    color: #000000 !important;
+}
+
+[data-tema="claro"] .cart-page .pull-quote cite {
+    color: #0a2fa8 !important;
+}
+
+/* ---------------------------------------------------------
+   19. RESUMO CHECKOUT (fora de cart-page)
+   --------------------------------------------------------- */
+[data-tema="claro"] .cart-summary-kicker {
+    color: #0a2fa8 !important;
+}
+
+[data-tema="claro"] .cart-summary-title {
+    color: #000000 !important;
+}
+
+[data-tema="claro"] .cart-summary-title em {
+    color: #1a4dff !important;
+}
+
+/* ---------------------------------------------------------
+   20. CHECKOUT
+   --------------------------------------------------------- */
+[data-tema="claro"] .search-main,
+[data-tema="claro"] .checkout-main {
+    color: #1f2937;
+}
+
+[data-tema="claro"] .search-head h1,
+[data-tema="claro"] .checkout-head h1 {
+    color: #000000 !important;
+}
+
+[data-tema="claro"] .search-head h1 em,
+[data-tema="claro"] .checkout-head h1 em {
+    color: #1a4dff !important;
+}
+
+[data-tema="claro"] .search-head p,
+[data-tema="claro"] .checkout-head p {
+    color: #1f2937 !important;
+}
+
+[data-tema="claro"] .checkout-step {
+    background: #f7f9fc;
+    border-color: rgba(0, 0, 0, .12);
+}
+
+[data-tema="claro"] .step-head {
+    border-bottom-color: rgba(0, 0, 0, .1);
+}
+
+[data-tema="claro"] .step-num {
+    color: #0a2fa8 !important;
+    border-color: rgba(0, 0, 0, .25);
+}
+
+[data-tema="claro"] .step-head h2 {
+    color: #000000 !important;
+}
+
+[data-tema="claro"] .step-head p {
+    color: #1f2937 !important;
+}
+
+[data-tema="claro"] .shipping-option {
+    background: #ffffff;
+    border-color: rgba(0, 0, 0, .15);
+}
+
+[data-tema="claro"] .shipping-option:hover {
+    border-color: rgba(0, 0, 0, .3);
+}
+
+[data-tema="claro"] .shipping-option:has(input:checked) {
+    border-color: #1a4dff;
+    background: rgba(26, 77, 255, .05);
+}
+
+[data-tema="claro"] .shipping-option input[type="radio"] {
+    border-color: rgba(0, 0, 0, .35);
+}
+
+[data-tema="claro"] .shipping-info strong {
+    color: #000000 !important;
+}
+
+[data-tema="claro"] .shipping-info small {
+    color: #1f2937 !important;
+}
+
+[data-tema="claro"] .shipping-price {
+    color: #0a2fa8 !important;
+}
+
+[data-tema="claro"] .payment-method {
+    background: #ffffff;
+    border-color: rgba(0, 0, 0, .15);
+}
+
+[data-tema="claro"] .payment-method:hover {
+    border-color: rgba(0, 0, 0, .3);
+}
+
+[data-tema="claro"] .payment-method:has(input:checked) {
+    border-color: #1a4dff;
+    background: rgba(26, 77, 255, .05);
+}
+
+[data-tema="claro"] .payment-method input[type="radio"] {
+    border-color: rgba(0, 0, 0, .35);
+}
+
+[data-tema="claro"] .payment-method strong {
+    color: #000000 !important;
+}
+
+[data-tema="claro"] .payment-method small {
+    color: #1f2937 !important;
+}
+
+[data-tema="claro"] .payment-detail {
+    background: #eef2f8;
+    border-color: rgba(0, 0, 0, .25);
+}
+
+[data-tema="claro"] .payment-note {
+    color: #1f2937 !important;
+}
+
+[data-tema="claro"] .btn-finish-mobile {
+    color: #ffffff !important;
+    background: #1a4dff;
+}
+
+[data-tema="claro"] .btn-finish-mobile:hover {
+    background: #0a2fa8;
+}
+
+[data-tema="claro"] .summary-content {
+    background: #f7f9fc;
+    border-color: rgba(0, 0, 0, .12);
+}
+
+[data-tema="claro"] .summary-items {
+    border-bottom-color: rgba(0, 0, 0, .12);
+}
+
+[data-tema="claro"] .summary-item-media {
+    background: #eef2f8;
+    border-color: rgba(0, 0, 0, .12);
+}
+
+[data-tema="claro"] .summary-item-info strong {
+    color: #000000 !important;
+}
+
+[data-tema="claro"] .summary-item-info small {
+    color: #4b5563 !important;
+}
+
+[data-tema="claro"] .summary-item-price {
+    color: #000000 !important;
+}
+
+[data-tema="claro"] .summary-row span {
+    color: #1f2937 !important;
+}
+
+[data-tema="claro"] .summary-row strong {
+    color: #000000 !important;
+}
+
+[data-tema="claro"] .summary-row--total strong {
+    color: #000000 !important;
+}
+
+[data-tema="claro"] .summary-divider {
+    background: rgba(0, 0, 0, .12);
+}
+
+[data-tema="claro"] .summary-info {
+    color: #4b5563 !important;
+}
+
+/* ---------------------------------------------------------
+   21. SUCESSO
+   --------------------------------------------------------- */
+[data-tema="claro"] .checkout-success {
+    background: rgba(0, 0, 0, .45);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+}
+
+[data-tema="claro"] .success-box {
+    background: #ffffff;
+    border-color: rgba(0, 0, 0, .15);
+}
+
+[data-tema="claro"] .success-box h2 {
+    color: #000000 !important;
+}
+
+[data-tema="claro"] .success-box p {
+    color: #1f2937 !important;
+}
+
+[data-tema="claro"] .success-code {
+    background: #f7f9fc;
+    border-color: rgba(0, 0, 0, .25);
+}
+
+[data-tema="claro"] .success-code span {
+    color: #4b5563 !important;
+}
+
+[data-tema="claro"] .success-code strong {
+    color: #1a4dff !important;
+}
+
+/* ---------------------------------------------------------
+   22. PIX
+   --------------------------------------------------------- */
+[data-tema="claro"] .pix-backdrop {
+    background: rgba(0, 0, 0, .5);
+}
+
+[data-tema="claro"] .pix-dialog {
+    background: #ffffff;
+    border-color: rgba(0, 0, 0, .15);
+    box-shadow: 0 30px 80px rgba(0, 0, 0, .2);
+}
+
+[data-tema="claro"] .pix-close {
+    color: #1f2937 !important;
+    border-color: rgba(0, 0, 0, .15);
+}
+
+[data-tema="claro"] .pix-close:hover {
+    color: #000000 !important;
+    border-color: #1a4dff;
+}
+
+[data-tema="claro"] .pix-head {
+    border-bottom-color: rgba(0, 0, 0, .12);
+}
+
+[data-tema="claro"] .pix-kicker {
+    color: #0a2fa8 !important;
+}
+
+[data-tema="claro"] .pix-head h2 {
+    color: #000000 !important;
+}
+
+[data-tema="claro"] .pix-head h2 em {
+    color: #1a4dff !important;
+}
+
+[data-tema="claro"] .pix-qr-wrap {
+    background: #ffffff;
+    border: 1px solid rgba(0, 0, 0, .15);
+}
+
+[data-tema="claro"] .pix-qr-logo {
+    border-color: #ffffff;
+}
+
+[data-tema="claro"] .pix-valor-row > span,
+[data-tema="claro"] .pix-countdown-row > span {
+    color: #4b5563 !important;
+}
+
+[data-tema="claro"] .pix-valor-row strong {
+    color: #000000 !important;
+}
+
+[data-tema="claro"] .pix-countdown-row strong {
+    color: #1a4dff !important;
+}
+
+[data-tema="claro"] .pix-aviso {
+    color: #1f2937 !important;
+}
+
+[data-tema="claro"] .pix-codigo-wrap {
+    background: #f7f9fc;
+    border-color: rgba(0, 0, 0, .25);
+}
+
+[data-tema="claro"] .pix-codigo-wrap label {
+    color: #0a2fa8 !important;
+}
+
+[data-tema="claro"] .pix-codigo-wrap code {
+    color: #1f2937 !important;
+}
+
+[data-tema="claro"] .pix-copiar {
+    color: #000000 !important;
+    border-color: rgba(0, 0, 0, .3);
+}
+
+[data-tema="claro"] .pix-copiar:hover {
+    border-color: #1a4dff;
+    background: rgba(26, 77, 255, .08);
+    color: #1a4dff !important;
+}
+
+[data-tema="claro"] .pix-copiar.copied {
+    border-color: #10b981;
+    color: #059669 !important;
+    background: rgba(16, 185, 129, .1);
+}
+
+[data-tema="claro"] .pix-foot {
+    border-top-color: rgba(0, 0, 0, .12);
+}
+
+[data-tema="claro"] .pix-confirmar {
+    color: #ffffff !important;
+    background: #1a4dff;
+}
+
+[data-tema="claro"] .pix-confirmar:hover {
+    background: #0a2fa8;
+}
+
+[data-tema="claro"] .pix-confirmar:disabled {
+    background: #cbd5e1;
+    color: #64748b !important;
+}
+
+[data-tema="claro"] .pix-cancelar {
+    color: #1f2937 !important;
+    border-color: rgba(0, 0, 0, .2);
+}
+
+[data-tema="claro"] .pix-cancelar:hover {
+    color: #000000 !important;
+    border-color: rgba(0, 0, 0, .4);
+}
+
+/* ---------------------------------------------------------
+   23. BUSCA OVERLAY
+   --------------------------------------------------------- */
+[data-tema="claro"] .search-overlay {
+    background: rgba(255, 255, 255, .97);
+}
+
+[data-tema="claro"] .search-overlay::before {
+    -webkit-text-stroke: 1px rgba(0, 0, 0, .22);
+}
+
+[data-tema="claro"] .search-box {
+    border-top-color: rgba(0, 0, 0, .15);
+    border-bottom-color: rgba(0, 0, 0, .15);
+}
+
+[data-tema="claro"] .search-box p {
+    color: #1f2937 !important;
+}
+
+[data-tema="claro"] .search-box input {
+    color: #000000 !important;
+    border-bottom-color: rgba(0, 0, 0, .3);
+}
+
+[data-tema="claro"] .search-box input::placeholder {
+    color: #6b7280 !important;
+}
+
+[data-tema="claro"] .close-search {
+    color: #1f2937 !important;
+    border-color: rgba(0, 0, 0, .2);
+}
+
+[data-tema="claro"] .close-search:hover {
+    color: #000000 !important;
+    border-color: #1a4dff;
+    background: rgba(26, 77, 255, .08);
+}
+
+[data-tema="claro"] .search-box > button:last-child {
+    color: #1f2937 !important;
+}
+
+[data-tema="claro"] .search-box > button:last-child:hover {
+    color: #000000 !important;
+    border-bottom-color: #1a4dff;
+}
+
+/* ---------------------------------------------------------
+   24. TOAST / ADMIN
+   --------------------------------------------------------- */
+[data-tema="claro"] .toast {
+    background: #ffffff;
+    border-color: rgba(0, 0, 0, .15);
+    color: #000000 !important;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, .15);
+}
+
+[data-tema="claro"] .toast svg {
+    stroke: currentColor;
+}
+
+[data-tema="claro"] .admin-head h1 {
+    color: #000000 !important;
+}
+
+[data-tema="claro"] .admin-head p {
+    color: #1f2937 !important;
+}
+
+[data-tema="claro"] .admin-form {
+    background: #f7f9fc;
+    border-color: rgba(0, 0, 0, .12);
+}
+
+[data-tema="claro"] .admin-form button {
+    color: #ffffff !important;
+    background: #1a4dff;
+}
+
+[data-tema="claro"] .admin-form button:hover {
+    background: #0a2fa8;
+}
+
+[data-tema="claro"] .admin-item {
+    background: #f7f9fc;
+    border-color: rgba(0, 0, 0, .12);
+}
+
+[data-tema="claro"] .admin-item h4 {
+    color: #000000 !important;
+}
+
+[data-tema="claro"] .admin-item small {
+    color: #4b5563 !important;
+}
+
+[data-tema="claro"] .admin-item button {
+    color: #1f2937 !important;
+    border-color: rgba(0, 0, 0, .2);
+}
+
+[data-tema="claro"] .admin-item button:hover {
+    color: #dc2626 !important;
+    border-color: #dc2626;
+}
+
+[data-tema="claro"] .admin-msg.ok {
+    background: rgba(26, 77, 255, .1);
+    border-color: #1a4dff;
+    color: #0a2fa8 !important;
+}
+
+/* ---------------------------------------------------------
+   25. CURSOR HALO / MENU MOBILE
+   --------------------------------------------------------- */
+[data-tema="claro"] .cursor-halo {
+    background: radial-gradient(circle, rgba(26, 77, 255, .08), transparent 65%);
+}
+
+[data-tema="claro"] .nav-backdrop {
+    background: rgba(0, 0, 0, .35);
+}
+
+[data-tema="claro"] .nav.open {
+    background: #ffffff;
+    border-left-color: rgba(0, 0, 0, .15);
+    box-shadow: -50px 0 120px rgba(0, 0, 0, .15);
+}
+
+[data-tema="claro"] .nav a {
+    color: #000000 !important;
+    border-bottom-color: rgba(0, 0, 0, .08);
+}
+
+[data-tema="claro"] .nav a:hover,
+[data-tema="claro"] .nav a.active {
+    color: #1a4dff !important;
+}
+
+[data-tema="claro"] .nav .nav-close {
+    color: #1f2937;
+    border-color: rgba(0, 0, 0, .2);
+}
+
+/* ---------------------------------------------------------
+   26. AUTH / LOGIN (se houver)
+   --------------------------------------------------------- */
+[data-tema="claro"] .auth-visual {
+    background:
+        radial-gradient(700px 500px at 30% 20%, rgba(26, 77, 255, .08), transparent 65%),
+        linear-gradient(160deg, #f7f9fc 0%, #ffffff 100%);
+    border-color: rgba(0, 0, 0, .12);
+}
+
+[data-tema="claro"] .auth-title {
+    color: #000000 !important;
+}
+
+[data-tema="claro"] .auth-sub {
+    color: #1f2937 !important;
+}
+
+[data-tema="claro"] .auth-benefits li {
+    color: #1f2937 !important;
+}
+
+[data-tema="claro"] .auth-tabs {
+    background: #f7f9fc;
+    border-color: rgba(0, 0, 0, .12);
+}
+
+[data-tema="claro"] .auth-tab {
+    color: #4b5563 !important;
+}
+
+[data-tema="claro"] .auth-tab:hover {
+    color: #000000 !important;
+    background: #eef2f8;
+}
+
+/* ---------------------------------------------------------
+   27. BOTÃO DE TEMA
+   --------------------------------------------------------- */
+.theme-button {
+    position: relative;
+    width: 42px;
+    height: 42px;
+    display: grid;
+    place-items: center;
+    color: var(--paper-2);
+    background: none;
+    border: 1px solid transparent;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: all .35s cubic-bezier(.22, 1, .36, 1);
+}
+
+.theme-button:hover {
+    color: var(--paper-0);
+    background: rgba(127, 176, 255, .06);
+    border-color: var(--line-2);
+    transform: translateY(-2px);
+}
+
+[data-tema="claro"] .theme-button {
+    color: #1f2937;
+}
+
+[data-tema="claro"] .theme-button:hover {
+    color: #000000;
+    background: rgba(26, 77, 255, .1);
+    border-color: rgba(26, 77, 255, .3);
+}
+
+.theme-button svg {
+    width: 18px;
+    height: 18px;
+    transition: transform .4s cubic-bezier(.34, 1.56, .64, 1);
+    stroke: currentColor;
+}
+
+.theme-button:hover svg { transform: rotate(20deg); }
+
+.theme-button .icone-sol { display: block; }
+.theme-button .icone-lua { display: none; }
+
+[data-tema="claro"] .theme-button .icone-sol { display: none; }
+[data-tema="claro"] .theme-button .icone-lua { display: block; }
+
+@media (max-width: 720px) {
+    .theme-button { width: 38px; height: 38px; }
+    .theme-button svg { width: 16px; height: 16px; }
+}
+
+/* ---------------------------------------------------------
+   28. SCROLLBAR + TRANSIÇÕES
+   --------------------------------------------------------- */
+[data-tema="claro"] ::-webkit-scrollbar-track {
+    background: #f7f9fc;
+    border-left-color: rgba(0, 0, 0, .1);
+}
+
+[data-tema="claro"] ::-webkit-scrollbar-thumb {
+    background: rgba(0, 0, 0, .25);
+    border-color: #f7f9fc;
+}
+
+[data-tema="claro"] ::-webkit-scrollbar-thumb:hover {
+    background: rgba(0, 0, 0, .4);
+}
+
+[data-tema] body,
+[data-tema] .header,
+[data-tema] .footer,
+[data-tema] .product-card,
+[data-tema] .cart-item,
+[data-tema] .pedido-card,
+[data-tema] .conta-button,
+[data-tema] .btn-primary,
+[data-tema] .btn-secondary {
+    transition:
+        background-color .35s ease,
+        color .35s ease,
+        border-color .35s ease;
+}
+
+/* =========================================================
+   FIM — SUPER FIX TEMA CLARO v3
+   ========================================================= */
+
+   /* =========================================================
+   🔥 TEMA CLARO — v4 NUCLEAR (LEGIBILIDADE GARANTIDA)
+   Força TODO texto a ser visível. Cola no FINAL do CSS.
+   ========================================================= */
+
+/* ---------------------------------------------------------
+   BASE: TUDO ESCURO POR PADRÃO
+   --------------------------------------------------------- */
+[data-tema="claro"],
+[data-tema="claro"] body,
+[data-tema="claro"] main,
+[data-tema="claro"] section,
+[data-tema="claro"] article,
+[data-tema="claro"] aside,
+[data-tema="claro"] header,
+[data-tema="claro"] footer,
+[data-tema="claro"] nav,
+[data-tema="claro"] div,
+[data-tema="claro"] span,
+[data-tema="claro"] p,
+[data-tema="claro"] a,
+[data-tema="claro"] li,
+[data-tema="claro"] ul,
+[data-tema="claro"] ol,
+[data-tema="claro"] small,
+[data-tema="claro"] label,
+[data-tema="claro"] strong,
+[data-tema="claro"] b,
+[data-tema="claro"] em,
+[data-tema="claro"] i,
+[data-tema="claro"] cite,
+[data-tema="claro"] blockquote,
+[data-tema="claro"] figcaption,
+[data-tema="claro"] dt,
+[data-tema="claro"] dd,
+[data-tema="claro"] code,
+[data-tema="claro"] kbd,
+[data-tema="claro"] samp,
+[data-tema="claro"] pre,
+[data-tema="claro"] h1,
+[data-tema="claro"] h2,
+[data-tema="claro"] h3,
+[data-tema="claro"] h4,
+[data-tema="claro"] h5,
+[data-tema="claro"] h6,
+[data-tema="claro"] th,
+[data-tema="claro"] td,
+[data-tema="claro"] legend,
+[data-tema="claro"] caption {
+    color: #111827;
+}
+
+/* Títulos sempre PRETO */
+[data-tema="claro"] h1,
+[data-tema="claro"] h2,
+[data-tema="claro"] h3,
+[data-tema="claro"] h4,
+[data-tema="claro"] h5,
+[data-tema="claro"] h6,
+[data-tema="claro"] strong,
+[data-tema="claro"] b,
+[data-tema="claro"] legend {
+    color: #000000 !important;
+}
+
+/* Parágrafos e corpo */
+[data-tema="claro"] p,
+[data-tema="claro"] li,
+[data-tema="claro"] dd,
+[data-tema="claro"] small,
+[data-tema="claro"] figcaption,
+[data-tema="claro"] caption {
+    color: #1f2937 !important;
+}
+
+/* ---------------------------------------------------------
+   SVGs e ícones — SEMPRE herdam cor do texto
+   --------------------------------------------------------- */
+[data-tema="claro"] svg {
+    color: inherit;
+    fill: currentColor;
+    stroke: currentColor;
+}
+
+[data-tema="claro"] svg[fill="none"],
+[data-tema="claro"] svg [fill="none"] {
+    fill: none;
+}
+
+[data-tema="claro"] svg[stroke="none"],
+[data-tema="claro"] svg [stroke="none"] {
+    stroke: none;
+}
+
+/* ---------------------------------------------------------
+   BOTÕES COM FUNDO COLORIDO → TEXTO BRANCO
+   (whitelist: onde o fundo é escuro/azul)
+   --------------------------------------------------------- */
+[data-tema="claro"] .btn-primary,
+[data-tema="claro"] .btn-primary *,
+[data-tema="claro"] .btn-buy-now,
+[data-tema="claro"] .btn-buy-now *,
+[data-tema="claro"] .product-buy-now,
+[data-tema="claro"] .product-buy-now *,
+[data-tema="claro"] .checkout-button,
+[data-tema="claro"] .checkout-button *,
+[data-tema="claro"] .pix-confirmar,
+[data-tema="claro"] .pix-confirmar *,
+[data-tema="claro"] .btn-finish-mobile,
+[data-tema="claro"] .btn-finish-mobile *,
+[data-tema="claro"] .admin-form button,
+[data-tema="claro"] .admin-form button *,
+[data-tema="claro"] .success-box .btn-primary,
+[data-tema="claro"] .success-box .btn-primary *,
+[data-tema="claro"] .cart-page .checkout-button,
+[data-tema="claro"] .cart-page .checkout-button *,
+[data-tema="claro"] .cart-page .cart-empty-actions .btn-primary,
+[data-tema="claro"] .cart-page .cart-empty-actions .btn-primary *,
+[data-tema="claro"] .product-size.active,
+[data-tema="claro"] .product-size.active *,
+[data-tema="claro"] .product-badge--new,
+[data-tema="claro"] .product-badge--sale,
+[data-tema="claro"] #cart-count,
+[data-tema="claro"] .conta-avatar,
+[data-tema="claro"] .summary-item-qty,
+[data-tema="claro"] .pix-qr-logo span {
+    color: #ffffff !important;
+}
+
+/* ---------------------------------------------------------
+   INPUTS — texto preto garantido
+   --------------------------------------------------------- */
+[data-tema="claro"] input,
+[data-tema="claro"] textarea,
+[data-tema="claro"] select,
+[data-tema="claro"] option,
+[data-tema="claro"] optgroup {
+    color: #000000 !important;
+    background-color: #ffffff;
+    border-color: rgba(0, 0, 0, .25);
+}
+
+[data-tema="claro"] input::placeholder,
+[data-tema="claro"] textarea::placeholder {
+    color: #6b7280 !important;
+    opacity: 1;
+}
+
+[data-tema="claro"] input:focus,
+[data-tema="claro"] textarea:focus,
+[data-tema="claro"] select:focus {
+    color: #000000 !important;
+    border-color: #1a4dff !important;
+    outline: none;
+}
+
+/* ---------------------------------------------------------
+   HEADER
+   --------------------------------------------------------- */
+[data-tema="claro"] .header,
+[data-tema="claro"] .header * {
+    color: #1f2937;
+}
+
+[data-tema="claro"] .logo,
+[data-tema="claro"] .logo span {
+    color: #000000 !important;
+}
+
+[data-tema="claro"] .logo span {
+    color: #1a4dff !important;
+}
+
+[data-tema="claro"] .nav a {
+    color: #1f2937 !important;
+}
+
+[data-tema="claro"] .nav a:hover,
+[data-tema="claro"] .nav a.active {
+    color: #1a4dff !important;
+}
+
+[data-tema="claro"] .search-button,
+[data-tema="claro"] .cart-button,
+[data-tema="claro"] .menu-button,
+[data-tema="claro"] .theme-button {
+    color: #1f2937 !important;
+}
+
+[data-tema="claro"] .search-button:hover,
+[data-tema="claro"] .cart-button:hover,
+[data-tema="claro"] .menu-button:hover,
+[data-tema="claro"] .theme-button:hover {
+    color: #000000 !important;
+    background: rgba(26, 77, 255, .1) !important;
+    border-color: rgba(26, 77, 255, .3) !important;
+}
+
+[data-tema="claro"] #cart-count {
+    color: #ffffff !important;
+    background: #1a4dff !important;
+    box-shadow: 0 0 0 2px #ffffff !important;
+}
+
+/* ---------------------------------------------------------
+   CONTA — botão + dropdown
+   --------------------------------------------------------- */
+[data-tema="claro"] .conta-button,
+[data-tema="claro"] .conta-button *,
+[data-tema="claro"] .conta-button svg {
+    color: #1f2937 !important;
+    stroke: currentColor !important;
+}
+
+[data-tema="claro"] .conta-button:hover,
+[data-tema="claro"] .conta-button:hover * {
+    color: #000000 !important;
+}
+
+[data-tema="claro"] .conta-nome {
+    color: #1f2937 !important;
+}
+
+[data-tema="claro"] .conta-button.logado,
+[data-tema="claro"] .conta-button.logado *,
+[data-tema="claro"] .conta-button.logado .conta-nome {
+    color: #047857 !important;
+}
+
+[data-tema="claro"] .conta-dropdown {
+    background: #ffffff !important;
+    border-color: rgba(0, 0, 0, .15) !important;
+    box-shadow: 0 30px 80px rgba(0, 0, 0, .15) !important;
+}
+
+[data-tema="claro"] .conta-dropdown-head strong,
+[data-tema="claro"] .conta-dropdown-head strong * {
+    color: #000000 !important;
+}
+
+[data-tema="claro"] .conta-dropdown-head small,
+[data-tema="claro"] .conta-dropdown-head small * {
+    color: #4b5563 !important;
+}
+
+[data-tema="claro"] .conta-dropdown ul li a,
+[data-tema="claro"] .conta-dropdown ul li a * {
+    color: #1f2937 !important;
+}
+
+[data-tema="claro"] .conta-dropdown ul li a:hover,
+[data-tema="claro"] .conta-dropdown ul li a:hover * {
+    color: #000000 !important;
+    background: #eef2f8 !important;
+}
+
+[data-tema="claro"] .conta-dropdown ul li a svg {
+    color: #1a4dff !important;
+    stroke: currentColor !important;
+}
+
+[data-tema="claro"] .conta-dropdown-foot button,
+[data-tema="claro"] .conta-dropdown-foot button * {
+    color: #dc2626 !important;
+}
+
+[data-tema="claro"] .conta-dropdown-foot button:hover,
+[data-tema="claro"] .conta-dropdown-foot button:hover * {
+    color: #991b1b !important;
+    background: rgba(239, 68, 68, .1) !important;
+}
+
+/* ---------------------------------------------------------
+   HERO / TICKER / DIVISORES
+   --------------------------------------------------------- */
+[data-tema="claro"] .hero,
+[data-tema="claro"] .hero * {
+    color: #1f2937;
+}
+
+[data-tema="claro"] .hero h1,
+[data-tema="claro"] .hero h1 span {
+    color: #000000 !important;
+}
+
+[data-tema="claro"] .hero h1 span {
+    color: #1a4dff !important;
+}
+
+[data-tema="claro"] .hero-small {
+    color: #0a2fa8 !important;
+    border-bottom-color: rgba(0, 0, 0, .2) !important;
+}
+
+[data-tema="claro"] .hero-description {
+    color: #1f2937 !important;
+}
+
+[data-tema="claro"] .hero::after {
+    color: #6b7280 !important;
+}
+
+[data-tema="claro"] .ticker,
+[data-tema="claro"] .ticker * {
+    color: #1f2937 !important;
+}
+
+[data-tema="claro"] .ticker-track > * {
+    color: #1f2937 !important;
+}
+
+[data-tema="claro"] .divider-marker,
+[data-tema="claro"] .divider-marker * {
+    color: #4b5563 !important;
+}
+
+[data-tema="claro"] .skip-link {
+    color: #ffffff !important;
+    background: #1a4dff !important;
+}
+
+/* ---------------------------------------------------------
+   SECTION TITLES
+   --------------------------------------------------------- */
+[data-tema="claro"] .section-title > p,
+[data-tema="claro"] .section-kicker {
+    color: #0a2fa8 !important;
+}
+
+[data-tema="claro"] .section-title h2 {
+    color: #000000 !important;
+}
+
+[data-tema="claro"] .section-title h2 span {
+    color: #1a4dff !important;
+}
+
+/* ---------------------------------------------------------
+   CATEGORIAS / LOOKBOOK / QUICK / PULL-QUOTE
+   --------------------------------------------------------- */
+[data-tema="claro"] .category-content > span,
+[data-tema="claro"] .lookbook-item small,
+[data-tema="claro"] .quick-card span,
+[data-tema="claro"] .pull-quote cite {
+    color: #0a2fa8 !important;
+}
+
+[data-tema="claro"] .category-content h3,
+[data-tema="claro"] .category-content strong,
+[data-tema="claro"] .lookbook-item h4,
+[data-tema="claro"] .quick-card h3,
+[data-tema="claro"] .pull-quote blockquote {
+    color: #000000 !important;
+}
+
+[data-tema="claro"] .category-content p,
+[data-tema="claro"] .quick-card p {
+    color: #1f2937 !important;
+}
+
+[data-tema="claro"] .quick-card:hover h3,
+[data-tema="claro"] .category-card:hover .category-content strong {
+    color: #1a4dff !important;
+}
+
+/* ---------------------------------------------------------
+   PRODUTOS (grid) — REforço máximo
+   --------------------------------------------------------- */
+[data-tema="claro"] .product-info,
+[data-tema="claro"] .product-info * {
+    color: #1f2937;
+}
+
+[data-tema="claro"] .product-cat {
+    color: #0a2fa8 !important;
+}
+
+[data-tema="claro"] .product-name,
+[data-tema="claro"] .product-name a {
+    color: #000000 !important;
+}
+
+[data-tema="claro"] .product-card:hover .product-name,
+[data-tema="claro"] .product-card:hover .product-name a {
+    color: #1a4dff !important;
+}
+
+[data-tema="claro"] .product-desc {
+    color: #1f2937 !important;
+}
+
+[data-tema="claro"] .product-price strong {
+    color: #000000 !important;
+}
+
+[data-tema="claro"] .product-price s {
+    color: #4b5563 !important;
+}
+
+[data-tema="claro"] .product-price em {
+    color: #0a2fa8 !important;
+}
+
+[data-tema="claro"] .product-size {
+    color: #1f2937 !important;
+    border-color: rgba(0, 0, 0, .25) !important;
+}
+
+[data-tema="claro"] .product-size:hover {
+    color: #000000 !important;
+    border-color: rgba(0, 0, 0, .5) !important;
+}
+
+[data-tema="claro"] .product-quick-add,
+[data-tema="claro"] .product-quick-add * {
+    color: #000000 !important;
+}
+
+[data-tema="claro"] .product-quick-add:hover:not(:disabled),
+[data-tema="claro"] .product-quick-add:hover:not(:disabled) * {
+    color: #1a4dff !important;
+}
+
+[data-tema="claro"] .product-wish {
+    color: #374151 !important;
+}
+
+[data-tema="claro"] .product-wish:hover,
+[data-tema="claro"] .product-wish.active {
+    color: #1a4dff !important;
+}
+
+/* ---------------------------------------------------------
+   BREADCRUMB / CATEGORIA
+   --------------------------------------------------------- */
+[data-tema="claro"] .breadcrumb,
+[data-tema="claro"] .breadcrumb * {
+    color: #4b5563;
+}
+
+[data-tema="claro"] .breadcrumb a {
+    color: #1f2937 !important;
+}
+
+[data-tema="claro"] .breadcrumb a:hover {
+    color: #1a4dff !important;
+}
+
+[data-tema="claro"] .breadcrumb [aria-current],
+[data-tema="claro"] .breadcrumb span[aria-current] {
+    color: #0a2fa8 !important;
+}
+
+[data-tema="claro"] .category-label,
+[data-tema="claro"] .category-label span {
+    color: #0a2fa8 !important;
+}
+
+[data-tema="claro"] .category-hero h1,
+[data-tema="claro"] .category-hero h1 em {
+    color: #000000 !important;
+}
+
+[data-tema="claro"] .category-hero h1 em {
+    color: #1a4dff !important;
+}
+
+[data-tema="claro"] .category-hero p {
+    color: #1f2937 !important;
+}
+
+[data-tema="claro"] .category-hero-meta span {
+    color: #4b5563 !important;
+}
+
+[data-tema="claro"] .category-hero-meta strong {
+    color: #000000 !important;
+}
+
+[data-tema="claro"] .category-result-count,
+[data-tema="claro"] .category-sort > span {
+    color: #4b5563 !important;
+}
+
+[data-tema="claro"] .category-sort select {
+    color: #000000 !important;
+}
+
+[data-tema="claro"] .category-sort svg {
+    color: #4b5563 !important;
+}
+
+/* ---------------------------------------------------------
+   EMPTY STATE / NO PRODUCTS
+   --------------------------------------------------------- */
+[data-tema="claro"] .no-products h3 {
+    color: #000000 !important;
+}
+
+[data-tema="claro"] .no-products h3 em {
+    color: #1a4dff !important;
+}
+
+[data-tema="claro"] .no-products p {
+    color: #1f2937 !important;
+}
+
+[data-tema="claro"] .no-products-mark {
+    color: rgba(0, 0, 0, .25) !important;
+}
+
+/* ---------------------------------------------------------
+   NEWSLETTER / CTA FINAL
+   --------------------------------------------------------- */
+[data-tema="claro"] .newsletter h3,
+[data-tema="claro"] .newsletter h3 span {
+    color: #000000 !important;
+}
+
+[data-tema="claro"] .newsletter h3 span {
+    color: #1a4dff !important;
+}
+
+[data-tema="claro"] .newsletter p {
+    color: #1f2937 !important;
+}
+
+[data-tema="claro"] .newsletter-form input {
+    color: #000000 !important;
+}
+
+[data-tema="claro"] .newsletter-form input::placeholder {
+    color: #6b7280 !important;
+}
+
+[data-tema="claro"] .newsletter-form button {
+    color: #000000 !important;
+}
+
+[data-tema="claro"] .newsletter-form button:hover {
+    color: #1a4dff !important;
+}
+
+[data-tema="claro"] .final-cta p {
+    color: #0a2fa8 !important;
+}
+
+[data-tema="claro"] .final-cta h2,
+[data-tema="claro"] .final-cta h2 span {
+    color: #000000 !important;
+}
+
+[data-tema="claro"] .final-cta h2 span {
+    color: #1a4dff !important;
+}
+
+/* ---------------------------------------------------------
+   FOOTER
+   --------------------------------------------------------- */
+[data-tema="claro"] .footer,
+[data-tema="claro"] .footer * {
+    color: #1f2937;
+}
+
+[data-tema="claro"] .footer-logo,
+[data-tema="claro"] .footer-logo span {
+    color: #000000 !important;
+}
+
+[data-tema="claro"] .footer-logo span {
+    color: #1a4dff !important;
+}
+
+[data-tema="claro"] .footer-links a {
+    color: #1f2937 !important;
+}
+
+[data-tema="claro"] .footer-links a:hover {
+    color: #1a4dff !important;
+}
+
+[data-tema="claro"] .footer > p {
+    color: #4b5563 !important;
+    border-top-color: rgba(0, 0, 0, .12) !important;
+}
+
+[data-tema="claro"] .admin-link {
+    color: #1f2937 !important;
+    border-left-color: rgba(0, 0, 0, .15) !important;
+}
+
+[data-tema="claro"] .admin-link:hover {
+    color: #0a2fa8 !important;
+}
+
+[data-tema="claro"] .footer-contato-link,
+[data-tema="claro"] .footer-contato-link * {
+    color: #1f2937 !important;
+    border-color: rgba(0, 0, 0, .25);
+}
+
+[data-tema="claro"] .footer-contato-link:hover,
+[data-tema="claro"] .footer-contato-link:hover * {
+    color: #1a4dff !important;
+    border-color: #1a4dff;
+    background: rgba(26, 77, 255, .08);
+}
+
+[data-tema="claro"] .footer-contato-link[href*="wa.me"]:hover,
+[data-tema="claro"] .footer-contato-link[href*="wa.me"]:hover * {
+    color: #128C7E !important;
+    border-color: rgba(18, 140, 126, .5);
+    background: rgba(37, 211, 102, .12);
+}
+
+/* ---------------------------------------------------------
+   CARRINHO — tudo forçado
+   --------------------------------------------------------- */
+[data-tema="claro"] .cart-page,
+[data-tema="claro"] .cart-page * {
+    color: #1f2937;
+}
+
+[data-tema="claro"] .cart-page .cart-heading h1,
+[data-tema="claro"] .cart-page .cart-heading h1 em {
+    color: #000000 !important;
+}
+
+[data-tema="claro"] .cart-page .cart-heading h1 em {
+    color: #1a4dff !important;
+}
+
+[data-tema="claro"] .cart-page .cart-heading p {
+    color: #1f2937 !important;
+}
+
+[data-tema="claro"] .cart-page .cart-heading .category-label,
+[data-tema="claro"] .cart-page .cart-heading .category-label span {
+    color: #0a2fa8 !important;
+}
+
+[data-tema="claro"] .cart-page .cart-item-cat {
+    color: #0a2fa8 !important;
+}
+
+[data-tema="claro"] .cart-page .cart-item-name {
+    color: #000000 !important;
+}
+
+[data-tema="claro"] .cart-page .cart-item-price {
+    color: #1f2937 !important;
+}
+
+[data-tema="claro"] .cart-page .cart-qty span {
+    color: #000000 !important;
+}
+
+[data-tema="claro"] .cart-page .cart-qty button {
+    color: #1f2937 !important;
+}
+
+[data-tema="claro"] .cart-page .cart-qty button:hover {
+    color: #000000 !important;
+    background: rgba(26, 77, 255, .15) !important;
+}
+
+[data-tema="claro"] .cart-page .cart-item-remove {
+    color: #4b5563 !important;
+}
+
+[data-tema="claro"] .cart-page .cart-item-remove:hover {
+    color: #dc2626 !important;
+}
+
+[data-tema="claro"] .cart-page .cart-summary-kicker {
+    color: #0a2fa8 !important;
+}
+
+[data-tema="claro"] .cart-page .cart-summary-title,
+[data-tema="claro"] .cart-page .cart-summary-title em {
+    color: #000000 !important;
+}
+
+[data-tema="claro"] .cart-page .cart-summary-title em {
+    color: #1a4dff !important;
+}
+
+[data-tema="claro"] .cart-page .cart-summary-row > span {
+    color: #1f2937 !important;
+}
+
+[data-tema="claro"] .cart-page .cart-summary-row strong {
+    color: #000000 !important;
+}
+
+[data-tema="claro"] .cart-page .cart-summary-row--total strong {
+    color: #000000 !important;
+}
+
+[data-tema="claro"] .cart-page .cart-summary-info {
+    color: #4b5563 !important;
+}
+
+[data-tema="claro"] .cart-page .continue-shopping {
+    color: #1f2937 !important;
+}
+
+[data-tema="claro"] .cart-page .continue-shopping:hover {
+    color: #1a4dff !important;
+}
+
+[data-tema="claro"] .cart-page .cart-empty-mark {
+    color: rgba(0, 0, 0, .25) !important;
+}
+
+[data-tema="claro"] .cart-page .cart-empty h2,
+[data-tema="claro"] .cart-page .cart-empty h2 em {
+    color: #000000 !important;
+}
+
+[data-tema="claro"] .cart-page .cart-empty h2 em {
+    color: #1a4dff !important;
+}
+
+[data-tema="claro"] .cart-page .cart-empty p {
+    color: #1f2937 !important;
+}
+
+[data-tema="claro"] .cart-page .pull-quote blockquote {
+    color: #000000 !important;
+}
+
+[data-tema="claro"] .cart-page .pull-quote cite {
+    color: #0a2fa8 !important;
+}
+
+[data-tema="claro"] .cart-page .breadcrumb,
+[data-tema="claro"] .cart-page .breadcrumb a,
+[data-tema="claro"] .cart-page .breadcrumb span {
+    color: #1f2937 !important;
+}
+
+/* RESUMO FORA do cart-page (checkout) */
+[data-tema="claro"] .cart-summary-kicker {
+    color: #0a2fa8 !important;
+}
+
+[data-tema="claro"] .cart-summary-title,
+[data-tema="claro"] .cart-summary-title em {
+    color: #000000 !important;
+}
+
+[data-tema="claro"] .cart-summary-title em {
+    color: #1a4dff !important;
+}
+
+/* ---------------------------------------------------------
+   CHECKOUT
+   --------------------------------------------------------- */
+[data-tema="claro"] .search-main,
+[data-tema="claro"] .search-main *,
+[data-tema="claro"] .checkout-main,
+[data-tema="claro"] .checkout-main * {
+    color: #1f2937;
+}
+
+[data-tema="claro"] .search-head h1,
+[data-tema="claro"] .search-head h1 em,
+[data-tema="claro"] .checkout-head h1,
+[data-tema="claro"] .checkout-head h1 em {
+    color: #000000 !important;
+}
+
+[data-tema="claro"] .search-head h1 em,
+[data-tema="claro"] .checkout-head h1 em {
+    color: #1a4dff !important;
+}
+
+[data-tema="claro"] .search-head p,
+[data-tema="claro"] .checkout-head p {
+    color: #1f2937 !important;
+}
+
+[data-tema="claro"] .search-head .category-label,
+[data-tema="claro"] .checkout-head .category-label {
+    color: #0a2fa8 !important;
+}
+
+[data-tema="claro"] .search-head .category-label span,
+[data-tema="claro"] .checkout-head .category-label span {
+    color: #4b5563 !important;
+}
+
+[data-tema="claro"] .step-head h2 {
+    color: #000000 !important;
+}
+
+[data-tema="claro"] .step-head p {
+    color: #1f2937 !important;
+}
+
+[data-tema="claro"] .step-num {
+    color: #0a2fa8 !important;
+    border-color: rgba(0, 0, 0, .25) !important;
+}
+
+[data-tema="claro"] .field label,
+[data-tema="claro"] .checkout-step label {
+    color: #0a2fa8 !important;
+}
+
+[data-tema="claro"] .shipping-info strong {
+    color: #000000 !important;
+}
+
+[data-tema="claro"] .shipping-info small {
+    color: #1f2937 !important;
+}
+
+[data-tema="claro"] .shipping-price {
+    color: #0a2fa8 !important;
+}
+
+[data-tema="claro"] .payment-method strong {
+    color: #000000 !important;
+}
+
+[data-tema="claro"] .payment-method small {
+    color: #1f2937 !important;
+}
+
+[data-tema="claro"] .payment-note {
+    color: #1f2937 !important;
+}
+
+[data-tema="claro"] .summary-item-info strong {
+    color: #000000 !important;
+}
+
+[data-tema="claro"] .summary-item-info small {
+    color: #4b5563 !important;
+}
+
+[data-tema="claro"] .summary-item-price {
+    color: #000000 !important;
+}
+
+[data-tema="claro"] .summary-row span {
+    color: #1f2937 !important;
+}
+
+[data-tema="claro"] .summary-row strong {
+    color: #000000 !important;
+}
+
+[data-tema="claro"] .summary-row--total strong {
+    color: #000000 !important;
+}
+
+[data-tema="claro"] .summary-info {
+    color: #4b5563 !important;
+}
+
+/* ---------------------------------------------------------
+   SUCESSO
+   --------------------------------------------------------- */
+[data-tema="claro"] .success-box h2,
+[data-tema="claro"] .success-box h2 em {
+    color: #000000 !important;
+}
+
+[data-tema="claro"] .success-box h2 em {
+    color: #059669 !important;
+}
+
+[data-tema="claro"] .success-box p {
+    color: #1f2937 !important;
+}
+
+[data-tema="claro"] .success-code span {
+    color: #4b5563 !important;
+}
+
+[data-tema="claro"] .success-code strong {
+    color: #1a4dff !important;
+}
+
+/* ---------------------------------------------------------
+   PIX MODAL
+   --------------------------------------------------------- */
+[data-tema="claro"] .pix-kicker {
+    color: #0a2fa8 !important;
+}
+
+[data-tema="claro"] .pix-head h2,
+[data-tema="claro"] .pix-head h2 em {
+    color: #000000 !important;
+}
+
+[data-tema="claro"] .pix-head h2 em {
+    color: #1a4dff !important;
+}
+
+[data-tema="claro"] .pix-valor-row > span,
+[data-tema="claro"] .pix-countdown-row > span {
+    color: #4b5563 !important;
+}
+
+[data-tema="claro"] .pix-valor-row strong {
+    color: #000000 !important;
+}
+
+[data-tema="claro"] .pix-countdown-row strong {
+    color: #1a4dff !important;
+}
+
+[data-tema="claro"] .pix-aviso {
+    color: #1f2937 !important;
+}
+
+[data-tema="claro"] .pix-codigo-wrap label {
+    color: #0a2fa8 !important;
+}
+
+[data-tema="claro"] .pix-codigo-wrap code {
+    color: #1f2937 !important;
+}
+
+[data-tema="claro"] .pix-copiar,
+[data-tema="claro"] .pix-copiar * {
+    color: #000000 !important;
+    border-color: rgba(0, 0, 0, .3);
+}
+
+[data-tema="claro"] .pix-copiar:hover,
+[data-tema="claro"] .pix-copiar:hover * {
+    color: #1a4dff !important;
+    border-color: #1a4dff;
+    background: rgba(26, 77, 255, .08);
+}
+
+[data-tema="claro"] .pix-copiar.copied,
+[data-tema="claro"] .pix-copiar.copied * {
+    color: #059669 !important;
+    border-color: #059669;
+    background: rgba(16, 185, 129, .1);
+}
+
+[data-tema="claro"] .pix-close {
+    color: #1f2937 !important;
+    border-color: rgba(0, 0, 0, .2);
+}
+
+[data-tema="claro"] .pix-close:hover {
+    color: #000000 !important;
+    border-color: #1a4dff;
+}
+
+[data-tema="claro"] .pix-cancelar {
+    color: #1f2937 !important;
+    border-color: rgba(0, 0, 0, .25);
+}
+
+[data-tema="claro"] .pix-cancelar:hover {
+    color: #000000 !important;
+    border-color: rgba(0, 0, 0, .5);
+}
+
+/* ---------------------------------------------------------
+   BUSCA OVERLAY
+   --------------------------------------------------------- */
+[data-tema="claro"] .search-box p {
+    color: #1f2937 !important;
+}
+
+[data-tema="claro"] .search-box input {
+    color: #000000 !important;
+}
+
+[data-tema="claro"] .search-box input::placeholder {
+    color: #6b7280 !important;
+}
+
+[data-tema="claro"] .search-box > button:last-child {
+    color: #1f2937 !important;
+}
+
+[data-tema="claro"] .search-box > button:last-child:hover {
+    color: #000000 !important;
+}
+
+[data-tema="claro"] .close-search {
+    color: #1f2937 !important;
+    border-color: rgba(0, 0, 0, .2);
+}
+
+[data-tema="claro"] .close-search:hover {
+    color: #000000 !important;
+    border-color: #1a4dff;
+}
+
+/* ---------------------------------------------------------
+   TOAST / ADMIN
+   --------------------------------------------------------- */
+[data-tema="claro"] .toast,
+[data-tema="claro"] .toast * {
+    color: #000000 !important;
+    background: #ffffff;
+    border-color: rgba(0, 0, 0, .15);
+}
+
+[data-tema="claro"] .admin-head h1 {
+    color: #000000 !important;
+}
+
+[data-tema="claro"] .admin-head p {
+    color: #1f2937 !important;
+}
+
+[data-tema="claro"] .admin-item h4 {
+    color: #000000 !important;
+}
+
+[data-tema="claro"] .admin-item small {
+    color: #4b5563 !important;
+}
+
+[data-tema="claro"] .admin-item button {
+    color: #1f2937 !important;
+    border-color: rgba(0, 0, 0, .2);
+}
+
+[data-tema="claro"] .admin-item button:hover {
+    color: #dc2626 !important;
+    border-color: #dc2626;
+}
+
+[data-tema="claro"] .admin-msg.ok {
+    color: #0a2fa8 !important;
+    background: rgba(26, 77, 255, .1);
+    border-color: #1a4dff;
+}
+
+/* ---------------------------------------------------------
+   MENU MOBILE
+   --------------------------------------------------------- */
+[data-tema="claro"] .nav.open,
+[data-tema="claro"] .nav.open * {
+    color: #000000;
+}
+
+[data-tema="claro"] .nav.open a {
+    color: #000000 !important;
+    border-bottom-color: rgba(0, 0, 0, .08) !important;
+}
+
+[data-tema="claro"] .nav.open a:hover,
+[data-tema="claro"] .nav.open a.active {
+    color: #1a4dff !important;
+}
+
+[data-tema="claro"] .nav .nav-close {
+    color: #1f2937 !important;
+    border-color: rgba(0, 0, 0, .2);
+}
+
+/* ---------------------------------------------------------
+   LOADER
+   --------------------------------------------------------- */
+[data-tema="claro"] .loader {
+    background: #ffffff !important;
+}
+
+[data-tema="claro"] .loader,
+[data-tema="claro"] .loader * {
+    color: #000000;
+}
+
+[data-tema="claro"] .loader-meta {
+    color: #4b5563 !important;
+}
+
+[data-tema="claro"] .loader-line {
+    background: rgba(0, 0, 0, .15);
+}
+
+/* ---------------------------------------------------------
+   AUTH / LOGIN
+   --------------------------------------------------------- */
+[data-tema="claro"] .auth-title {
+    color: #000000 !important;
+}
+
+[data-tema="claro"] .auth-sub {
+    color: #1f2937 !important;
+}
+
+[data-tema="claro"] .auth-benefits li {
+    color: #1f2937 !important;
+}
+
+[data-tema="claro"] .auth-tab {
+    color: #4b5563 !important;
+}
+
+[data-tema="claro"] .auth-tab:hover,
+[data-tema="claro"] .auth-tab.active {
+    color: #000000 !important;
+}
+
+/* ---------------------------------------------------------
+   FALLBACK UNIVERSAL: força cor mínima legível
+   --------------------------------------------------------- */
+[data-tema="claro"] *[style*="color: #a4b2ca"],
+[data-tema="claro"] *[style*="color: #f5f7ff"],
+[data-tema="claro"] *[style*="color: #e0e6f5"],
+[data-tema="claro"] *[style*="color: #7fb0ff"],
+[data-tema="claro"] *[style*="color: #b8d4ff"],
+[data-tema="claro"] *[style*="color: #5d6b83"],
+[data-tema="claro"] *[style*="color: #38455c"] {
+    color: #1f2937 !important;
+}
+
+/* ---------------------------------------------------------
+   FIM — SUPER FIX v4 NUCLEAR
+   --------------------------------------------------------- */

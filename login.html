@@ -70,7 +70,13 @@
         <div class="auth-form-wrap">
             <span class="auth-kicker"><span>—</span>SUA CONTA</span>
             <h1 class="auth-title">Bem-vindo<em>de volta.</em></h1>
-            <p class="auth-sub">Entre para ver seus pedidos, endereços e continuar de onde parou.</p>
+            <p class="auth-sub" id="authSub">Entre para ver seus pedidos, endereços e continuar de onde parou.</p>
+
+<script>
+if (new URLSearchParams(window.location.search).get('redirect') === 'finalizar') {
+    document.getElementById('authSub').textContent = 'Entre para finalizar sua compra.';
+}
+</script>
 
             <div class="auth-tabs">
                 <button class="auth-tab active" onclick="trocarAba('login', this)">Entrar</button>

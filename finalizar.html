@@ -366,6 +366,32 @@
 <script>
 let pedidoValorTotal = 0;
 
+/* =========================================================
+   BLOQUEIO — exige login pra finalizar
+   ========================================================= */
+(function verificarLogin() {
+
+    if (!window.auth) return;
+
+    auth.onAuthStateChanged(function (user) {
+
+        if (!user) {
+
+            console.log('[checkout] Usuário não logado — redirecionando');
+
+            // Salva a intenção de voltar pro checkout depois do login
+            sessionStorage.setItem('voltarParaCheckout', '1');
+
+            // Vai pro login com aviso
+            window.location.href = 'login.html?redirect=finalizar';
+            return;
+        }
+
+        console.log('[checkout] Logado:', user.email);
+    });
+
+})();
+
 document.addEventListener('DOMContentLoaded', () => {
     if (!document.getElementById('summaryItems')) return;
     renderizarResumoCheckout();
