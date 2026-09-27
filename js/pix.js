@@ -10,8 +10,8 @@
    --------------------------------------------------------- */
 
 const PIX_CONFIG = {
-    chave: 'contato@artefatos.com.br',
-    nome: 'ARTEFATOS',
+    chave: 'contato@seynclothing.com.br',
+    nome: 'SEYNCLOTHING',
     cidade: 'SAO PAULO',
     descricao: '',
     txid: '***'

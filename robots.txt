@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://mjstoress.netlify.app/sitemap.xml
+Sitemap: https://seynclothing.netlify.app/sitemap.xml

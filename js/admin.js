@@ -1706,7 +1706,7 @@ function escapeHtmlAdmin(str) {
 function carregarConfig() {
     var cfg = window.__config || {};
     setValue('configPixChave', cfg.pixChave || '');
-    setValue('configPixNome', cfg.pixNome || 'ARTEFATOS');
+    setValue('configPixNome', cfg.pixNome || 'SEYNCLOTHING');
     setValue('configPixCidade', cfg.pixCidade || 'SAO PAULO');
 }
 
