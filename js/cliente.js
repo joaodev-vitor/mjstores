@@ -72,7 +72,7 @@ document.addEventListener('DOMContentLoaded', function () {
         /* Se está na página de login e já autenticou */
         if (user && formLogin) {
 
-            var ehAdmin = user.email === 'mjstores.contato@gmail.com';
+            var ehAdmin = user.email === 'seyn.clothing@gmail.com';
 
             /* Admin tentou logar pela página de cliente → BLOQUEIA */
             if (ehAdmin) {
@@ -167,7 +167,7 @@ async function fazerLogin(e) {
 
     if (!email || !senha) return;
 
-    if (email.toLowerCase() === 'mjstores.contato@gmail.com') {
+    if (email.toLowerCase() === 'seyn.clothing@gmail.com') {
         if (erro) erro.textContent = 'Use o painel administrativo para entrar.';
         return;
     }
@@ -222,7 +222,7 @@ async function fazerCadastro(e) {
 
     if (erro) erro.textContent = '';
 
-    if (email.toLowerCase() === 'mjstores.contato@gmail.com') {
+    if (email.toLowerCase() === 'seyn.clothing@gmail.com') {
         if (erro) erro.textContent = 'Esse e-mail é reservado.';
         return;
     }
@@ -316,7 +316,7 @@ async function recuperarSenha() {
         return;
     }
 
-    if (email.toLowerCase() === 'mjstores.contato@gmail.com') {
+    if (email.toLowerCase() === 'seyn.clothing@gmail.com') {
         toast('Esse e-mail é reservado.', 'warn');
         return;
     }
@@ -1476,7 +1476,7 @@ async function alterarEmailCliente() {
     if (!novoEmail) { toast('Digite o novo e-mail', 'warn'); return; }
     if (!senhaAtual) { toast('Digite sua senha atual', 'warn'); return; }
 
-    if (novoEmail.toLowerCase() === 'mjstores.contato@gmail.com') {
+    if (novoEmail.toLowerCase() === 'seyn.clothing@gmail.com') {
         toast('Esse e-mail é reservado.', 'warn');
         return;
     }

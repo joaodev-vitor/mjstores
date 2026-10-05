@@ -13,7 +13,7 @@ const EMAILJS_CONFIG = {
     serviceId:        'service_t6woudm',
     templateId:       'template_03qg6x2',
     templateIdAdmin:  'template_03qg6x2',
-    adminEmail:       'mjstores.contato@gmail.com'
+    adminEmail:       'seyn.clothing@gmail.com'
 };
 
 

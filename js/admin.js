@@ -107,7 +107,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
         if (!window.__firebasePronto) return;
         if (!auth.currentUser) return;
-        if (auth.currentUser.email !== 'mjstores.contato@gmail.com') return;
+        if (auth.currentUser.email !== 'seyn.clothing@gmail.com') return;
         if (window.__adminIniciado) return;
 
         console.log('[admin] Auto-start (sessão já ativa)');
@@ -123,7 +123,7 @@ document.addEventListener('DOMContentLoaded', function () {
     /* Também escuta auth — se logar depois, inicia */
     if (window.auth) {
         auth.onAuthStateChanged(function (user) {
-            if (user && user.email === 'mjstores.contato@gmail.com') {
+            if (user && user.email === 'seyn.clothing@gmail.com') {
                 tentarAutoIniciar();
             }
         });
@@ -138,7 +138,7 @@ async function iniciarPainel() {
         return;
     }
 
-    if (!auth.currentUser || auth.currentUser.email !== 'mjstores.contato@gmail.com') {
+    if (!auth.currentUser || auth.currentUser.email !== 'seyn.clothing@gmail.com') {
         console.warn('[admin] iniciarPainel chamado sem admin logado — abortando');
         return;
     }

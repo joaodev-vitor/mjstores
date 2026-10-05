@@ -5,7 +5,7 @@
 
 'use strict';
 
-const ADMIN_EMAIL = 'mjstores.contato@gmail.com';
+const ADMIN_EMAIL = 'seyn.clothing@gmail.com';
 
 
 document.addEventListener('DOMContentLoaded', function () {
