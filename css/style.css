@@ -9189,3 +9189,217 @@ img, video, canvas, svg {
 /* =========================================================
    FIM — RESPONSIVE.CSS
    ========================================================= */
+/* =========================================================
+   FIX — TEXTOS DECORATIVOS GIGANTES (TEMA CLARO) — v2
+   Contorno mais grosso e visível
+   ========================================================= */
+
+/* HERO — "Seynclothing" gigante no canto */
+[data-tema="claro"] .hero-decoration span {
+    color: transparent !important;
+    -webkit-text-stroke: 3px rgba(26, 77, 255, .55) !important;
+    opacity: 1;
+}
+
+/* CATEGORY HERO — nome da categoria gigante no fundo */
+[data-tema="claro"] .category-hero-mark {
+    color: transparent !important;
+    -webkit-text-stroke: 3px rgba(26, 77, 255, .45) !important;
+    opacity: 1;
+}
+
+/* BUSCA — "BUSCAR" gigante no overlay */
+[data-tema="claro"] .search-overlay::before {
+    color: transparent !important;
+    -webkit-text-stroke: 3px rgba(26, 77, 255, .40) !important;
+    opacity: 1;
+}
+
+/* CTA FINAL — "REPRESENTE" gigante no fundo */
+[data-tema="claro"] .final-cta::before {
+    color: transparent !important;
+    -webkit-text-stroke: 3px rgba(26, 77, 255, .40) !important;
+    opacity: 1;
+}
+/* =========================================================
+   FIX — SEÇÃO DE AVALIAÇÕES NO TEMA CLARO
+   Corrige: card preto, estrelas invisíveis, textarea escuro
+   ========================================================= */
+
+/* Wrap geral da seção */
+[data-tema="claro"] .reviews-section {
+    background: transparent;
+    color: #1e293b;
+}
+
+[data-tema="claro"] .reviews-head {
+    border-bottom-color: rgba(15, 23, 42, .12);
+}
+
+[data-tema="claro"] .reviews-head .section-kicker {
+    color: #1a4dff !important;
+}
+
+/* Título "O que dizem sobre essa peça" — remove gradiente/transparência */
+[data-tema="claro"] .reviews-head .section-title,
+[data-tema="claro"] .reviews-head h2 {
+    background: none !important;
+    -webkit-background-clip: initial !important;
+    background-clip: initial !important;
+    -webkit-text-fill-color: #0a0e1a !important;
+    color: #0a0e1a !important;
+}
+
+[data-tema="claro"] .reviews-head h2 em,
+[data-tema="claro"] .reviews-head h2 span {
+    color: #1a4dff !important;
+    -webkit-text-fill-color: #1a4dff !important;
+}
+
+/* Resumo (estrelas + nota) */
+[data-tema="claro"] .reviews-summary {
+    color: #1e293b;
+}
+
+[data-tema="claro"] .reviews-summary .estrelas,
+[data-tema="claro"] .reviews-summary svg {
+    color: #1a4dff !important;
+    fill: #1a4dff !important;
+}
+
+[data-tema="claro"] .reviews-summary-nota {
+    color: #0a0e1a !important;
+}
+
+[data-tema="claro"] .reviews-summary-total {
+    color: #64748b !important;
+}
+
+/* ============================================
+   Card do formulário "Avalie essa peça"
+   ESTAVA PRETO — agora fica claro
+   ============================================ */
+[data-tema="claro"] .review-form-wrap {
+    background: #f8fafc !important;
+    border: 1px solid rgba(15, 23, 42, .12) !important;
+    box-shadow: 0 10px 40px rgba(15, 23, 42, .04);
+}
+
+[data-tema="claro"] .review-form-wrap *,
+[data-tema="claro"] .review-form * {
+    color: inherit;
+}
+
+[data-tema="claro"] .review-form-title {
+    color: #0a0e1a !important;
+}
+
+/* ============================================
+   Estrelas de seleção — ESTAVAM CINZA ESCURO
+   ============================================ */
+[data-tema="claro"] .review-star-pick button,
+[data-tema="claro"] .review-star-pick svg {
+    color: #cbd5e1 !important;
+    fill: #cbd5e1 !important;
+    stroke: #cbd5e1 !important;
+    transition: color .2s, fill .2s;
+}
+
+[data-tema="claro"] .review-star-pick button:hover,
+[data-tema="claro"] .review-star-pick button.hovered,
+[data-tema="claro"] .review-star-pick button.selected,
+[data-tema="claro"] .review-star-pick button.active {
+    color: #1a4dff !important;
+    fill: #1a4dff !important;
+    stroke: #1a4dff !important;
+}
+
+/* ============================================
+   Textarea de avaliação — ESTAVA ESCURO
+   ============================================ */
+[data-tema="claro"] .review-form-wrap textarea,
+[data-tema="claro"] .review-form textarea,
+[data-tema="claro"] .review-form-wrap .review-textarea {
+    background: #ffffff !important;
+    color: #0a0e1a !important;
+    border: 1px solid rgba(15, 23, 42, .2) !important;
+}
+
+[data-tema="claro"] .review-form-wrap textarea::placeholder,
+[data-tema="claro"] .review-form textarea::placeholder {
+    color: #94a3b8 !important;
+}
+
+[data-tema="claro"] .review-form-wrap textarea:focus,
+[data-tema="claro"] .review-form textarea:focus {
+    border-color: #1a4dff !important;
+    outline: none;
+}
+
+/* Rodapé do form "Seu nome será exibido publicamente" */
+[data-tema="claro"] .review-form-actions small,
+[data-tema="claro"] .review-form-note {
+    color: #64748b !important;
+}
+
+/* Botão enviar */
+[data-tema="claro"] .review-form-actions .btn-primary {
+    color: #ffffff !important;
+    background: #1a4dff;
+    border-color: #1a4dff;
+}
+
+[data-tema="claro"] .review-form-actions .btn-primary:hover {
+    background: #0a2fa8;
+    border-color: #0a2fa8;
+}
+
+[data-tema="claro"] .review-form-actions .btn-primary * {
+    color: #ffffff !important;
+}
+
+/* ============================================
+   Cards de avaliações publicadas
+   ============================================ */
+[data-tema="claro"] .review-card {
+    background: #f8fafc;
+    border-color: rgba(15, 23, 42, .1);
+}
+
+[data-tema="claro"] .review-card--minha {
+    background: linear-gradient(180deg, rgba(26, 77, 255, .06), rgba(26, 77, 255, .02));
+    border-color: rgba(26, 77, 255, .35);
+}
+
+[data-tema="claro"] .review-name {
+    color: #0a0e1a !important;
+}
+
+[data-tema="claro"] .review-date {
+    color: #64748b !important;
+}
+
+[data-tema="claro"] .review-comentario {
+    color: #475569 !important;
+}
+
+[data-tema="claro"] .review-avatar {
+    background: linear-gradient(135deg, #1a4dff, #0a2fa8);
+    color: #fff !important;
+}
+
+[data-tema="claro"] .review-card .estrelas,
+[data-tema="claro"] .review-card .estrelas svg {
+    color: #1a4dff !important;
+    fill: #1a4dff !important;
+}
+
+/* Mensagem "Nenhuma avaliação" */
+[data-tema="claro"] .reviews-empty,
+[data-tema="claro"] .reviews-empty p {
+    color: #64748b !important;
+}
+
+/* ============================================
+   FIM — FIX AVALIAÇÕES TEMA CLARO
+   ============================================ */
