@@ -1,6 +1,6 @@
 /* =========================================================
    EMAIL.JS — Notificações por e-mail (EmailJS)
-   v9 — Correção: exports das funções de novo pedido
+   v11 — Variáveis padronizadas (corrige erro 422 e endereço vazio)
    ========================================================= */
 
 'use strict';
@@ -35,7 +35,6 @@ const EMAILJS_CONFIG = {
     try {
         emailjs.init(EMAILJS_CONFIG.publicKey);
         console.log('[email] ✅ EmailJS pronto — Seyn clothing');
-        console.log('[email] Admin será notificado em:', EMAILJS_CONFIG.adminEmail);
     } catch (e) {
         console.error('[email] Erro ao inicializar:', e);
     }
@@ -50,7 +49,7 @@ const STATUS_EMAIL = {
 
     'aguardando_pagamento': {
         emoji:       '⏳',
-        titulo:      'Aguardando confirmação de pagamento',
+        titulo:      'Aguardando pagamento',
         mensagem:    'Recebemos seu pedido! Estamos aguardando a confirmação do pagamento pra começar a preparar tudo com cuidado.',
         botao_texto: 'Acompanhar pedido',
         botao_url:   'https://seynclothing.netlify.app/minha-conta.html'
@@ -58,15 +57,15 @@ const STATUS_EMAIL = {
 
     'pago': {
         emoji:       '💰',
-        titulo:      'Pagamento confirmado — pedido em preparação',
-        mensagem:    'Confirmamos o recebimento do seu pagamento! Seu pedido já entrou na fila de separação e nossa equipe está embalando cada peça com cuidado. Em breve você recebe um novo e-mail avisando quando ele sair para entrega.',
+        titulo:      'Pagamento confirmado',
+        mensagem:    'Confirmamos o recebimento do seu pagamento! Seu pedido já entrou na fila de separação e nossa equipe está embalando cada peça com cuidado.',
         botao_texto: 'Acompanhar pedido',
         botao_url:   'https://seynclothing.netlify.app/minha-conta.html'
     },
 
     'processando': {
         emoji:       '📝',
-        titulo:      'Seu pedido está sendo processado',
+        titulo:      'Pedido em processamento',
         mensagem:    'Estamos processando seu pedido. Em breve ele será preparado para envio.',
         botao_texto: 'Acompanhar pedido',
         botao_url:   'https://seynclothing.netlify.app/minha-conta.html'
@@ -83,7 +82,7 @@ const STATUS_EMAIL = {
     'enviado': {
         emoji:       '🚚',
         titulo:      'Seu pedido saiu para entrega',
-        mensagem:    'Seu pedido já está em rota! A transportadora foi acionada e o prazo começa a contar a partir de agora. Fique de olho no seu e-mail e telefone para eventuais avisos de entrega.',
+        mensagem:    'Seu pedido já está em rota! A transportadora foi acionada e o prazo começa a contar a partir de agora.',
         botao_texto: 'Acompanhar pedido',
         botao_url:   'https://seynclothing.netlify.app/minha-conta.html'
     },
@@ -91,15 +90,15 @@ const STATUS_EMAIL = {
     'entregue': {
         emoji:       '✅',
         titulo:      'Pedido entregue',
-        mensagem:    'Seu pedido chegou! Esperamos que você ame as peças. Se tiver qualquer problema, é só falar com a gente — e se quiser, deixe sua avaliação no site.',
+        mensagem:    'Seu pedido chegou! Esperamos que você ame as peças. Se tiver qualquer problema, é só falar com a gente.',
         botao_texto: 'Avaliar produtos',
         botao_url:   'https://seynclothing.netlify.app/minha-conta.html'
     },
 
     'cancelado': {
         emoji:       '💸',
-        titulo:      'Pedido cancelado — acompanhe seu reembolso',
-        mensagem:    'Confirmamos o cancelamento do seu pedido. A solicitação de reembolso foi aberta automaticamente e nossa equipe vai analisar em até 3 dias úteis. Você pode acompanhar o status do reembolso a qualquer momento na sua conta, na aba "Meus pedidos".',
+        titulo:      'Pedido cancelado',
+        mensagem:    'Confirmamos o cancelamento do seu pedido. A solicitação de reembolso foi aberta automaticamente e nossa equipe vai analisar em até 3 dias úteis.',
         botao_texto: 'Acompanhar reembolso',
         botao_url:   'https://seynclothing.netlify.app/minha-conta.html'
     }
@@ -107,16 +106,31 @@ const STATUS_EMAIL = {
 
 
 /* =========================================================
+   HELPER — montar endereço completo em texto único
+   ========================================================= */
+function montarEnderecoCompleto(clienteOuEndereco) {
+    if (!clienteOuEndereco) return '';
+
+    var e = clienteOuEndereco.endereco || clienteOuEndereco;
+    if (!e || !e.rua) return '';
+
+    var linha1 = e.rua + (e.numero ? ', ' + e.numero : '') + (e.complemento ? ' - ' + e.complemento : '');
+    var linha2 = e.bairro || '';
+    var linha3 = (e.cidade || '') + (e.estado ? ' - ' + e.estado : '');
+    var linha4 = 'CEP ' + (e.cep || '');
+
+    return [linha1, linha2, linha3, linha4].filter(function (l) { return l.trim(); }).join('\n');
+}
+
+
+/* =========================================================
    GERAR HTML DOS ITENS
    ========================================================= */
 function gerarItensHTML(itens) {
 
-    if (!itens || itens.length === 0) {
-        return '';
-    }
+    if (!itens || itens.length === 0) return '';
 
     var linhas = itens.map(function (item) {
-
         var nome = item.nome || 'Produto';
         var qtd = item.quantidade || 1;
         var preco = Number(item.preco || 0);
@@ -180,25 +194,31 @@ async function enviarEmailMudancaStatus(pedido, novoStatus, observacaoAdmin) {
     }
 
     var mensagemFinal = observacaoAdmin ? observacaoAdmin : info.mensagem;
+    var listaItens = gerarItensHTML(pedido.itens);
+    var totalFmt = formatarMoedaEmail(pedido.total || 0);
+    var endCompleto = montarEnderecoCompleto(pedido.cliente);
 
     var params = {
-        to_email:      pedido.cliente.email,
-        pedido_id:     pedido.numero || '—',
-        nome_cliente:  pedido.cliente.nome || 'cliente',
-        lista_itens:   gerarItensHTML(pedido.itens),
-        endereco_completo: '',
-        total:         formatarMoedaEmail(pedido.total || 0),
-        cliente_nome:  (pedido.cliente.nome || 'cliente'),
-        numero_pedido: pedido.numero || '—',
-        valor:         formatarMoedaEmail(pedido.total || 0),
-        status:        novoStatus,
-        status_label:  info.titulo,
-        emoji:         info.emoji,
-        titulo:        info.titulo,
-        mensagem:      mensagemFinal,
-        itens_html:    gerarItensHTML(pedido.itens),
-        botao_texto:   info.botao_texto || 'Acompanhar pedido',
-        botao_url:     info.botao_url   || 'https://seynclothing.netlify.app/minha-conta.html'
+        // Padronizadas
+        to_email:          pedido.cliente.email,
+        nome_cliente:      pedido.cliente.nome || 'cliente',
+        pedido_id:         pedido.numero || '—',
+        total:             totalFmt,
+        lista_itens:       listaItens,
+        endereco_completo: endCompleto,
+        pagamento:         pedido.pagamento || 'PIX',
+        emoji:             info.emoji,
+        titulo:            info.titulo,
+        mensagem:          mensagemFinal,
+        botao_texto:       info.botao_texto || 'Acompanhar pedido',
+        botao_url:         info.botao_url || 'https://seynclothing.netlify.app/minha-conta.html',
+        status:            novoStatus,
+        // Compatibilidade
+        cliente_nome:      pedido.cliente.nome || 'cliente',
+        numero_pedido:     pedido.numero || '—',
+        valor:             totalFmt,
+        status_label:      info.titulo,
+        itens_html:        listaItens
     };
 
     try {
@@ -237,7 +257,7 @@ async function enviarEmailReembolso(refund, novoStatus, observacaoAdmin) {
     var mapas = {
         'pendente': {
             emoji:       '📩',
-            titulo:      'Solicitação de reembolso recebida',
+            titulo:      'Reembolso recebido',
             mensagem:    'Recebemos sua solicitação de reembolso. Nossa equipe vai analisar e responder em até 3 dias úteis.',
             botao_texto: 'Acompanhar reembolso',
             botao_url:   'https://seynclothing.netlify.app/minha-conta.html'
@@ -245,14 +265,14 @@ async function enviarEmailReembolso(refund, novoStatus, observacaoAdmin) {
         'aprovado': {
             emoji:       '✅',
             titulo:      'Reembolso aprovado',
-            mensagem:    'Sua solicitação foi aprovada! O valor será devolvido em até 5 dias úteis. Fique de olho no e-mail e na conta bancária.',
+            mensagem:    'Sua solicitação foi aprovada! O valor será devolvido em até 5 dias úteis.',
             botao_texto: 'Acompanhar reembolso',
             botao_url:   'https://seynclothing.netlify.app/minha-conta.html'
         },
         'pago': {
             emoji:       '💰',
             titulo:      'Reembolso pago',
-            mensagem:    'O valor do reembolso já foi devolvido. Obrigado pela confiança — esperamos te ver de novo em breve.',
+            mensagem:    'O valor do reembolso já foi devolvido. Obrigado pela confiança!',
             botao_texto: 'Voltar à loja',
             botao_url:   'https://seynclothing.netlify.app/index.html'
         },
@@ -266,25 +286,32 @@ async function enviarEmailReembolso(refund, novoStatus, observacaoAdmin) {
     };
 
     var info = mapas[novoStatus];
-    if (!info) {
-        return { ok: false, erro: 'Status sem template' };
-    }
+    if (!info) return { ok: false, erro: 'Status sem template' };
 
     var mensagemFinal = observacaoAdmin ? observacaoAdmin : info.mensagem;
+    var listaItens = gerarItensHTML(refund.itens);
+    var totalFmt = formatarMoedaEmail(refund.valor || 0);
+    var endCompleto = montarEnderecoCompleto(refund.cliente);
 
     var params = {
-        to_email:      refund.cliente.email,
-        cliente_nome:  (refund.cliente.nome || 'cliente'),
-        numero_pedido: refund.orderNumero || '—',
-        valor:         formatarMoedaEmail(refund.valor || 0),
-        status:        novoStatus,
-        status_label:  info.titulo,
-        emoji:         info.emoji,
-        titulo:        info.titulo,
-        mensagem:      mensagemFinal,
-        itens_html:    gerarItensHTML(refund.itens),
-        botao_texto:   info.botao_texto || 'Acompanhar pedido',
-        botao_url:     info.botao_url   || 'https://seynclothing.netlify.app/minha-conta.html'
+        to_email:          refund.cliente.email,
+        nome_cliente:      refund.cliente.nome || 'cliente',
+        pedido_id:         refund.orderNumero || '—',
+        total:             totalFmt,
+        lista_itens:       listaItens,
+        endereco_completo: endCompleto,
+        pagamento:         'Reembolso',
+        emoji:             info.emoji,
+        titulo:            info.titulo,
+        mensagem:          mensagemFinal,
+        botao_texto:       info.botao_texto || 'Acompanhar pedido',
+        botao_url:         info.botao_url || 'https://seynclothing.netlify.app/minha-conta.html',
+        status:            novoStatus,
+        cliente_nome:      refund.cliente.nome || 'cliente',
+        numero_pedido:     refund.orderNumero || '—',
+        valor:             totalFmt,
+        status_label:      info.titulo,
+        itens_html:        listaItens
     };
 
     try {
@@ -317,7 +344,6 @@ async function enviarEmailAdminReembolso(refund) {
     }
 
     if (typeof emailjs === 'undefined') {
-        console.warn('[email] EmailJS não disponível pro admin');
         return { ok: false, erro: 'EmailJS indisponível' };
     }
 
@@ -326,6 +352,7 @@ async function enviarEmailAdminReembolso(refund) {
     var pedidoNum = refund.orderNumero || '—';
     var motivo = refund.motivo || 'não informado';
     var detalhes = refund.detalhes || '';
+    var listaItens = gerarItensHTML(refund.itens);
 
     var mensagemAdmin =
         '💸 NOVO REEMBOLSO SOLICITADO\n\n' +
@@ -339,18 +366,24 @@ async function enviarEmailAdminReembolso(refund) {
         '\nAcesse o painel pra aprovar ou negar.';
 
     var params = {
-        to_email:      EMAILJS_CONFIG.adminEmail,
-        cliente_nome:  'Admin Seyn',
-        numero_pedido: pedidoNum,
-        valor:         valor,
-        status:        'reembolso_solicitado',
-        status_label:  '💸 Novo reembolso solicitado',
-        emoji:         '💸',
-        titulo:        'Novo reembolso — Pedido #' + pedidoNum,
-        mensagem:      mensagemAdmin,
-        itens_html:    gerarItensHTML(refund.itens),
-        botao_texto:   'Abrir painel administrativo',
-        botao_url:     'https://seynclothing.netlify.app/admin.html?section=reembolsos'
+        to_email:          EMAILJS_CONFIG.adminEmail,
+        nome_cliente:      'Admin Seyn',
+        pedido_id:         pedidoNum,
+        total:             valor,
+        lista_itens:       listaItens,
+        endereco_completo: montarEnderecoCompleto(cli),
+        pagamento:         'Reembolso',
+        emoji:             '💸',
+        titulo:            'Novo reembolso #' + pedidoNum,
+        mensagem:          mensagemAdmin,
+        botao_texto:       'Abrir painel',
+        botao_url:         'https://seynclothing.netlify.app/admin.html?section=reembolsos',
+        status:            'reembolso_solicitado',
+        cliente_nome:      'Admin Seyn',
+        numero_pedido:     pedidoNum,
+        valor:             valor,
+        status_label:      'Novo reembolso solicitado',
+        itens_html:        listaItens
     };
 
     try {
@@ -359,7 +392,7 @@ async function enviarEmailAdminReembolso(refund) {
             EMAILJS_CONFIG.templateIdAdmin,
             params
         );
-        console.log('[email] ✅ E-mail enviado pro ADMIN:', resp.status);
+        console.log('[email] ✅ E-mail enviado pro ADMIN (reembolso):', resp.status);
         return { ok: true };
 
     } catch (e) {
@@ -377,39 +410,32 @@ async function enviarEmailAdminReembolso(refund) {
    ========================================================= */
 async function enviarEmailNovoPedidoProAdmin(pedido) {
 
-    if (!pedido) {
-        return { ok: false, erro: 'Pedido vazio' };
-    }
-
-    if (typeof emailjs === 'undefined') {
-        console.warn('[email] EmailJS não disponível');
-        return { ok: false, erro: 'EmailJS indisponível' };
-    }
+    if (!pedido) return { ok: false, erro: 'Pedido vazio' };
+    if (typeof emailjs === 'undefined') return { ok: false, erro: 'EmailJS indisponível' };
 
     var cliente  = pedido.cliente || {};
-    var endereco = (pedido.cliente && pedido.cliente.endereco) || pedido.endereco || pedido.enderecoEntrega || {};
+    var listaItens = gerarItensHTML(pedido.itens);
+    var totalFmt = formatarMoedaEmail(pedido.total || 0);
 
     var params = {
-        to_email:         EMAILJS_CONFIG.adminEmail,
-        pedido_id:        pedido.numero || pedido.id || '-',
-        nome_cliente:     cliente.nome || cliente.name || 'Cliente',
-        email_cliente:    cliente.email || '',
-        telefone_cliente: cliente.telefone || cliente.phone || '',
-        lista_itens:      gerarItensHTML(pedido.itens),
-        endereco_completo: endereco.rua ? (endereco.rua + (endereco.numero ? ', ' + endereco.numero : '') + (endereco.complemento ? ' - ' + endereco.complemento : '') + '\n' + (endereco.bairro || '') + '\n' + (endereco.cidade || '') + ' - ' + (endereco.estado || '') + '\nCEP ' + (endereco.cep || '')) : '',
-        cidade:           endereco.cidade || '',
-        estado:           endereco.estado || endereco.uf || '',
-        cep:              endereco.cep || '',
-        pagamento:        pedido.pagamento || pedido.formaPagamento || 'PIX',
-        total:            formatarMoedaEmail(pedido.total || 0),
-        cliente_nome:     'Admin Seyn',
-        numero_pedido:    pedido.numero || pedido.id || '-',
-        valor:            formatarMoedaEmail(pedido.total || 0),
-        titulo:           'Novo pedido #' + (pedido.numero || pedido.id || '-'),
-        mensagem:         'Você recebeu um novo pedido! Confira os detalhes abaixo.',
-        itens_html:       gerarItensHTML(pedido.itens),
-        botao_texto:      'Abrir painel administrativo',
-        botao_url:        'https://seynclothing.netlify.app/admin.html'
+        to_email:          EMAILJS_CONFIG.adminEmail,
+        nome_cliente:      cliente.nome || 'Cliente',
+        pedido_id:         pedido.numero || pedido.id || '-',
+        total:             totalFmt,
+        lista_itens:       listaItens,
+        endereco_completo: montarEnderecoCompleto(cliente),
+        pagamento:         pedido.pagamento || 'PIX',
+        emoji:             '🛒',
+        titulo:            'Novo pedido #' + (pedido.numero || pedido.id || '-'),
+        mensagem:          'Você recebeu um novo pedido! Confira os detalhes abaixo.',
+        botao_texto:       'Abrir painel',
+        botao_url:         'https://seynclothing.netlify.app/admin.html',
+        email_cliente:     cliente.email || '',
+        telefone_cliente:  cliente.telefone || '',
+        cliente_nome:      'Admin Seyn',
+        numero_pedido:     pedido.numero || pedido.id || '-',
+        valor:             totalFmt,
+        itens_html:        listaItens
     };
 
     try {
@@ -437,40 +463,34 @@ async function enviarEmailNovoPedidoProAdmin(pedido) {
 async function enviarEmailConfirmacaoProCliente(pedido) {
 
     if (!pedido || !pedido.cliente || !pedido.cliente.email) {
-        console.warn('[email] Pedido sem e-mail do cliente');
         return { ok: false, erro: 'Pedido sem e-mail' };
     }
-
     if (typeof emailjs === 'undefined') {
-        console.warn('[email] EmailJS não disponível');
         return { ok: false, erro: 'EmailJS indisponível' };
     }
 
     var cliente  = pedido.cliente;
-    var endereco = (pedido.cliente && pedido.cliente.endereco) || pedido.endereco || pedido.enderecoEntrega || {};
+    var listaItens = gerarItensHTML(pedido.itens);
+    var totalFmt = formatarMoedaEmail(pedido.total || 0);
 
     var params = {
-        to_email:      cliente.email,
-        pedido_id:     pedido.numero || pedido.id || '-',
-        nome_cliente:  cliente.nome || 'Cliente',
-        email_cliente: cliente.email,
-        lista_itens:   gerarItensHTML(pedido.itens),
-        endereco_completo: endereco.rua ? (endereco.rua + (endereco.numero ? ", " + endereco.numero : "") + (endereco.complemento ? " - " + endereco.complemento : "") + "
-" + (endereco.bairro || "") + "
-" + (endereco.cidade || "") + " - " + (endereco.estado || "") + "
-CEP " + (endereco.cep || "")) : "",
-        cidade:        endereco.cidade || '',
-        estado:        endereco.estado || endereco.uf || '',
-        cep:           endereco.cep || '',
-        pagamento:     pedido.pagamento || pedido.formaPagamento || 'PIX',
-        total:         formatarMoedaEmail(pedido.total || 0),
-        numero_pedido: pedido.numero || pedido.id || '-',
-        valor:         formatarMoedaEmail(pedido.total || 0),
-        titulo:        'Pedido #' + (pedido.numero || pedido.id || '-') + ' confirmado',
-        mensagem:      'Recebemos seu pedido! Em breve você receberá o código de rastreio.',
-        itens_html:    gerarItensHTML(pedido.itens),
-        botao_texto:   'Acompanhar pedido',
-        botao_url:     'https://seynclothing.netlify.app/minha-conta.html'
+        to_email:          cliente.email,
+        nome_cliente:      cliente.nome || 'Cliente',
+        pedido_id:         pedido.numero || pedido.id || '-',
+        total:             totalFmt,
+        lista_itens:       listaItens,
+        endereco_completo: montarEnderecoCompleto(cliente),
+        pagamento:         pedido.pagamento || 'PIX',
+        emoji:             '✅',
+        titulo:            'Pedido confirmado',
+        mensagem:          'Recebemos seu pedido! Em breve você receberá o código de rastreio.',
+        botao_texto:       'Acompanhar pedido',
+        botao_url:         'https://seynclothing.netlify.app/minha-conta.html',
+        email_cliente:     cliente.email,
+        cliente_nome:      cliente.nome || 'Cliente',
+        numero_pedido:     pedido.numero || pedido.id || '-',
+        valor:             totalFmt,
+        itens_html:        listaItens
     };
 
     try {
@@ -493,7 +513,7 @@ CEP " + (endereco.cep || "")) : "",
 
 
 /* =========================================================
-   EXPÕE PRO WINDOW (pra ser chamado por HTML/outros JS)
+   EXPÕE PRO WINDOW
    ========================================================= */
 window.STATUS_EMAIL                      = STATUS_EMAIL;
 window.EMAILJS_CONFIG                    = EMAILJS_CONFIG;
@@ -504,9 +524,4 @@ window.enviarEmailAdminReembolso         = enviarEmailAdminReembolso;
 window.enviarEmailNovoPedidoProAdmin     = enviarEmailNovoPedidoProAdmin;
 window.enviarEmailConfirmacaoProCliente  = enviarEmailConfirmacaoProCliente;
 
-console.log('[email] Funções expostas no window:');
-console.log('  → window.enviarEmailNovoPedidoProAdmin');
-console.log('  → window.enviarEmailConfirmacaoProCliente');
-console.log('  → window.enviarEmailMudancaStatus');
-console.log('  → window.enviarEmailReembolso');
-console.log('  → window.enviarEmailAdminReembolso');
+console.log('[email] ✅ Funções expostas no window');
