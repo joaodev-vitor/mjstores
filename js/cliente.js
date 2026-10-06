@@ -103,18 +103,18 @@ document.addEventListener('DOMContentLoaded', function () {
                 return;
             }
 
-            /* Cliente normal → checa se tem redirect */ 
-            
-        var params = new URLSearchParams(window.location.search);
-        var redirect = params.get('redirect');
+            /* Cliente normal → checa se tem redirect */
 
-        if (redirect === 'finalizar') {
-        window.location.href = 'finalizar.html';
-        } else {
-        window.location.href = 'minha-conta.html';
-       }
-       return;
-       }
+            var params = new URLSearchParams(window.location.search);
+            var redirect = params.get('redirect');
+
+            if (redirect === 'finalizar') {
+                window.location.href = 'finalizar.html';
+            } else {
+                window.location.href = 'minha-conta.html';
+            }
+            return;
+        }
 
         var contaWrap = document.getElementById('contaWrap');
         var contaNaoLogado = document.getElementById('contaNaoLogado');
@@ -1255,7 +1255,8 @@ async function confirmarReembolso() {
             cliente: {
                 nome: (pedido.cliente && pedido.cliente.nome) || '',
                 email: (pedido.cliente && pedido.cliente.email) || clienteAtual.email,
-                telefone: (pedido.cliente && pedido.cliente.telefone) || ''
+                telefone: (pedido.cliente && pedido.cliente.telefone) || '',
+                endereco: (pedido.cliente && pedido.cliente.endereco) || null
             },
             valor: pedido.total || 0,
             itens: pedido.itens || [],
