@@ -9,7 +9,7 @@
    ⚙️ CONFIGURAÇÃO
    ========================================================= */
 const EMAILJS_CONFIG = {
-    publicKey: 'KNDpGOBBNU1ZzTqHc',
+    publicKey: 'EIBy3OPd6ECXedKsS',
     serviceId: 'service_00vd97h',              // ← NOVO! conectado ao seyn.clothing@gmail.com
     templateId: 'template_03qg6x2',            // ← confirmação (você vai criar o definitivo)
     templateIdAdmin: 'template_mflfrhn',       // ← "Novo Pedido - Admin" que criamos
