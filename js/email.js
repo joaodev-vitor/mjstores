@@ -11,7 +11,7 @@
 const EMAILJS_CONFIG = {
     publicKey: 'EIBy3OPd6ECXedKsS',
     serviceId: 'service_00vd97h',              // ← NOVO! conectado ao seyn.clothing@gmail.com
-    templateId: 'template_03qg6x2',            // ← confirmação (você vai criar o definitivo)
+    templateId: 'template_y049p9q',           // ← confirmação (você vai criar o definitivo)
     templateIdAdmin: 'template_mflfrhn',       // ← "Novo Pedido - Admin" que criamos
     adminEmail: 'seyn.clothing@gmail.com'
 };
