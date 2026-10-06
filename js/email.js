@@ -382,7 +382,7 @@ async function enviarEmailNovoPedidoProAdmin(pedido) {
     }
 
     var cliente  = pedido.cliente || {};
-    var endereco = pedido.endereco || pedido.enderecoEntrega || {};
+    var endereco = (pedido.cliente && pedido.cliente.endereco) || pedido.endereco || pedido.enderecoEntrega || {};
 
     var params = {
         to_email:         EMAILJS_CONFIG.adminEmail,
@@ -442,7 +442,7 @@ async function enviarEmailConfirmacaoProCliente(pedido) {
     }
 
     var cliente  = pedido.cliente;
-    var endereco = pedido.endereco || pedido.enderecoEntrega || {};
+    var endereco = (pedido.cliente && pedido.cliente.endereco) || pedido.endereco || pedido.enderecoEntrega || {};
 
     var params = {
         to_email:      cliente.email,
