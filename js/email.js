@@ -9,11 +9,11 @@
    ⚙️ CONFIGURAÇÃO
    ========================================================= */
 const EMAILJS_CONFIG = {
-    publicKey:        'KNDpGOBBNU1ZZtQhC',
-    serviceId:        'service_t6woudm',
-    templateId:       'template_03qg6x2',
-    templateIdAdmin:  'template_03qg6x2',
-    adminEmail:       'seyn.clothing@gmail.com'
+    publicKey: 'KNDpGOBBNU1ZzTqHc',
+    serviceId: 'service_00vd97h',              // ← NOVO! conectado ao seyn.clothing@gmail.com
+    templateId: 'template_03qg6x2',            // ← confirmação (você vai criar o definitivo)
+    templateIdAdmin: 'template_mflfrhn',       // ← "Novo Pedido - Admin" que criamos
+    adminEmail: 'seyn.clothing@gmail.com'
 };
 
 
