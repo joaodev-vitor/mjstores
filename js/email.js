@@ -183,6 +183,11 @@ async function enviarEmailMudancaStatus(pedido, novoStatus, observacaoAdmin) {
 
     var params = {
         to_email:      pedido.cliente.email,
+        pedido_id:     pedido.numero || '—',
+        nome_cliente:  pedido.cliente.nome || 'cliente',
+        lista_itens:   gerarItensHTML(pedido.itens),
+        endereco_completo: '',
+        total:         formatarMoedaEmail(pedido.total || 0),
         cliente_nome:  (pedido.cliente.nome || 'cliente'),
         numero_pedido: pedido.numero || '—',
         valor:         formatarMoedaEmail(pedido.total || 0),
