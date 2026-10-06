@@ -593,6 +593,13 @@ async function salvarPedido(status) {
             const id = await salvarPedidoFirebase(pedido);
             window.__pedidoFirebaseId = id;
             window.__pedidoAtual.id = id;
+
+            if (typeof enviarEmailNovoPedidoProAdmin === "function") {
+                enviarEmailNovoPedidoProAdmin(pedido).catch(function(e){ console.warn("[email] falhou admin:", e); });
+            }
+            if (typeof enviarEmailConfirmacaoProCliente === "function") {
+                enviarEmailConfirmacaoProCliente(pedido).catch(function(e){ console.warn("[email] falhou cliente:", e); });
+            }
         }
     } catch (e) {
         console.warn('[checkout] Erro ao salvar no Firebase:', e);
