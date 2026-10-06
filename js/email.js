@@ -1,6 +1,6 @@
 /* =========================================================
    EMAIL.JS — Notificações por e-mail (EmailJS)
-   v8 — URLs atualizadas para seynclothing.netlify.app
+   v9 — Correção: exports das funções de novo pedido
    ========================================================= */
 
 'use strict';
@@ -10,9 +10,9 @@
    ========================================================= */
 const EMAILJS_CONFIG = {
     publicKey: 'EIBy3OPd6ECXedKsS',
-    serviceId: 'service_00vd97h',              // ← NOVO! conectado ao seyn.clothing@gmail.com
-    templateId: 'template_y049p9q',           // ← confirmação (você vai criar o definitivo)
-    templateIdAdmin: 'template_mflfrhn',       // ← "Novo Pedido - Admin" que criamos
+    serviceId: 'service_00vd97h',
+    templateId: 'template_y049p9q',
+    templateIdAdmin: 'template_mflfrhn',
     adminEmail: 'seyn.clothing@gmail.com'
 };
 
@@ -34,7 +34,7 @@ const EMAILJS_CONFIG = {
 
     try {
         emailjs.init(EMAILJS_CONFIG.publicKey);
-        console.log('[email] ✅ EmailJS pronto — conta MJ');
+        console.log('[email] ✅ EmailJS pronto — Seyn clothing');
         console.log('[email] Admin será notificado em:', EMAILJS_CONFIG.adminEmail);
     } catch (e) {
         console.error('[email] Erro ao inicializar:', e);
@@ -144,6 +144,17 @@ function gerarItensHTML(itens) {
     return '<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse;">' +
         linhas +
     '</table>';
+}
+
+
+/* =========================================================
+   UTILITÁRIO
+   ========================================================= */
+function formatarMoedaEmail(v) {
+    return Number(v || 0).toLocaleString('pt-BR', {
+        style: 'currency',
+        currency: 'BRL'
+    });
 }
 
 
@@ -324,7 +335,7 @@ async function enviarEmailAdminReembolso(refund) {
 
     var params = {
         to_email:      EMAILJS_CONFIG.adminEmail,
-        cliente_nome:  'Admin MJ',
+        cliente_nome:  'Admin Seyn',
         numero_pedido: pedidoNum,
         valor:         valor,
         status:        'reembolso_solicitado',
@@ -357,21 +368,137 @@ async function enviarEmailAdminReembolso(refund) {
 
 
 /* =========================================================
-   UTILITÁRIO
+   ENVIAR E-MAIL — NOVO PEDIDO (pro admin)
    ========================================================= */
-function formatarMoedaEmail(v) {
-    return Number(v || 0).toLocaleString('pt-BR', {
-        style: 'currency',
-        currency: 'BRL'
-    });
+async function enviarEmailNovoPedidoProAdmin(pedido) {
+
+    if (!pedido) {
+        return { ok: false, erro: 'Pedido vazio' };
+    }
+
+    if (typeof emailjs === 'undefined') {
+        console.warn('[email] EmailJS não disponível');
+        return { ok: false, erro: 'EmailJS indisponível' };
+    }
+
+    var cliente  = pedido.cliente || {};
+    var endereco = pedido.endereco || pedido.enderecoEntrega || {};
+
+    var params = {
+        to_email:         EMAILJS_CONFIG.adminEmail,
+        pedido_id:        pedido.numero || pedido.id || '-',
+        nome_cliente:     cliente.nome || cliente.name || 'Cliente',
+        email_cliente:    cliente.email || '',
+        telefone_cliente: cliente.telefone || cliente.phone || '',
+        lista_itens:      gerarItensHTML(pedido.itens),
+        endereco:         endereco.rua || endereco.logradouro || endereco.endereco || '',
+        cidade:           endereco.cidade || '',
+        estado:           endereco.estado || endereco.uf || '',
+        cep:              endereco.cep || '',
+        pagamento:        pedido.pagamento || pedido.formaPagamento || 'PIX',
+        total:            formatarMoedaEmail(pedido.total || 0),
+        cliente_nome:     'Admin Seyn',
+        numero_pedido:    pedido.numero || pedido.id || '-',
+        valor:            formatarMoedaEmail(pedido.total || 0),
+        titulo:           'Novo pedido #' + (pedido.numero || pedido.id || '-'),
+        mensagem:         'Você recebeu um novo pedido! Confira os detalhes abaixo.',
+        itens_html:       gerarItensHTML(pedido.itens),
+        botao_texto:      'Abrir painel administrativo',
+        botao_url:        'https://seynclothing.netlify.app/admin.html'
+    };
+
+    try {
+        var resp = await emailjs.send(
+            EMAILJS_CONFIG.serviceId,
+            EMAILJS_CONFIG.templateIdAdmin,
+            params
+        );
+        console.log('[email] ✅ Enviado admin (novo pedido):', resp.status);
+        return { ok: true };
+
+    } catch (e) {
+        console.error('[email] ❌ Erro ao enviar pro admin:', e);
+        return {
+            ok: false,
+            erro: (e && e.text) ? e.text : (e && e.message ? e.message : 'Erro desconhecido')
+        };
+    }
 }
 
 
 /* =========================================================
-   EXPÕE
+   ENVIAR E-MAIL — CONFIRMAÇÃO (pro cliente)
    ========================================================= */
-window.STATUS_EMAIL                  = STATUS_EMAIL;
-window.EMAILJS_CONFIG                = EMAILJS_CONFIG;
-window.enviarEmailMudancaStatus      = enviarEmailMudancaStatus;
-window.enviarEmailReembolso          = enviarEmailReembolso;
-window.enviarEmailAdminReembolso     = enviarEmailAdminReembolso;
+async function enviarEmailConfirmacaoProCliente(pedido) {
+
+    if (!pedido || !pedido.cliente || !pedido.cliente.email) {
+        console.warn('[email] Pedido sem e-mail do cliente');
+        return { ok: false, erro: 'Pedido sem e-mail' };
+    }
+
+    if (typeof emailjs === 'undefined') {
+        console.warn('[email] EmailJS não disponível');
+        return { ok: false, erro: 'EmailJS indisponível' };
+    }
+
+    var cliente  = pedido.cliente;
+    var endereco = pedido.endereco || pedido.enderecoEntrega || {};
+
+    var params = {
+        to_email:      cliente.email,
+        pedido_id:     pedido.numero || pedido.id || '-',
+        nome_cliente:  cliente.nome || 'Cliente',
+        email_cliente: cliente.email,
+        lista_itens:   gerarItensHTML(pedido.itens),
+        endereco:      endereco.rua || endereco.logradouro || endereco.endereco || '',
+        cidade:        endereco.cidade || '',
+        estado:        endereco.estado || endereco.uf || '',
+        cep:           endereco.cep || '',
+        pagamento:     pedido.pagamento || pedido.formaPagamento || 'PIX',
+        total:         formatarMoedaEmail(pedido.total || 0),
+        numero_pedido: pedido.numero || pedido.id || '-',
+        valor:         formatarMoedaEmail(pedido.total || 0),
+        titulo:        'Pedido #' + (pedido.numero || pedido.id || '-') + ' confirmado',
+        mensagem:      'Recebemos seu pedido! Em breve você receberá o código de rastreio.',
+        itens_html:    gerarItensHTML(pedido.itens),
+        botao_texto:   'Acompanhar pedido',
+        botao_url:     'https://seynclothing.netlify.app/minha-conta.html'
+    };
+
+    try {
+        var resp = await emailjs.send(
+            EMAILJS_CONFIG.serviceId,
+            EMAILJS_CONFIG.templateId,
+            params
+        );
+        console.log('[email] ✅ Enviado cliente (confirmação):', resp.status);
+        return { ok: true };
+
+    } catch (e) {
+        console.error('[email] ❌ Erro ao enviar pro cliente:', e);
+        return {
+            ok: false,
+            erro: (e && e.text) ? e.text : (e && e.message ? e.message : 'Erro desconhecido')
+        };
+    }
+}
+
+
+/* =========================================================
+   EXPÕE PRO WINDOW (pra ser chamado por HTML/outros JS)
+   ========================================================= */
+window.STATUS_EMAIL                      = STATUS_EMAIL;
+window.EMAILJS_CONFIG                    = EMAILJS_CONFIG;
+
+window.enviarEmailMudancaStatus          = enviarEmailMudancaStatus;
+window.enviarEmailReembolso              = enviarEmailReembolso;
+window.enviarEmailAdminReembolso         = enviarEmailAdminReembolso;
+window.enviarEmailNovoPedidoProAdmin     = enviarEmailNovoPedidoProAdmin;
+window.enviarEmailConfirmacaoProCliente  = enviarEmailConfirmacaoProCliente;
+
+console.log('[email] Funções expostas no window:');
+console.log('  → window.enviarEmailNovoPedidoProAdmin');
+console.log('  → window.enviarEmailConfirmacaoProCliente');
+console.log('  → window.enviarEmailMudancaStatus');
+console.log('  → window.enviarEmailReembolso');
+console.log('  → window.enviarEmailAdminReembolso');
