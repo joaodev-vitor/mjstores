@@ -1,6 +1,6 @@
 /* =========================================================
    EMAIL.JS — Notificações por e-mail (EmailJS)
-   v13 — endereço com <br> + fallback do pedido original
+   v14 — imagem com alt + background no item
    ========================================================= */
 
 'use strict';
@@ -78,7 +78,7 @@ async function buscarPedidoOriginal(refund) {
 
 
 /* =========================================================
-   GERAR HTML DOS ITENS
+   GERAR HTML DOS ITENS (com foto + alt + código)
    ========================================================= */
 function gerarItensHTML(itens) {
     if (!itens || itens.length === 0) return '';
@@ -90,11 +90,14 @@ function gerarItensHTML(itens) {
         var preco = Number(item.preco || 0);
         var subtotal = preco * qtd;
         var imagem = item.imagem || '';
+        var altTexto = String(nome).replace(/"/g, '&quot;');
 
         return '<tr>' +
             '<td style="padding:14px 12px 14px 0; border-bottom:1px solid #1a212c; width:60px; vertical-align:top;">' +
                 (imagem
-                    ? '<img src="' + imagem + '" alt="" width="50" height="62" style="display:block; width:50px; height:62px; object-fit:cover; border-radius:6px; border:1px solid #1a212c;">'
+                    ? '<img src="' + imagem + '" alt="' + altTexto + '" width="50" height="62" ' +
+                      'style="display:block; width:50px; height:62px; object-fit:cover; ' +
+                      'border-radius:6px; border:1px solid #1a212c; background:#0b1120;">'
                     : '<div style="width:50px; height:62px; background:#0b1120; border:1px solid #1a212c; border-radius:6px;"></div>') +
             '</td>' +
             '<td style="padding:14px 12px; border-bottom:1px solid #1a212c; vertical-align:top;">' +
@@ -237,7 +240,6 @@ async function enviarEmailReembolso(refund, novoStatus, observacaoAdmin) {
         return { ok: false, erro: 'EmailJS indisponível' };
     }
 
-    /* FALLBACK: se o refund tá sem itens/valor, busca o pedido original */
     var pedidoOriginal = null;
     var precisaFallback = !refund.itens || refund.itens.length === 0 || !refund.valor;
 
@@ -343,7 +345,6 @@ async function enviarEmailAdminReembolso(refund) {
     if (!refund) return { ok: false, erro: 'Sem dados do reembolso' };
     if (typeof emailjs === 'undefined') return { ok: false, erro: 'EmailJS indisponível' };
 
-    /* FALLBACK */
     var pedidoOriginal = null;
     var precisaFallback = !refund.itens || refund.itens.length === 0;
 
@@ -357,7 +358,6 @@ async function enviarEmailAdminReembolso(refund) {
     var numeroPedido = refund.orderNumero || refund.orderId
                     || (pedidoOriginal && pedidoOriginal.numero) || '—';
 
-    /* Cliente mesclado — pega o que tiver em refund, completa com o pedido original */
     var cliRefund = refund.cliente || {};
     var cliOriginal = (pedidoOriginal && pedidoOriginal.cliente) || {};
 
