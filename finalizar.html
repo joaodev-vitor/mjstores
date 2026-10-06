@@ -8,7 +8,7 @@
     <meta name="description" content="Finalize sua compra na Seyn clothing.">
     <meta name="theme-color" content="#05070c">
 
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' fill='%231a4dff'/><text y='.9em' x='50%25' text-anchor='middle' font-size='70' font-family='Georgia,serif' font-style='italic' font-weight='700' fill='white'>M</text></svg>">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' fill='%231a4dff'/><text y='.9em' x='50%25' text-anchor='middle' font-size='70' font-family='Georgia,serif' font-style='italic' font-weight='700' fill='white'>S</text></svg>">
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -16,7 +16,7 @@
 
     <link rel="stylesheet" href="css/style.css">
 
-    <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js" onerror="this.onerror=null;this.src='https://unpkg.com/qrcode@1.5.3/build/qrcode.min.js';"></script>
+    <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
 </head>
 
@@ -283,7 +283,7 @@
         <div class="pix-body">
             <div class="pix-qr-wrap">
                 <canvas id="pixCanvas" aria-label="QR Code Pix"></canvas>
-                <div class="pix-qr-logo" aria-hidden="true"><span>M</span></div>
+                <div class="pix-qr-logo" aria-hidden="true"><span>S</span></div>
             </div>
             <div class="pix-info">
                 <div class="pix-valor-row"><span>Valor</span><strong id="pixValor">R$ 0,00</strong></div>
@@ -321,7 +321,7 @@
 </div>
 
 <footer class="footer">
-    <div class="footer-logo">M<span>J</span></div>
+    <div class="footer-logo">Seyn<span>clothing</span></div>
     <nav class="footer-links" aria-label="Rodapé">
         <a href="streetwear.html">Streetwear</a>
         <a href="acessorios.html">Acessórios</a>
@@ -533,7 +533,7 @@ async function enviarPedido() {
 
     const pagamento = document.querySelector('input[name="pagamento"]:checked')?.value;
     await salvarPedido('aguardando_pagamento');
-
+    await enviarEmailStatusPedido('aguardando_pagamento');
 
     if (pagamento === 'pix') abrirPixModal(pedidoValorTotal);
     else finalizarPedidoAposPix();
@@ -593,16 +593,36 @@ async function salvarPedido(status) {
             const id = await salvarPedidoFirebase(pedido);
             window.__pedidoFirebaseId = id;
             window.__pedidoAtual.id = id;
-
-            if (typeof enviarEmailNovoPedidoProAdmin === "function") {
-                enviarEmailNovoPedidoProAdmin(pedido).catch(function(e){ console.warn("[email] falhou admin:", e); });
-            }
-            if (typeof enviarEmailConfirmacaoProCliente === "function") {
-                enviarEmailConfirmacaoProCliente(pedido).catch(function(e){ console.warn("[email] falhou cliente:", e); });
-            }
         }
     } catch (e) {
         console.warn('[checkout] Erro ao salvar no Firebase:', e);
+    }
+
+    // 📧 DISPARA E-MAILS (novo pedido pro admin + confirmação pro cliente)
+    try {
+        if (typeof enviarEmailNovoPedidoProAdmin === 'function') {
+            enviarEmailNovoPedidoProAdmin(pedido).then(function(r){
+                if (r && r.ok) console.log('[email] ✅ Novo pedido enviado pro admin');
+                else console.warn('[email] ⚠️ Falha admin:', r);
+            }).catch(function(e){
+                console.warn('[email] ❌ Exceção admin:', e);
+            });
+        } else {
+            console.warn('[email] enviarEmailNovoPedidoProAdmin NÃO EXISTE');
+        }
+
+        if (typeof enviarEmailConfirmacaoProCliente === 'function') {
+            enviarEmailConfirmacaoProCliente(pedido).then(function(r){
+                if (r && r.ok) console.log('[email] ✅ Confirmação enviada pro cliente');
+                else console.warn('[email] ⚠️ Falha cliente:', r);
+            }).catch(function(e){
+                console.warn('[email] ❌ Exceção cliente:', e);
+            });
+        } else {
+            console.warn('[email] enviarEmailConfirmacaoProCliente NÃO EXISTE');
+        }
+    } catch (e) {
+        console.warn('[email] Erro ao disparar e-mails:', e);
     }
 }
 
