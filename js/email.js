@@ -391,7 +391,7 @@ async function enviarEmailNovoPedidoProAdmin(pedido) {
         email_cliente:    cliente.email || '',
         telefone_cliente: cliente.telefone || cliente.phone || '',
         lista_itens:      gerarItensHTML(pedido.itens),
-        endereco:         endereco.rua || endereco.logradouro || endereco.endereco || '',
+        endereco_completo: endereco.rua ? (endereco.rua + (endereco.numero ? ', ' + endereco.numero : '') + (endereco.complemento ? ' - ' + endereco.complemento : '') + '\n' + (endereco.bairro || '') + '\n' + (endereco.cidade || '') + ' - ' + (endereco.estado || '') + '\nCEP ' + (endereco.cep || '')) : '',
         cidade:           endereco.cidade || '',
         estado:           endereco.estado || endereco.uf || '',
         cep:              endereco.cep || '',
@@ -450,7 +450,10 @@ async function enviarEmailConfirmacaoProCliente(pedido) {
         nome_cliente:  cliente.nome || 'Cliente',
         email_cliente: cliente.email,
         lista_itens:   gerarItensHTML(pedido.itens),
-        endereco:      endereco.rua || endereco.logradouro || endereco.endereco || '',
+        endereco_completo: endereco.rua ? (endereco.rua + (endereco.numero ? ", " + endereco.numero : "") + (endereco.complemento ? " - " + endereco.complemento : "") + "
+" + (endereco.bairro || "") + "
+" + (endereco.cidade || "") + " - " + (endereco.estado || "") + "
+CEP " + (endereco.cep || "")) : "",
         cidade:        endereco.cidade || '',
         estado:        endereco.estado || endereco.uf || '',
         cep:           endereco.cep || '',

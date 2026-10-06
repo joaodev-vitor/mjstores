@@ -16,7 +16,7 @@
 
     <link rel="stylesheet" href="css/style.css">
 
-    <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js" onerror="this.onerror=null;this.src='https://unpkg.com/qrcode@1.5.3/build/qrcode.min.js';"></script>
     <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
 </head>
 
@@ -533,7 +533,7 @@ async function enviarPedido() {
 
     const pagamento = document.querySelector('input[name="pagamento"]:checked')?.value;
     await salvarPedido('aguardando_pagamento');
-    await enviarEmailStatusPedido('aguardando_pagamento');
+
 
     if (pagamento === 'pix') abrirPixModal(pedidoValorTotal);
     else finalizarPedidoAposPix();
