@@ -1,6 +1,6 @@
 /* =========================================================
    EMAIL.JS — Notificações por e-mail (EmailJS)
-   v15 — endereço com fallback + logs de debug
+   v16 — templates novos + só 1 email pro cliente
    ========================================================= */
 
 'use strict';
@@ -8,15 +8,12 @@
 const EMAILJS_CONFIG = {
     publicKey: 'EIBy3OPd6ECXedKsS',
     serviceId: 'service_00vd97h',
-    templateId: 'template_y049p9q',
-    templateIdAdmin: 'template_mflfrhn',
+    templateId: 'template_mn8wmal',      // ← template do cliente
+    templateIdAdmin: 'template_wek9sca', // ← template do admin
     adminEmail: 'seyn.clothing@gmail.com'
 };
 
 
-/* =========================================================
-   INIT
-   ========================================================= */
 (function initEmailJS() {
     if (typeof emailjs === 'undefined') {
         console.warn('[email] EmailJS SDK não carregado');
@@ -41,8 +38,6 @@ function formatarMoedaEmail(v) {
     });
 }
 
-/* Monta o endereço com <br>. Se algum campo estiver vazio,
-   mostra os que tem. Se todos vazios, mostra mensagem. */
 function montarEnderecoCompleto(clienteOuEndereco) {
     if (!clienteOuEndereco) return 'Endereço não informado';
 
@@ -75,7 +70,7 @@ function montarEnderecoCompleto(clienteOuEndereco) {
 
 
 /* =========================================================
-   BUSCAR PEDIDO ORIGINAL — fallback quando refund tá vazio
+   BUSCAR PEDIDO ORIGINAL
    ========================================================= */
 async function buscarPedidoOriginal(refund) {
     if (!refund || !refund.orderId) return null;
@@ -93,7 +88,7 @@ async function buscarPedidoOriginal(refund) {
 
 
 /* =========================================================
-   GERAR HTML DOS ITENS (com foto + alt + código)
+   GERAR HTML DOS ITENS
    ========================================================= */
 function gerarItensHTML(itens) {
     if (!itens || itens.length === 0) return '';
@@ -140,8 +135,8 @@ function gerarItensHTML(itens) {
 const STATUS_EMAIL = {
     'aguardando_pagamento': {
         emoji: '⏳',
-        titulo: 'Aguardando pagamento',
-        mensagem: 'Recebemos seu pedido! Estamos aguardando a confirmação do pagamento.',
+        titulo: 'Pedido recebido',
+        mensagem: 'Recebemos seu pedido! Assim que o pagamento for confirmado, começamos a preparar tudo com cuidado.',
         botao_texto: 'Acompanhar pedido',
         botao_url: 'https://seynclothing.netlify.app/minha-conta.html'
     },
@@ -242,7 +237,7 @@ async function enviarEmailMudancaStatus(pedido, novoStatus, observacaoAdmin) {
 
 
 /* =========================================================
-   ENVIAR — REEMBOLSO (pro cliente) — COM FALLBACK
+   ENVIAR — REEMBOLSO (pro cliente)
    ========================================================= */
 async function enviarEmailReembolso(refund, novoStatus, observacaoAdmin) {
 
@@ -250,7 +245,6 @@ async function enviarEmailReembolso(refund, novoStatus, observacaoAdmin) {
         console.warn('[email] Refund sem e-mail do cliente');
         return { ok: false, erro: 'Refund sem e-mail' };
     }
-
     if (typeof emailjs === 'undefined') {
         return { ok: false, erro: 'EmailJS indisponível' };
     }
@@ -259,11 +253,7 @@ async function enviarEmailReembolso(refund, novoStatus, observacaoAdmin) {
     var precisaFallback = !refund.itens || refund.itens.length === 0 || !refund.valor;
 
     if (precisaFallback) {
-        console.log('[email] Refund incompleto — buscando pedido original...');
         pedidoOriginal = await buscarPedidoOriginal(refund);
-        if (pedidoOriginal) {
-            console.log('[email] ✅ Pedido original encontrado:', pedidoOriginal.numero);
-        }
     }
 
     var itens = (refund.itens && refund.itens.length) ? refund.itens
@@ -334,26 +324,18 @@ async function enviarEmailReembolso(refund, novoStatus, observacaoAdmin) {
     };
 
     try {
-        var resp = await emailjs.send(
-            EMAILJS_CONFIG.serviceId,
-            EMAILJS_CONFIG.templateId,
-            params
-        );
+        var resp = await emailjs.send(EMAILJS_CONFIG.serviceId, EMAILJS_CONFIG.templateId, params);
         console.log('[email] ✅ Enviado reembolso cliente:', resp.status);
         return { ok: true };
-
     } catch (e) {
         console.error('[email] ❌ Erro ao enviar reembolso:', e);
-        return {
-            ok: false,
-            erro: (e && e.text) ? e.text : (e && e.message ? e.message : 'Erro desconhecido')
-        };
+        return { ok: false, erro: (e && e.text) ? e.text : (e && e.message ? e.message : 'Erro desconhecido') };
     }
 }
 
 
 /* =========================================================
-   ENVIAR — NOVO REEMBOLSO (pro admin) — COM FALLBACK
+   ENVIAR — NOVO REEMBOLSO (pro admin)
    ========================================================= */
 async function enviarEmailAdminReembolso(refund) {
 
@@ -443,7 +425,6 @@ async function enviarEmailNovoPedidoProAdmin(pedido) {
     var totalFmt = formatarMoedaEmail(pedido.total || 0);
     var enderecoFmt = montarEnderecoCompleto(cliente);
 
-    /* 🔍 DEBUG — mostra no Console o que está sendo enviado */
     console.log('[email] 📩 Novo pedido — cliente:', cliente);
     console.log('[email] 📩 Endereço do cliente:', cliente.endereco);
     console.log('[email] 📩 Endereço formatado:', enderecoFmt);
@@ -481,49 +462,11 @@ async function enviarEmailNovoPedidoProAdmin(pedido) {
 
 
 /* =========================================================
-   ENVIAR — CONFIRMAÇÃO (pro cliente)
+   ENVIAR — CONFIRMAÇÃO (pro cliente) — NÃO USADO, mantido
    ========================================================= */
 async function enviarEmailConfirmacaoProCliente(pedido) {
-
-    if (!pedido || !pedido.cliente || !pedido.cliente.email) {
-        return { ok: false, erro: 'Pedido sem e-mail' };
-    }
-    if (typeof emailjs === 'undefined') {
-        return { ok: false, erro: 'EmailJS indisponível' };
-    }
-
-    var cliente = pedido.cliente;
-    var listaItens = gerarItensHTML(pedido.itens);
-    var totalFmt = formatarMoedaEmail(pedido.total || 0);
-
-    var params = {
-        to_email:          cliente.email,
-        nome_cliente:      cliente.nome || 'Cliente',
-        pedido_id:         pedido.numero || pedido.id || '-',
-        total:             totalFmt,
-        lista_itens:       listaItens,
-        endereco_completo: montarEnderecoCompleto(cliente),
-        pagamento:         pedido.pagamento || 'PIX',
-        emoji:             '✅',
-        titulo:            'Pedido confirmado',
-        mensagem:          'Recebemos seu pedido! Em breve você receberá o código de rastreio.',
-        botao_texto:       'Acompanhar pedido',
-        botao_url:         'https://seynclothing.netlify.app/minha-conta.html',
-        email_cliente:     cliente.email,
-        cliente_nome:      cliente.nome || 'Cliente',
-        numero_pedido:     pedido.numero || pedido.id || '-',
-        valor:             totalFmt,
-        itens_html:        listaItens
-    };
-
-    try {
-        var resp = await emailjs.send(EMAILJS_CONFIG.serviceId, EMAILJS_CONFIG.templateId, params);
-        console.log('[email] ✅ Enviado cliente (confirmação):', resp.status);
-        return { ok: true };
-    } catch (e) {
-        console.error('[email] ❌ Erro ao enviar pro cliente:', e);
-        return { ok: false, erro: (e && e.text) ? e.text : (e && e.message ? e.message : 'Erro desconhecido') };
-    }
+    /* Função mantida só pra compatibilidade, mas não é mais chamada */
+    return { ok: true };
 }
 
 
