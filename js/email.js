@@ -1,6 +1,6 @@
 /* =========================================================
    EMAIL.JS — Notificações por e-mail (EmailJS)
-   v16 — templates novos + só 1 email pro cliente
+   v16 — templates novos
    ========================================================= */
 
 'use strict';
@@ -8,8 +8,8 @@
 const EMAILJS_CONFIG = {
     publicKey: 'EIBy3OPd6ECXedKsS',
     serviceId: 'service_00vd97h',
-    templateId: 'template_mn8wmal',      // ← template do cliente
-    templateIdAdmin: 'template_wek9sca', // ← template do admin
+    templateId: 'template_mn8wmal',      // ← NOVO template do cliente
+    templateIdAdmin: 'template_wek9sca', // ← NOVO template do admin
     adminEmail: 'seyn.clothing@gmail.com'
 };
 
@@ -22,6 +22,8 @@ const EMAILJS_CONFIG = {
     try {
         emailjs.init(EMAILJS_CONFIG.publicKey);
         console.log('[email] ✅ EmailJS pronto — Seyn clothing');
+        console.log('[email] templateId cliente:', EMAILJS_CONFIG.templateId);
+        console.log('[email] templateId admin:', EMAILJS_CONFIG.templateIdAdmin);
     } catch (e) {
         console.error('[email] Erro ao inicializar:', e);
     }
@@ -462,10 +464,9 @@ async function enviarEmailNovoPedidoProAdmin(pedido) {
 
 
 /* =========================================================
-   ENVIAR — CONFIRMAÇÃO (pro cliente) — NÃO USADO, mantido
+   ENVIAR — CONFIRMAÇÃO (pro cliente)
    ========================================================= */
 async function enviarEmailConfirmacaoProCliente(pedido) {
-    /* Função mantida só pra compatibilidade, mas não é mais chamada */
     return { ok: true };
 }
 
