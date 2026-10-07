@@ -1,6 +1,6 @@
 /* =========================================================
    EMAIL.JS — Notificações por e-mail (EmailJS)
-   v14 — imagem com alt + background no item
+   v15 — endereço com fallback + logs de debug
    ========================================================= */
 
 'use strict';
@@ -41,21 +41,36 @@ function formatarMoedaEmail(v) {
     });
 }
 
-/* Retorna o endereço já formatado com <br> — o template usa {{{ }}} */
+/* Monta o endereço com <br>. Se algum campo estiver vazio,
+   mostra os que tem. Se todos vazios, mostra mensagem. */
 function montarEnderecoCompleto(clienteOuEndereco) {
-    if (!clienteOuEndereco) return '';
+    if (!clienteOuEndereco) return 'Endereço não informado';
 
     var e = clienteOuEndereco.endereco || clienteOuEndereco;
-    if (!e || !e.rua) return '';
+    if (!e || typeof e !== 'object') return 'Endereço não informado';
 
-    var linha1 = e.rua + (e.numero ? ', ' + e.numero : '') + (e.complemento ? ' - ' + e.complemento : '');
+    var linha1 = '';
+    if (e.rua) {
+        linha1 = e.rua;
+        if (e.numero) linha1 += ', ' + e.numero;
+        if (e.complemento) linha1 += ' - ' + e.complemento;
+    }
+
     var linha2 = e.bairro || '';
-    var linha3 = (e.cidade || '') + (e.estado ? ' - ' + e.estado : '');
+
+    var linha3 = '';
+    if (e.cidade) linha3 = e.cidade;
+    if (e.estado) linha3 += (linha3 ? ' - ' : '') + e.estado;
+
     var linha4 = e.cep ? 'CEP ' + e.cep : '';
 
-    return [linha1, linha2, linha3, linha4]
-        .filter(function (l) { return l && l.trim(); })
-        .join('<br>');
+    var linhas = [linha1, linha2, linha3, linha4].filter(function (l) {
+        return l && String(l).trim();
+    });
+
+    if (linhas.length === 0) return 'Endereço não informado';
+
+    return linhas.join('<br>');
 }
 
 
@@ -426,6 +441,12 @@ async function enviarEmailNovoPedidoProAdmin(pedido) {
     var cliente = pedido.cliente || {};
     var listaItens = gerarItensHTML(pedido.itens);
     var totalFmt = formatarMoedaEmail(pedido.total || 0);
+    var enderecoFmt = montarEnderecoCompleto(cliente);
+
+    /* 🔍 DEBUG — mostra no Console o que está sendo enviado */
+    console.log('[email] 📩 Novo pedido — cliente:', cliente);
+    console.log('[email] 📩 Endereço do cliente:', cliente.endereco);
+    console.log('[email] 📩 Endereço formatado:', enderecoFmt);
 
     var params = {
         to_email:          EMAILJS_CONFIG.adminEmail,
@@ -433,7 +454,7 @@ async function enviarEmailNovoPedidoProAdmin(pedido) {
         pedido_id:         pedido.numero || pedido.id || '-',
         total:             totalFmt,
         lista_itens:       listaItens,
-        endereco_completo: montarEnderecoCompleto(cliente),
+        endereco_completo: enderecoFmt,
         pagamento:         pedido.pagamento || 'PIX',
         emoji:             '🛒',
         titulo:            'Novo pedido #' + (pedido.numero || pedido.id || '-'),
