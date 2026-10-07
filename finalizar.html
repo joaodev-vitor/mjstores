@@ -598,7 +598,7 @@ async function salvarPedido(status) {
         console.warn('[checkout] Erro ao salvar no Firebase:', e);
     }
 
-    // 📧 DISPARA E-MAILS (novo pedido pro admin + confirmação pro cliente)
+    // 📧 Notifica o ADMIN sobre o novo pedido (cliente só recebe o do status)
     try {
         if (typeof enviarEmailNovoPedidoProAdmin === 'function') {
             enviarEmailNovoPedidoProAdmin(pedido).then(function(r){
@@ -607,22 +607,9 @@ async function salvarPedido(status) {
             }).catch(function(e){
                 console.warn('[email] ❌ Exceção admin:', e);
             });
-        } else {
-            console.warn('[email] enviarEmailNovoPedidoProAdmin NÃO EXISTE');
-        }
-
-        if (typeof enviarEmailConfirmacaoProCliente === 'function') {
-            enviarEmailConfirmacaoProCliente(pedido).then(function(r){
-                if (r && r.ok) console.log('[email] ✅ Confirmação enviada pro cliente');
-                else console.warn('[email] ⚠️ Falha cliente:', r);
-            }).catch(function(e){
-                console.warn('[email] ❌ Exceção cliente:', e);
-            });
-        } else {
-            console.warn('[email] enviarEmailConfirmacaoProCliente NÃO EXISTE');
         }
     } catch (e) {
-        console.warn('[email] Erro ao disparar e-mails:', e);
+        console.warn('[email] Erro ao notificar admin:', e);
     }
 }
 
@@ -654,7 +641,7 @@ window.finalizarPedidoAposPix = async function () {
 
     if (window.__pedidoAtual) window.__pedidoAtual.status = 'pago';
 
-    await enviarEmailStatusPedido('pago');
+    /* Sem e-mail de "pagamento confirmado" pro cliente — só o admin é notificado via painel */
 
     document.getElementById('successCode').textContent = `#${window.__pedidoNumeroAtual || '0000'}`;
     salvarCarrinho([]);
