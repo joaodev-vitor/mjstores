@@ -7,8 +7,8 @@
 const EMAILJS_CONFIG = {
     publicKey: 'EIBy3OPd6ECXedKsS',
     serviceId: 'service_00vd97h',
-    templateId: 'template_wek9sca',       
-    templateIdAdmin: 'template_wek9sca',   
+    templateId: 'template_4x1y0b8',
+    templateIdAdmin: 'template_4x1y0b8',
     adminEmail: 'seyn.clothing@gmail.com'
 };
 
