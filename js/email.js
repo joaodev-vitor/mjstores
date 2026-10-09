@@ -20,7 +20,9 @@ const EMAILJS_CONFIG = {
     }
     try {
         emailjs.init(EMAILJS_CONFIG.publicKey);
-        console.log('[email] ✅ EmailJS pronto — Seyn clothing');
+        console.log('[email] ✅ EmailJS pronto');
+        console.log('[email] templateId:', EMAILJS_CONFIG.templateId);
+        console.log('[email] templateIdAdmin:', EMAILJS_CONFIG.templateIdAdmin);
     } catch (e) {
         console.error('[email] Erro ao inicializar:', e);
     }
@@ -120,6 +122,19 @@ function gerarItensHTML(itens) {
 }
 
 
+/* Log unificado de erro */
+function logErroEmailJS(contexto, e) {
+    console.error('[email] ❌ Erro ' + contexto + ':');
+    if (e) {
+        console.error('  → status:', e.status);
+        console.error('  → text:', e.text);
+        console.error('  → message:', e.message);
+        console.error('  → templateId usado:', EMAILJS_CONFIG.templateId);
+        console.error('  → templateIdAdmin usado:', EMAILJS_CONFIG.templateIdAdmin);
+    }
+}
+
+
 const STATUS_EMAIL = {
     'aguardando_pagamento': { emoji: '⏳', titulo: 'Pedido recebido',          mensagem: 'Recebemos seu pedido! Assim que o pagamento for confirmado, começamos a preparar tudo com cuidado.', botao_texto: 'Acompanhar pedido',   botao_url: 'https://seynclothing.netlify.app/minha-conta.html' },
     'pago':                 { emoji: '💰', titulo: 'Pagamento confirmado',     mensagem: 'Confirmamos o recebimento do seu pagamento! Seu pedido já entrou na fila de separação.',                botao_texto: 'Acompanhar pedido',   botao_url: 'https://seynclothing.netlify.app/minha-conta.html' },
@@ -133,40 +148,43 @@ const STATUS_EMAIL = {
 
 async function enviarEmailMudancaStatus(pedido, novoStatus, observacaoAdmin) {
     if (!pedido || !pedido.cliente || !pedido.cliente.email) {
+        console.warn('[email] Pedido sem e-mail do cliente');
         return { ok: false, erro: 'Pedido sem e-mail' };
     }
     if (typeof emailjs === 'undefined') {
+        console.warn('[email] EmailJS indisponível');
         return { ok: false, erro: 'EmailJS indisponível' };
     }
 
     var info = STATUS_EMAIL[novoStatus];
-    if (!info) return { ok: false, erro: 'Status sem template' };
+    if (!info) {
+        console.warn('[email] Status sem template:', novoStatus);
+        return { ok: false, erro: 'Status sem template' };
+    }
 
     var params = {
         to_email:          pedido.cliente.email,
         nome_cliente:      pedido.cliente.nome || 'cliente',
-        pedido_id:         pedido.numero || pedido.id || '—',
-        total:             formatarMoedaEmail(pedido.total || 0),
-        lista_itens:       gerarItensHTML(pedido.itens),
+        numero_pedido:     pedido.numero || pedido.id || '—',
+        valor:             formatarMoedaEmail(pedido.total || 0),
+        itens_html:        gerarItensHTML(pedido.itens),
         endereco_completo: montarEnderecoCompleto(pedido.cliente),
         pagamento:         pedido.pagamento || 'PIX',
         emoji:             info.emoji,
         titulo:            info.titulo,
         mensagem:          observacaoAdmin || info.mensagem,
         botao_texto:       info.botao_texto,
-        botao_url:         info.botao_url,
-        cliente_nome:      pedido.cliente.nome || 'cliente',
-        numero_pedido:     pedido.numero || pedido.id || '—',
-        valor:             formatarMoedaEmail(pedido.total || 0),
-        itens_html:        gerarItensHTML(pedido.itens)
+        botao_url:         info.botao_url
     };
+
+    console.log('[email] 📤 Enviando cliente (' + novoStatus + ') → template:', EMAILJS_CONFIG.templateId);
 
     try {
         var resp = await emailjs.send(EMAILJS_CONFIG.serviceId, EMAILJS_CONFIG.templateId, params);
         console.log('[email] ✅ Cliente (' + novoStatus + '):', resp.status);
         return { ok: true };
     } catch (e) {
-        console.error('[email] ❌ Erro cliente:', e);
+        logErroEmailJS('ao enviar cliente (' + novoStatus + ')', e);
         return { ok: false, erro: (e && e.text) ? e.text : (e && e.message ? e.message : 'Erro') };
     }
 }
@@ -181,30 +199,26 @@ async function enviarEmailNovoPedidoProAdmin(pedido) {
     var params = {
         to_email:          EMAILJS_CONFIG.adminEmail,
         nome_cliente:      cliente.nome || 'Cliente',
-        pedido_id:         pedido.numero || pedido.id || '-',
-        total:             formatarMoedaEmail(pedido.total || 0),
-        lista_itens:       gerarItensHTML(pedido.itens),
+        numero_pedido:     pedido.numero || pedido.id || '-',
+        valor:             formatarMoedaEmail(pedido.total || 0),
+        itens_html:        gerarItensHTML(pedido.itens),
         endereco_completo: montarEnderecoCompleto(cliente),
         pagamento:         pedido.pagamento || 'PIX',
         emoji:             '🛒',
         titulo:            'Novo pedido #' + (pedido.numero || pedido.id || '-'),
         mensagem:          'Você recebeu um novo pedido!',
         botao_texto:       'Abrir painel',
-        botao_url:         'https://seynclothing.netlify.app/admin.html',
-        email_cliente:     cliente.email || '',
-        telefone_cliente:  cliente.telefone || '',
-        cliente_nome:      'Admin Seyn',
-        numero_pedido:     pedido.numero || pedido.id || '-',
-        valor:             formatarMoedaEmail(pedido.total || 0),
-        itens_html:        gerarItensHTML(pedido.itens)
+        botao_url:         'https://seynclothing.netlify.app/admin.html'
     };
+
+    console.log('[email] 📤 Enviando admin (novo pedido) → template:', EMAILJS_CONFIG.templateIdAdmin);
 
     try {
         var resp = await emailjs.send(EMAILJS_CONFIG.serviceId, EMAILJS_CONFIG.templateIdAdmin, params);
         console.log('[email] ✅ Admin (novo pedido):', resp.status);
         return { ok: true };
     } catch (e) {
-        console.error('[email] ❌ Erro admin:', e);
+        logErroEmailJS('ao enviar admin (novo pedido)', e);
         return { ok: false, erro: (e && e.text) ? e.text : (e && e.message ? e.message : 'Erro') };
     }
 }
@@ -227,28 +241,26 @@ async function enviarEmailReembolso(refund, novoStatus, observacaoAdmin) {
     var params = {
         to_email:          refund.cliente.email,
         nome_cliente:      refund.cliente.nome || 'cliente',
-        pedido_id:         refund.orderNumero || '—',
-        total:             formatarMoedaEmail(refund.valor || 0),
-        lista_itens:       gerarItensHTML(refund.itens),
+        numero_pedido:     refund.orderNumero || '—',
+        valor:             formatarMoedaEmail(refund.valor || 0),
+        itens_html:        gerarItensHTML(refund.itens),
         endereco_completo: montarEnderecoCompleto(refund.cliente),
         pagamento:         'Reembolso',
         emoji:             info.emoji,
         titulo:            info.titulo,
         mensagem:          observacaoAdmin || info.mensagem,
         botao_texto:       info.botao_texto,
-        botao_url:         info.botao_url,
-        cliente_nome:      refund.cliente.nome || 'cliente',
-        numero_pedido:     refund.orderNumero || '—',
-        valor:             formatarMoedaEmail(refund.valor || 0),
-        itens_html:        gerarItensHTML(refund.itens)
+        botao_url:         info.botao_url
     };
+
+    console.log('[email] 📤 Enviando reembolso cliente → template:', EMAILJS_CONFIG.templateId);
 
     try {
         var resp = await emailjs.send(EMAILJS_CONFIG.serviceId, EMAILJS_CONFIG.templateId, params);
         console.log('[email] ✅ Reembolso cliente:', resp.status);
         return { ok: true };
     } catch (e) {
-        console.error('[email] ❌ Erro reembolso cliente:', e);
+        logErroEmailJS('ao enviar reembolso cliente', e);
         return { ok: false, erro: (e && e.text) ? e.text : (e && e.message ? e.message : 'Erro') };
     }
 }
@@ -259,36 +271,31 @@ async function enviarEmailAdminReembolso(refund) {
     if (typeof emailjs === 'undefined') return { ok: false, erro: 'EmailJS indisponível' };
 
     var cli = refund.cliente || {};
-    var valor = formatarMoedaEmail(refund.valor || 0);
     var pedidoNum = refund.orderNumero || '—';
 
     var params = {
         to_email:          EMAILJS_CONFIG.adminEmail,
         nome_cliente:      cli.nome || '—',
-        pedido_id:         pedidoNum,
-        total:             valor,
-        lista_itens:       gerarItensHTML(refund.itens),
+        numero_pedido:     pedidoNum,
+        valor:             formatarMoedaEmail(refund.valor || 0),
+        itens_html:        gerarItensHTML(refund.itens),
         endereco_completo: montarEnderecoCompleto(cli),
         pagamento:         'Reembolso',
         emoji:             '💸',
         titulo:            'Novo reembolso #' + pedidoNum,
         mensagem:          'Reembolso solicitado. Motivo: ' + (refund.motivo || '—'),
         botao_texto:       'Abrir painel',
-        botao_url:         'https://seynclothing.netlify.app/admin.html?section=reembolsos',
-        email_cliente:     cli.email || '',
-        telefone_cliente:  cli.telefone || '',
-        cliente_nome:      'Admin Seyn',
-        numero_pedido:     pedidoNum,
-        valor:             valor,
-        itens_html:        gerarItensHTML(refund.itens)
+        botao_url:         'https://seynclothing.netlify.app/admin.html?section=reembolsos'
     };
+
+    console.log('[email] 📤 Enviando reembolso admin → template:', EMAILJS_CONFIG.templateIdAdmin);
 
     try {
         var resp = await emailjs.send(EMAILJS_CONFIG.serviceId, EMAILJS_CONFIG.templateIdAdmin, params);
         console.log('[email] ✅ Admin (reembolso):', resp.status);
         return { ok: true };
     } catch (e) {
-        console.error('[email] ❌ Erro reembolso admin:', e);
+        logErroEmailJS('ao enviar reembolso admin', e);
         return { ok: false, erro: (e && e.text) ? e.text : (e && e.message ? e.message : 'Erro') };
     }
 }
