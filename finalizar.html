@@ -593,23 +593,29 @@ async function salvarPedido(status) {
             const id = await salvarPedidoFirebase(pedido);
             window.__pedidoFirebaseId = id;
             window.__pedidoAtual.id = id;
+            pedido.id = id;
         }
     } catch (e) {
         console.warn('[checkout] Erro ao salvar no Firebase:', e);
     }
 
-    // 📧 Notifica o ADMIN sobre o novo pedido (cliente só recebe o do status)
-    try {
-        if (typeof enviarEmailNovoPedidoProAdmin === 'function') {
-            enviarEmailNovoPedidoProAdmin(pedido).then(function(r){
-                if (r && r.ok) console.log('[email] ✅ Novo pedido enviado pro admin');
-                else console.warn('[email] ⚠️ Falha admin:', r);
-            }).catch(function(e){
-                console.warn('[email] ❌ Exceção admin:', e);
-            });
+    /* =====================================================
+       📧 NOTIFICA O ADMIN SOBRE O NOVO PEDIDO
+       Roda ANTES do cliente receber email
+       ===================================================== */
+    if (typeof enviarEmailNovoPedidoProAdmin === 'function') {
+        try {
+            var r = await enviarEmailNovoPedidoProAdmin(pedido);
+            if (r && r.ok) {
+                console.log('[email] ✅ Novo pedido enviado pro admin');
+            } else {
+                console.warn('[email] ⚠️ Falha ao avisar admin:', r);
+            }
+        } catch (e) {
+            console.warn('[email] ❌ Exceção ao avisar admin:', e);
         }
-    } catch (e) {
-        console.warn('[email] Erro ao notificar admin:', e);
+    } else {
+        console.warn('[email] enviarEmailNovoPedidoProAdmin indisponível');
     }
 }
 
