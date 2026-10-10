@@ -9979,3 +9979,129 @@ img, video, canvas, svg {
         font-size: .88rem;
     }
 }
+
+/* =========================================================
+   MENU SÓ NO HAMBURGER (desktop + mobile)
+   Esconde o menu horizontal, tudo dentro da gaveta
+   ========================================================= */
+
+/* 1. Forçar o menu a virar gaveta lateral em TODAS as larguras */
+.header .nav {
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    right: auto !important;
+    width: min(420px, 88vw) !important;
+    height: 100vh !important;
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    justify-content: center !important;
+    gap: 4px !important;
+    padding: 100px 40px !important;
+    background: var(--ink-1) !important;
+    border-left: none !important;
+    border-right: 1px solid var(--line-2) !important;
+    box-shadow: 50px 0 120px rgba(0, 0, 0, .85) !important;
+    transform: translateX(-105%) !important;
+    transition: transform .65s cubic-bezier(.22, 1, .36, 1) !important;
+    z-index: 195 !important;
+    display: flex !important;
+}
+
+/* 2. Quando aberto, aparece */
+.header .nav.open {
+    transform: translateX(0) !important;
+}
+
+/* 3. Estilo dos links dentro da gaveta */
+.header .nav a {
+    width: 100% !important;
+    font-family: var(--ff-display) !important;
+    font-size: 1.6rem !important;
+    font-style: italic !important;
+    font-weight: 400 !important;
+    letter-spacing: 0 !important;
+    text-transform: none !important;
+    color: var(--paper-0) !important;
+    padding: 18px 0 !important;
+    border-bottom: 1px solid var(--line-0) !important;
+    opacity: 1 !important;
+}
+
+.header .nav a::before { display: none !important; }
+.header .nav a:hover { letter-spacing: 0 !important; color: var(--blue-3) !important; }
+.header .nav a.active { color: var(--blue-3) !important; }
+
+/* 4. Botão de fechar dentro da gaveta */
+.header .nav .nav-close {
+    display: grid !important;
+    position: absolute !important;
+    top: 22px !important;
+    right: 24px !important;
+    width: 40px !important;
+    height: 40px !important;
+    place-items: center !important;
+    font-size: 1.4rem !important;
+    color: var(--paper-2) !important;
+    border: 1px solid var(--line-1) !important;
+    border-radius: 50% !important;
+    background: transparent !important;
+    transition: all .4s ease !important;
+}
+
+.header .nav .nav-close:hover {
+    color: var(--paper-0) !important;
+    border-color: var(--blue-1) !important;
+    transform: rotate(90deg) !important;
+}
+
+/* 5. Empurra o logo pra não colidir com o hamburger */
+.header {
+    padding-left: 90px !important;
+    grid-template-columns: 1fr auto 1fr !important;
+}
+
+/* 6. Logo continua centralizado */
+.header .logo {
+    grid-column: 2 !important;
+    justify-self: center !important;
+}
+
+/* 7. Ações do header (busca/cart/conta) à direita */
+.header .header-actions {
+    grid-column: 3 !important;
+    justify-content: flex-end !important;
+}
+
+/* 8. Tema claro — gaveta branca */
+[data-tema="claro"] .header .nav {
+    background: #ffffff !important;
+    border-right-color: rgba(0, 0, 0, .15) !important;
+}
+[data-tema="claro"] .header .nav a {
+    color: #000000 !important;
+    border-bottom-color: rgba(0, 0, 0, .08) !important;
+}
+[data-tema="claro"] .header .nav a:hover,
+[data-tema="claro"] .header .nav a.active {
+    color: #1a4dff !important;
+}
+[data-tema="claro"] .header .nav .nav-close {
+    color: #1f2937 !important;
+    border-color: rgba(0, 0, 0, .2) !important;
+}
+
+/* 9. Mobile — ajustes finos */
+@media (max-width: 720px) {
+    .header {
+        padding-left: 70px !important;
+    }
+    .header .nav {
+        width: 100vw !important;
+        padding: 80px 28px 40px !important;
+    }
+    .header .nav a {
+        font-size: 1.4rem !important;
+        padding: 16px 0 !important;
+    }
+}
