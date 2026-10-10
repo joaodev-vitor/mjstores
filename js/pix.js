@@ -10,8 +10,8 @@
    --------------------------------------------------------- */
 
 const PIX_CONFIG = {
-    chave: 'contato@seynclothing.com.br',
-    nome: 'SEYNCLOTHING',
+    chave: '405.992.708-29',        // ⬅️ trocar pelo CPF só números
+    nome: 'SEYN CLOTHING',         // ⬅️ sem acento, sem ç
     cidade: 'SAO PAULO',
     descricao: '',
     txid: '***'
@@ -31,6 +31,9 @@ function gerarPayloadPix(valor, chave, nome, cidade, txid, descricao) {
     txid      = txid      || PIX_CONFIG.txid;
     descricao = descricao || PIX_CONFIG.descricao;
 
+    // Sanitiza nome e cidade (BR Code não aceita acento/ç)
+    nome   = String(nome).normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^A-Za-z0-9 ]/g, '').trim();
+    cidade = String(cidade).normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^A-Za-z0-9 ]/g, '').trim();
 
     function tlv(id, value) {
         const str = String(value);
@@ -120,6 +123,10 @@ function renderizarQRCode(canvas, payload) {
         return;
     }
 
+    // ✅ FORÇA um tamanho no canvas antes de desenhar
+    canvas.width  = 280;
+    canvas.height = 280;
+
     QRCode.toCanvas(canvas, payload, {
         width: 280,
         margin: 1,
@@ -130,6 +137,7 @@ function renderizarQRCode(canvas, payload) {
         }
     }, (err) => {
         if (err) console.error('Erro ao gerar QR Code:', err);
+        else console.log('[pix] ✅ QR Code renderizado');
     });
 }
 
@@ -156,6 +164,9 @@ function abrirPixModal(valor, txid) {
 
     window.__pixPayloadAtual = payload;
 
+    console.log('[pix] payload gerado:', payload);
+    console.log('[pix] chave usada:', chave);
+
 
     const valorEl = document.getElementById('pixValor');
 
@@ -167,10 +178,6 @@ function abrirPixModal(valor, txid) {
     }
 
 
-    const canvas = document.getElementById('pixCanvas');
-    renderizarQRCode(canvas, payload);
-
-
     const codigoEl = document.getElementById('pixCodigo');
 
     if (codigoEl) {
@@ -178,8 +185,17 @@ function abrirPixModal(valor, txid) {
     }
 
 
+    /* ✅ 1) ABRE O MODAL PRIMEIRO */
     modal.classList.add('open');
     document.body.style.overflow = 'hidden';
+
+
+    /* ✅ 2) SÓ DEPOIS renderiza o QR (com modal já visível) */
+    const canvas = document.getElementById('pixCanvas');
+
+    requestAnimationFrame(() => {
+        renderizarQRCode(canvas, payload);
+    });
 
 
     iniciarCountdownPix(30 * 60);
