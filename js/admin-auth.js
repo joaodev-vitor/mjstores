@@ -169,7 +169,7 @@ function mostrarLogin(overlay, input) {
     overlay.style.pointerEvents = 'auto';
     document.body.classList.add('admin-locked');
     if (input) setTimeout(function () { input.focus(); }, 200);
-}
+} 
 
 
 function esconderLogin(overlay) {

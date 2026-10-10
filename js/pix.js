@@ -10,7 +10,7 @@
    --------------------------------------------------------- */
 
 const PIX_CONFIG = {
-    chave: '405.992.708-29',        // ⬅️ trocar pelo CPF só números
+    chave: '40599270829',        // ⬅️ trocar pelo CPF só números
     nome: 'SEYN CLOTHING',         // ⬅️ sem acento, sem ç
     cidade: 'SAO PAULO',
     descricao: '',

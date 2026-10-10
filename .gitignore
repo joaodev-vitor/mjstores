@@ -1,5 +1,101 @@
+# =========================================================
+# SEGURANÇA — CHAVES E CREDENCIAIS (NUNCA COMMITAR)
+# =========================================================
+
+# Firebase Admin SDK (chaves privadas)
 *-key.json
+*adminsdk*.json
+serviceAccount*.json
+firebase-adminsdk*.json
+artefatos-loja-firebase-adminsdk*.json
+
+# Pasta de chaves
 keys/
-*-key.json
-keys/
+chaves/
+secrets/
+credentials/
+.env
+.env.local
+.env.*.local
+.env.production
+.env.development
+
+# Qualquer coisa com "firebase" e "key" junto
+firebase-key*.json
+
+# =========================================================
+# FIREBASE — FUNÇÕES / DEPLOY
+# =========================================================
+.firebase/
+firebase-debug.log
+firestore-debug.log
+ui-debug.log
+.firebaserc
+
+# =========================================================
+# MIGRAÇÃO / BACKUPS
+# =========================================================
 firebase-migration/
+backup/
+backups/
+*.backup
+*.old
+*.bak
+
+# =========================================================
+# NODE / DEPENDÊNCIAS
+# =========================================================
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+package-lock.json
+yarn.lock
+
+# =========================================================
+# BUILD / DIST
+# =========================================================
+dist/
+build/
+.cache/
+.parcel-cache/
+.next/
+out/
+
+# =========================================================
+# SISTEMA OPERACIONAL
+# =========================================================
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+desktop.ini
+
+# =========================================================
+# EDITOR / IDE
+# =========================================================
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.project
+.settings/
+
+# =========================================================
+# LOGS
+# =========================================================
+*.log
+logs/
+*.log.*
+
+# =========================================================
+# TEMP
+# =========================================================
+tmp/
+temp/
+*.tmp
+*.cache
