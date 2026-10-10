@@ -16,8 +16,22 @@
 
     <link rel="stylesheet" href="css/style.css">
 
-    <!-- ✅ CORRIGIDO: jsDelivr (unpkg dava 404) -->
-    <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js"></script>
+    <!-- ✅ QRCode com 3 CDNs em cascata (o primeiro que carregar vence) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcode/1.5.1/qrcode.min.js"></script>
+    <script>
+      if (typeof QRCode === 'undefined') {
+        document.write('<script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js"><\/script>');
+      }
+    </script>
+    <script>
+      if (typeof QRCode === 'undefined') {
+        document.write('<script src="https://unpkg.com/qrcode@1.5.3/build/qrcode.min.js"><\/script>');
+      }
+    </script>
+    <script>
+      console.log('[qrcode] status final:', typeof QRCode);
+    </script>
+
     <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
 </head>
 
@@ -600,9 +614,6 @@ async function salvarPedido(status) {
         console.warn('[checkout] Erro ao salvar no Firebase:', e);
     }
 
-    /* =====================================================
-       📧 NOTIFICA O ADMIN SOBRE O NOVO PEDIDO
-       ===================================================== */
     if (typeof enviarEmailNovoPedidoProAdmin === 'function') {
         try {
             var r = await enviarEmailNovoPedidoProAdmin(pedido);
