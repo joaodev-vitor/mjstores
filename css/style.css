@@ -9833,52 +9833,149 @@ img, video, canvas, svg {
 }
 
 /* =========================================================
-   HAMBURGER NA ESQUERDA — SOLUÇÃO FORÇADA (VAI OU VAI)
+   SIDEBAR DE CATEGORIAS — Estilo marketplace
    ========================================================= */
 
-/* Esconde o hamburger que tá na direita (dentro das actions) */
-.header-actions > .menu-button {
-    display: none !important;
+.cat-sidebar {
+    position: sticky;
+    top: calc(var(--header-h) + 20px);
+    width: 260px;
+    background: var(--ink-1);
+    border: 1px solid var(--line-1);
+    border-radius: 8px;
+    overflow: hidden;
+    font-family: var(--ff-sans);
 }
 
-/* Cria o hamburger na ESQUERDA via pseudo-elemento */
-.header::before {
-    content: "";
-    position: absolute;
-    left: 20px;
-    top: 50%;
-    transform: translateY(-50%);
-    width: 42px;
-    height: 42px;
-    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23a4b2ca' stroke-width='2' stroke-linecap='round'><path d='M4 7h16M4 12h16M4 17h16'/></svg>");
-    background-repeat: no-repeat;
-    background-position: center;
-    background-size: 22px 22px;
-    border-radius: 50%;
+.cat-sidebar details {
+    border-bottom: 1px solid var(--line-0);
+}
+
+.cat-sidebar details:last-child {
+    border-bottom: none;
+}
+
+.cat-sidebar summary {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 18px;
+    font-size: .92rem;
+    font-weight: 600;
+    color: var(--paper-1);
     cursor: pointer;
-    z-index: 210;
-    pointer-events: auto;
-    transition: background-color .3s;
+    list-style: none;
+    transition: background .25s, color .25s;
 }
 
-.header::before:hover {
-    background-color: rgba(127, 176, 255, .08);
+.cat-sidebar summary::-webkit-details-marker {
+    display: none;
 }
 
-/* Empurra o logo um pouco pra direita pra não colidir */
-.header {
-    padding-left: 80px !important;
+.cat-sidebar summary::after {
+    content: "›";
+    font-size: 1.2rem;
+    color: var(--paper-3);
+    transition: transform .3s, color .3s;
 }
 
-/* No mobile, esconde o hamburger "fake" da esquerda — deixa o normal */
-@media (max-width: 1080px) {
-    .header::before {
-        display: none !important;
+.cat-sidebar details[open] summary::after {
+    transform: rotate(90deg);
+    color: var(--blue-3);
+}
+
+.cat-sidebar summary:hover {
+    background: rgba(127, 176, 255, .05);
+    color: var(--blue-3);
+}
+
+.cat-sidebar details[open] summary {
+    color: var(--blue-3);
+    background: rgba(127, 176, 255, .05);
+}
+
+.cat-sidebar .cat-sub {
+    display: flex;
+    flex-direction: column;
+    padding: 6px 0 10px;
+    background: rgba(0, 0, 0, .15);
+}
+
+.cat-sidebar .cat-sub a {
+    display: block;
+    padding: 9px 18px 9px 34px;
+    font-size: .82rem;
+    color: var(--paper-2);
+    text-decoration: none;
+    transition: color .2s, background .2s, padding-left .2s;
+    position: relative;
+}
+
+.cat-sidebar .cat-sub a::before {
+    content: "·";
+    position: absolute;
+    left: 22px;
+    color: var(--paper-4);
+    transition: color .2s;
+}
+
+.cat-sidebar .cat-sub a:hover {
+    color: var(--blue-3);
+    background: rgba(127, 176, 255, .05);
+    padding-left: 38px;
+}
+
+.cat-sidebar .cat-sub a:hover::before {
+    color: var(--blue-3);
+}
+
+/* Título da sidebar */
+.cat-sidebar-title {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 18px;
+    background: linear-gradient(135deg, var(--ink-2), var(--ink-1));
+    border-bottom: 1px solid var(--line-1);
+    font-size: .95rem;
+    font-weight: 700;
+    color: var(--paper-0);
+    text-transform: uppercase;
+    letter-spacing: .12em;
+}
+
+.cat-sidebar-title svg {
+    width: 18px;
+    height: 18px;
+    stroke: var(--blue-3);
+}
+
+/* Layout wrapper — sidebar + conteúdo */
+.cat-layout {
+    display: grid;
+    grid-template-columns: 260px 1fr;
+    gap: 32px;
+    padding: 40px var(--gutter);
+    max-width: 1500px;
+    margin: 0 auto;
+    align-items: start;
+}
+
+/* Mobile — sidebar vira um bloco acima */
+@media (max-width: 900px) {
+    .cat-layout {
+        grid-template-columns: 1fr;
+        gap: 20px;
+        padding: 30px 18px;
     }
-    .header {
-        padding-left: var(--gutter) !important;
+
+    .cat-sidebar {
+        position: static;
+        width: 100%;
     }
-    .header-actions > .menu-button {
-        display: grid !important;
+
+    .cat-sidebar summary {
+        padding: 14px 16px;
+        font-size: .88rem;
     }
 }
