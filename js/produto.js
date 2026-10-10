@@ -50,7 +50,7 @@ function iniciarPaginaProduto() {
     renderizarProduto(produto);
     renderizarRelacionados(produto);
 
-    document.title = `${produto.nome} — ARTEFATOS`;
+    document.title = `${produto.nome} — Seyn clothing`;
 }
 
 
@@ -442,7 +442,7 @@ document.addEventListener('keydown', (e) => {
 window.abrirGuiaTamanhos = function () {
 
     alert(
-        'Guia de tamanhos ARTEFATOS\n\n' +
+        'Guia de tamanhos Seyn clothing\n\n' +
         'P — Busto 96cm | Cintura 80cm\n' +
         'M — Busto 100cm | Cintura 84cm\n' +
         'G — Busto 106cm | Cintura 90cm\n' +
@@ -508,7 +508,7 @@ function produtoNaoEncontrado() {
         </div>
     `;
 
-    document.title = 'Produto não encontrado — ARTEFATOS';
+    document.title = 'Produto não encontrado — Seyn clothing';
 }
 
 
