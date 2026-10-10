@@ -9831,114 +9831,54 @@ img, video, canvas, svg {
 #cookieModal[data-tema="claro"] .cookie-cat-info small {
     color: #4b5563;
 }
+
 /* =========================================================
-   HAMBURGER NO CANTO ESQUERDO (FORÇADO)
+   HAMBURGER NA ESQUERDA — SOLUÇÃO FORÇADA (VAI OU VAI)
    ========================================================= */
 
-/* 1. Mover o hamburger pra fora do fluxo do header-actions */
-.header .header-actions .menu-button {
-    position: fixed !important;
-    left: 24px !important;
-    top: 50% !important;
-    transform: translateY(-50%) !important;
-    z-index: 250 !important;
-    width: 42px !important;
-    height: 42px !important;
-    background: transparent !important;
-    border: 1px solid transparent !important;
-    color: var(--paper-2) !important;
-    display: grid !important;
-    place-items: center !important;
-    border-radius: 50% !important;
-    transition: all .3s ease !important;
+/* Esconde o hamburger que tá na direita (dentro das actions) */
+.header-actions > .menu-button {
+    display: none !important;
 }
 
-.header .header-actions .menu-button:hover {
-    color: var(--paper-0) !important;
-    background: rgba(127, 176, 255, .08) !important;
-    border-color: var(--line-2) !important;
+/* Cria o hamburger na ESQUERDA via pseudo-elemento */
+.header::before {
+    content: "";
+    position: absolute;
+    left: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 42px;
+    height: 42px;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23a4b2ca' stroke-width='2' stroke-linecap='round'><path d='M4 7h16M4 12h16M4 17h16'/></svg>");
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 22px 22px;
+    border-radius: 50%;
+    cursor: pointer;
+    z-index: 210;
+    pointer-events: auto;
+    transition: background-color .3s;
 }
 
-/* Ajuste de posição vertical: header tem altura variável */
-.header.scrolled .header-actions .menu-button {
-    top: 34px !important;
-    transform: none !important;
+.header::before:hover {
+    background-color: rgba(127, 176, 255, .08);
 }
 
-/* 2. Empurrar o logo um pouco pra direita pra não colidir com o hamburger */
-@media (min-width: 1081px) {
-    .header {
-        padding-left: 90px;
-    }
-}
-
-/* Força hamburger à esquerda em TODAS as larguras */
-@media (max-width: 1080px) {
-    .header .header-actions .menu-button {
-        position: absolute !important;
-        left: 24px !important;
-        top: 50% !important;
-        transform: translateY(-50%) !important;
-        z-index: 250 !important;
-    }
-}/* =========================================================
-   HAMBURGER NA ESQUERDA — VERSÃO FORÇADA (VAI OU VAI)
-   ========================================================= */
-
-/* Botão hamburger — fora de qualquer container, canto esquerdo */
-body .header .menu-button,
-body #header .menu-button,
-body header#header .menu-button,
-html body header.header .menu-button {
-    position: fixed !important;
-    top: 28px !important;
-    left: 28px !important;
-    right: auto !important;
-    bottom: auto !important;
-    width: 42px !important;
-    height: 42px !important;
-    display: grid !important;
-    place-items: center !important;
-    color: #a4b2ca !important;
-    background: transparent !important;
-    border: 1px solid transparent !important;
-    border-radius: 50% !important;
-    z-index: 9999 !important;
-    transform: none !important;
-    transition: color .3s, background .3s, border-color .3s !important;
-}
-
-body .header .menu-button:hover,
-body #header .menu-button:hover {
-    color: #f5f7ff !important;
-    background: rgba(127, 176, 255, .08) !important;
-    border-color: rgba(127, 176, 255, .28) !important;
-}
-
-body .header .menu-button svg {
-    width: 22px !important;
-    height: 22px !important;
-    stroke: currentColor !important;
-}
-
-/* Header scrolled — ajusta top */
-body .header.scrolled .menu-button {
-    top: 14px !important;
-}
-
-/* Logo — empurra um pouco pra não colidir */
+/* Empurra o logo um pouco pra direita pra não colidir */
 .header {
-    padding-left: 90px !important;
+    padding-left: 80px !important;
 }
 
-@media (max-width: 720px) {
-    body .header .menu-button {
-        top: 18px !important;
-        left: 14px !important;
-        width: 38px !important;
-        height: 38px !important;
+/* No mobile, esconde o hamburger "fake" da esquerda — deixa o normal */
+@media (max-width: 1080px) {
+    .header::before {
+        display: none !important;
     }
     .header {
-        padding-left: 70px !important;
+        padding-left: var(--gutter) !important;
+    }
+    .header-actions > .menu-button {
+        display: grid !important;
     }
 }

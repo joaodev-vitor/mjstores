@@ -339,3 +339,23 @@ window.pesquisarProduto = pesquisarProduto;
     });
 
 })();
+
+/* Move o hamburger pro canto esquerdo do header (desktop) */
+document.addEventListener('DOMContentLoaded', function() {
+    function moverHamburger() {
+        var btn = document.querySelector('.header .menu-button');
+        var header = document.querySelector('.header');
+        if (!btn || !header) return;
+
+        if (window.innerWidth > 1080) {
+            btn.style.cssText = 'position: fixed !important; left: 20px !important; top: 50% !important; transform: translateY(-50%) !important; z-index: 250 !important; display: grid !important;';
+            header.style.paddingLeft = '80px';
+        } else {
+            btn.style.cssText = '';
+            header.style.paddingLeft = '';
+        }
+    }
+
+    moverHamburger();
+    window.addEventListener('resize', moverHamburger);
+});
