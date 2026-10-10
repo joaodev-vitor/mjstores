@@ -9872,12 +9872,13 @@ img, video, canvas, svg {
     }
 }
 
-/* 3. No mobile, mantém o comportamento antigo (dentro do fluxo) */
+/* Força hamburger à esquerda em TODAS as larguras */
 @media (max-width: 1080px) {
     .header .header-actions .menu-button {
-        position: relative !important;
-        left: auto !important;
-        top: auto !important;
-        transform: none !important;
+        position: absolute !important;
+        left: 24px !important;
+        top: 50% !important;
+        transform: translateY(-50%) !important;
+        z-index: 250 !important;
     }
 }
