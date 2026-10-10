@@ -9831,103 +9831,53 @@ img, video, canvas, svg {
 #cookieModal[data-tema="claro"] .cookie-cat-info small {
     color: #4b5563;
 }
-
 /* =========================================================
-   MENU HAMBURGER NO DESKTOP (canto esquerdo)
-   Adicionado: transformar menu em drawer lateral em todas as telas
+   HAMBURGER NO CANTO ESQUERDO (FORÇADO)
    ========================================================= */
 
-/* 1. Mostrar o botão hamburger em todas as larguras */
-.menu-button {
+/* 1. Mover o hamburger pra fora do fluxo do header-actions */
+.header .header-actions .menu-button {
+    position: fixed !important;
+    left: 24px !important;
+    top: 50% !important;
+    transform: translateY(-50%) !important;
+    z-index: 250 !important;
+    width: 42px !important;
+    height: 42px !important;
+    background: transparent !important;
+    border: 1px solid transparent !important;
+    color: var(--paper-2) !important;
     display: grid !important;
+    place-items: center !important;
+    border-radius: 50% !important;
+    transition: all .3s ease !important;
 }
 
-/* 2. Posicionar o hamburger no canto esquerdo do header */
-.header .menu-button {
-    position: absolute;
-    left: var(--gutter);
-    top: 50%;
-    transform: translateY(-50%);
-    z-index: 210;
+.header .header-actions .menu-button:hover {
+    color: var(--paper-0) !important;
+    background: rgba(127, 176, 255, .08) !important;
+    border-color: var(--line-2) !important;
 }
 
-.header .menu-button:hover {
-    transform: translateY(-50%) translateY(-2px);
+/* Ajuste de posição vertical: header tem altura variável */
+.header.scrolled .header-actions .menu-button {
+    top: 34px !important;
+    transform: none !important;
 }
 
-/* 3. Transformar o menu horizontal em drawer lateral (todas as larguras) */
-.header .nav {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: auto;
-    width: min(420px, 88vw);
-    height: 100vh;
-    flex-direction: column;
-    align-items: flex-start;
-    justify-content: center;
-    gap: 4px;
-    padding: 100px 40px;
-    background: var(--ink-1);
-    border-left: none;
-    border-right: 1px solid var(--line-2);
-    box-shadow: 50px 0 120px rgba(0, 0, 0, .85);
-    transform: translateX(-105%);
-    transition: transform .65s var(--ease-soft);
-    z-index: 195;
+/* 2. Empurrar o logo um pouco pra direita pra não colidir com o hamburger */
+@media (min-width: 1081px) {
+    .header {
+        padding-left: 90px;
+    }
 }
 
-.header .nav.open {
-    transform: translateX(0);
-}
-
-/* 4. Estilo dos links dentro da gaveta */
-.header .nav a {
-    width: 100%;
-    font-family: var(--ff-display);
-    font-size: 1.6rem;
-    font-style: italic;
-    font-weight: 400;
-    letter-spacing: 0;
-    text-transform: none;
-    color: var(--paper-0);
-    padding: 18px 0;
-    border-bottom: 1px solid var(--line-0);
-}
-
-.header .nav a::before { display: none; }
-.header .nav a:hover { letter-spacing: 0; color: var(--blue-3); }
-.header .nav a.active { color: var(--blue-3); }
-
-/* 5. Botão de fechar dentro da gaveta */
-.header .nav .nav-close {
-    display: grid;
-    position: absolute;
-    top: 22px;
-    right: 24px;
-    width: 40px;
-    height: 40px;
-    place-items: center;
-    font-size: 1.4rem;
-    color: var(--paper-2);
-    border: 1px solid var(--line-1);
-    border-radius: 50%;
-    background: transparent;
-    transition: all .4s var(--ease-soft);
-}
-
-.header .nav .nav-close:hover {
-    color: var(--paper-0);
-    border-color: var(--blue-1);
-    transform: rotate(90deg);
-}
-
-/* 6. Logo continua centralizado no header */
-.header .logo {
-    grid-column: 2;
-}
-
-/* 7. Ações do header (busca, cart, conta) ficam à direita */
-.header .header-actions {
-    grid-column: 3;
+/* 3. No mobile, mantém o comportamento antigo (dentro do fluxo) */
+@media (max-width: 1080px) {
+    .header .header-actions .menu-button {
+        position: relative !important;
+        left: auto !important;
+        top: auto !important;
+        transform: none !important;
+    }
 }
