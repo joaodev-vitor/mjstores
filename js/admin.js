@@ -1701,25 +1701,66 @@ function escapeHtmlAdmin(str) {
 
 
 /* =========================================================
-   CONFIG
+   CONFIG — ✅ AJUSTADO (default com espaço + sanitização ao salvar)
    ========================================================= */
 function carregarConfig() {
     var cfg = window.__config || {};
     setValue('configPixChave', cfg.pixChave || '');
-    setValue('configPixNome', cfg.pixNome || 'SEYNCLOTHING');
+    setValue('configPixNome', cfg.pixNome || 'SEYN CLOTHING');      // ✅ com espaço
     setValue('configPixCidade', cfg.pixCidade || 'SAO PAULO');
 }
 
+/* Limpa texto pra ficar compatível com BR Code (sem acento, sem ç) */
+function limparTextoBrCode(str) {
+    return String(str || '')
+        .normalize('NFD').replace(/[\u0300-\u036f]/g, '')  // remove acentos
+        .replace(/ç/gi, 'c')                                // remove cedilha
+        .replace(/Ç/g, 'C')
+        .replace(/[^A-Za-z0-9 ]/g, '')                     // só letras/números/espaço
+        .replace(/\s+/g, ' ')                               // espaços duplicados
+        .trim();
+}
+
 async function salvarConfiguracoes() {
+
+    var chaveBruta = String(getValue('configPixChave') || '').trim();
+    var nomeBruto  = String(getValue('configPixNome')  || '').trim();
+    var cidadeBruta = String(getValue('configPixCidade') || '').trim();
+
+    /* Se a chave parece CPF (tem ponto, traço ou barra), limpa pra só números */
+    var chaveLimpa = chaveBruta;
+    if (/[\.\-\/]/.test(chaveBruta)) {
+        chaveLimpa = chaveBruta.replace(/\D/g, '');
+    }
+
     var cfg = {
-        pixChave: getValue('configPixChave'),
-        pixNome: getValue('configPixNome'),
-        pixCidade: getValue('configPixCidade')
+        pixChave: chaveLimpa,
+        pixNome: limparTextoBrCode(nomeBruto).slice(0, 25),
+        pixCidade: limparTextoBrCode(cidadeBruta).slice(0, 15)
     };
+
+    /* Avisa se o valor final ficou diferente do que foi digitado */
+    if (cfg.pixNome !== nomeBruto || cfg.pixCidade !== cidadeBruta || cfg.pixChave !== chaveBruta) {
+        console.log('[admin] ⚠️ Valores foram sanitizados:');
+        console.log('  Nome:', nomeBruto, '→', cfg.pixNome);
+        console.log('  Cidade:', cidadeBruta, '→', cfg.pixCidade);
+        console.log('  Chave:', chaveBruta, '→', cfg.pixChave);
+    }
+
     try {
         await salvarConfigFirebase(cfg);
+
+        /* Atualiza cache local pra refletir na UI imediatamente */
+        window.__config = Object.assign({}, window.__config || {}, cfg);
+
+        /* Repõe os valores sanitizados nos campos */
+        setValue('configPixChave', cfg.pixChave);
+        setValue('configPixNome', cfg.pixNome);
+        setValue('configPixCidade', cfg.pixCidade);
+
         toast('Configurações salvas', 'success');
     } catch (e) {
+        console.error('[admin] Erro ao salvar config:', e);
         toast('Erro ao salvar', 'error');
     }
 }
