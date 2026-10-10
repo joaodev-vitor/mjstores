@@ -9825,7 +9825,109 @@ img, video, canvas, svg {
 #cookieModal[data-tema="claro"] .cookie-cat-info strong {
     color: #000000;
 }
-
 #cookieModal[data-tema="claro"] .cookie-cat-info small {
     color: #4b5563;
+}
+#cookieModal[data-tema="claro"] .cookie-cat-info small {
+    color: #4b5563;
+}
+
+/* =========================================================
+   MENU HAMBURGER NO DESKTOP (canto esquerdo)
+   Adicionado: transformar menu em drawer lateral em todas as telas
+   ========================================================= */
+
+/* 1. Mostrar o botão hamburger em todas as larguras */
+.menu-button {
+    display: grid !important;
+}
+
+/* 2. Posicionar o hamburger no canto esquerdo do header */
+.header .menu-button {
+    position: absolute;
+    left: var(--gutter);
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 210;
+}
+
+.header .menu-button:hover {
+    transform: translateY(-50%) translateY(-2px);
+}
+
+/* 3. Transformar o menu horizontal em drawer lateral (todas as larguras) */
+.header .nav {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: auto;
+    width: min(420px, 88vw);
+    height: 100vh;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+    gap: 4px;
+    padding: 100px 40px;
+    background: var(--ink-1);
+    border-left: none;
+    border-right: 1px solid var(--line-2);
+    box-shadow: 50px 0 120px rgba(0, 0, 0, .85);
+    transform: translateX(-105%);
+    transition: transform .65s var(--ease-soft);
+    z-index: 195;
+}
+
+.header .nav.open {
+    transform: translateX(0);
+}
+
+/* 4. Estilo dos links dentro da gaveta */
+.header .nav a {
+    width: 100%;
+    font-family: var(--ff-display);
+    font-size: 1.6rem;
+    font-style: italic;
+    font-weight: 400;
+    letter-spacing: 0;
+    text-transform: none;
+    color: var(--paper-0);
+    padding: 18px 0;
+    border-bottom: 1px solid var(--line-0);
+}
+
+.header .nav a::before { display: none; }
+.header .nav a:hover { letter-spacing: 0; color: var(--blue-3); }
+.header .nav a.active { color: var(--blue-3); }
+
+/* 5. Botão de fechar dentro da gaveta */
+.header .nav .nav-close {
+    display: grid;
+    position: absolute;
+    top: 22px;
+    right: 24px;
+    width: 40px;
+    height: 40px;
+    place-items: center;
+    font-size: 1.4rem;
+    color: var(--paper-2);
+    border: 1px solid var(--line-1);
+    border-radius: 50%;
+    background: transparent;
+    transition: all .4s var(--ease-soft);
+}
+
+.header .nav .nav-close:hover {
+    color: var(--paper-0);
+    border-color: var(--blue-1);
+    transform: rotate(90deg);
+}
+
+/* 6. Logo continua centralizado no header */
+.header .logo {
+    grid-column: 2;
+}
+
+/* 7. Ações do header (busca, cart, conta) ficam à direita */
+.header .header-actions {
+    grid-column: 3;
 }
