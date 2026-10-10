@@ -1,6 +1,6 @@
 /* =========================================================
-   ADMIN-AUTH.JS — Login via Firebase Auth
-   v4 — recria listeners DEPOIS do login (fix reembolsos)
+   ADMIN-AUTH.JS — Login via Firebase Auth + TOTP (Google Auth)
+   v5 — com verificação em duas etapas gratuita
    ========================================================= */
 
 'use strict';
@@ -24,42 +24,34 @@ document.addEventListener('DOMContentLoaded', function () {
     auth.setPersistence(firebase.auth.Auth.Persistence.SESSION)
         .then(function () {
 
-            console.log('[admin] ✅ Persistência SESSION configurada');
-
             auth.onAuthStateChanged(function (user) {
 
                 console.log('[admin] onAuthStateChanged →', user ? user.email : 'null');
 
                 if (!user) {
-                    console.log('[admin] Nenhum usuário — mostrando login');
                     mostrarLogin(overlay, input);
                     return;
                 }
 
                 if (user.email !== ADMIN_EMAIL) {
                     console.warn('[admin] ❌ Email não autorizado:', user.email);
-
-                    auth.signOut().then(function () {
-                        mostrarLogin(overlay, input);
-                    });
-
+                    auth.signOut().then(function () { mostrarLogin(overlay, input); });
                     return;
                 }
 
-                console.log('[admin] ✅ Admin autenticado:', user.email);
-                console.log('[admin] UID:', user.uid);
-
-                esconderLogin(overlay);
-
-                /* Espera firebase-ready pra carregar tudo */
-                aguardarFirebaseEIniciar();
-
-                /* 🔥 E DEPOIS recria os listeners autenticado */
-                setTimeout(function () {
-                    reiniciarListenersAutenticado();
-                }, 1500);
+                /* ✅ Admin correto — agora verifica TOTP */
+                verificarTOTP(user).then(function (ok) {
+                    if (ok) {
+                        console.log('[admin] ✅ Admin + TOTP OK');
+                        esconderLogin(overlay);
+                        aguardarFirebaseEIniciar();
+                        setTimeout(function () { reiniciarListenersAutenticado(); }, 1500);
+                    } else {
+                        console.warn('[admin] ❌ TOTP falhou — deslogando');
+                        auth.signOut();
+                    }
+                });
             });
-
         })
         .catch(function (e) {
             console.error('[admin] ❌ Erro persistência:', e);
@@ -74,6 +66,266 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 
 
+/* =========================================================
+   🔐 TOTP — VERIFICAÇÃO EM DUAS ETAPAS (GRÁTIS)
+   ========================================================= */
+
+async function verificarTOTP(user) {
+
+    return new Promise(async function (resolve) {
+
+        try {
+
+            /* Lê o secret do Firestore */
+            var doc = await db.collection('admin_security').doc('totp').get();
+            var secret = doc.exists ? doc.data().secret : null;
+
+            /* Se não tem secret → primeira vez, mostra setup */
+            if (!secret) {
+                console.log('[TOTP] Primeira vez — mostrando setup');
+                mostrarSetupTOTP(user, resolve);
+                return;
+            }
+
+            /* Se tem → pede o código */
+            console.log('[TOTP] Pedindo código');
+            mostrarVerificacaoTOTP(secret, resolve);
+
+        } catch (e) {
+            console.error('[TOTP] Erro:', e);
+            resolve(false);
+        }
+    });
+}
+
+
+/* ---------------------------------------------------------
+   SETUP — primeira vez (gera QR Code)
+   --------------------------------------------------------- */
+function mostrarSetupTOTP(user, resolve) {
+
+    /* Gera um secret novo */
+    var secret = new OTPAuth.Secret({ size: 20 });
+    var totp = new OTPAuth.TOTP({
+        issuer: 'Seyn clothing',
+        label: user.email,
+        algorithm: 'SHA1',
+        digits: 6,
+        period: 30,
+        secret: secret
+    });
+
+    var uri = totp.toString();
+    var secretBase32 = secret.base32;
+
+    /* Cria o modal */
+    var modal = document.createElement('div');
+    modal.id = 'totpModal';
+    modal.style.cssText = `
+        position: fixed; inset: 0; z-index: 99999;
+        display: flex; align-items: center; justify-content: center;
+        background: rgba(4,6,11,.9); backdrop-filter: blur(20px);
+        padding: 20px; font-family: 'Inter', sans-serif;
+    `;
+
+    modal.innerHTML = `
+        <div style="background: #0a0f19; border: 1px solid rgba(127,176,255,.28); border-radius: 12px; padding: 32px; max-width: 480px; width: 100%; box-shadow: 0 30px 80px rgba(0,0,0,.6);">
+            <h2 style="font-family: 'Playfair Display', serif; font-style: italic; color: #f5f7ff; margin: 0 0 12px; font-size: 1.6rem;">Ativar verificação em duas etapas</h2>
+            <p style="color: #a4b2ca; font-size: .9rem; line-height: 1.6; margin: 0 0 24px;">
+                Escaneie o QR Code abaixo com o <strong style="color:#f5f7ff;">Google Authenticator</strong> (ou Authy, Microsoft Authenticator).
+                Depois digite o código de 6 dígitos que aparecer no app.
+            </p>
+
+            <div style="text-align: center; margin-bottom: 20px;">
+                <div id="totpQR" style="display: inline-block; background: #fff; padding: 12px; border-radius: 8px;"></div>
+            </div>
+
+            <div style="background: rgba(127,176,255,.06); border: 1px dashed rgba(127,176,255,.28); border-radius: 6px; padding: 12px; margin-bottom: 20px;">
+                <p style="color: #7fb0ff; font-size: .68rem; letter-spacing: .24em; text-transform: uppercase; font-weight: 600; margin: 0 0 6px;">Ou digite manualmente:</p>
+                <code style="color: #f5f7ff; font-size: .78rem; word-break: break-all;">${secretBase32}</code>
+            </div>
+
+            <label style="display: block; color: #7fb0ff; font-size: .72rem; font-weight: 600; letter-spacing: .24em; text-transform: uppercase; margin-bottom: 8px;">Código do app</label>
+            <input type="text" id="totpCodigoSetup" placeholder="000000" maxlength="6" autocomplete="off"
+                   style="width: 100%; padding: 14px 16px; background: #04060b; border: 1px solid rgba(127,176,255,.28); color: #f5f7ff; font-size: 1.4rem; letter-spacing: .3em; text-align: center; border-radius: 6px; outline: none; margin-bottom: 20px;">
+
+            <div style="display: flex; gap: 10px;">
+                <button type="button" id="totpCancelar"
+                        style="flex: 1; padding: 14px; background: transparent; border: 1px solid rgba(127,176,255,.28); color: #a4b2ca; font-weight: 600; cursor: pointer; border-radius: 6px;">
+                    Cancelar
+                </button>
+                <button type="button" id="totpConfirmar"
+                        style="flex: 2; padding: 14px; background: #1a4dff; border: none; color: #fff; font-weight: 700; cursor: pointer; border-radius: 6px;">
+                    Ativar
+                </button>
+            </div>
+
+            <p id="totpErro" style="color: #ef4444; font-size: .8rem; text-align: center; margin: 12px 0 0; display: none;"></p>
+        </div>
+    `;
+
+    document.body.appendChild(modal);
+
+    /* Gera o QR Code */
+    var canvas = document.createElement('canvas');
+    document.getElementById('totpQR').appendChild(canvas);
+    QRCode.toCanvas(canvas, uri, { width: 200, margin: 1 }, function (err) {
+        if (err) console.error('[TOTP] Erro QR:', err);
+    });
+
+    /* Foca no input */
+    setTimeout(function () {
+        document.getElementById('totpCodigoSetup').focus();
+    }, 300);
+
+    /* Botão cancelar */
+    document.getElementById('totpCancelar').addEventListener('click', function () {
+        modal.remove();
+        resolve(false);
+    });
+
+    /* Botão confirmar */
+    document.getElementById('totpConfirmar').addEventListener('click', async function () {
+
+        var codigo = document.getElementById('totpCodigoSetup').value.trim();
+        var erroEl = document.getElementById('totpErro');
+
+        if (codigo.length !== 6) {
+            erroEl.textContent = 'Digite os 6 dígitos do app.';
+            erroEl.style.display = 'block';
+            return;
+        }
+
+        /* Valida o código */
+        var valido = totp.validate({ token: codigo, window: 1 }) !== null;
+
+        if (!valido) {
+            erroEl.textContent = 'Código incorreto. Verifique o horário do celular.';
+            erroEl.style.display = 'block';
+            document.getElementById('totpCodigoSetup').value = '';
+            document.getElementById('totpCodigoSetup').focus();
+            return;
+        }
+
+        /* Salva o secret no Firestore */
+        try {
+            await db.collection('admin_security').doc('totp').set({
+                secret: secretBase32,
+                criadoEm: firebase.firestore.FieldValue.serverTimestamp(),
+                email: user.email
+            });
+
+            console.log('[TOTP] ✅ Secret salvo');
+            modal.remove();
+            resolve(true);
+
+        } catch (e) {
+            console.error('[TOTP] Erro ao salvar:', e);
+            erroEl.textContent = 'Erro ao salvar. Tente novamente.';
+            erroEl.style.display = 'block';
+        }
+    });
+
+    /* Enter no input confirma */
+    document.getElementById('totpCodigoSetup').addEventListener('keydown', function (e) {
+        if (e.key === 'Enter') {
+            document.getElementById('totpConfirmar').click();
+        }
+    });
+}
+
+
+/* ---------------------------------------------------------
+   VERIFICAÇÃO — nas próximas vezes (pede código)
+   --------------------------------------------------------- */
+function mostrarVerificacaoTOTP(secretBase32, resolve) {
+
+    var totp = new OTPAuth.TOTP({
+        issuer: 'Seyn clothing',
+        algorithm: 'SHA1',
+        digits: 6,
+        period: 30,
+        secret: OTPAuth.Secret.fromBase32(secretBase32)
+    });
+
+    /* Cria modal */
+    var modal = document.createElement('div');
+    modal.id = 'totpVerifyModal';
+    modal.style.cssText = `
+        position: fixed; inset: 0; z-index: 99999;
+        display: flex; align-items: center; justify-content: center;
+        background: rgba(4,6,11,.9); backdrop-filter: blur(20px);
+        padding: 20px; font-family: 'Inter', sans-serif;
+    `;
+
+    modal.innerHTML = `
+        <div style="background: #0a0f19; border: 1px solid rgba(127,176,255,.28); border-radius: 12px; padding: 32px; max-width: 420px; width: 100%; box-shadow: 0 30px 80px rgba(0,0,0,.6);">
+            <h2 style="font-family: 'Playfair Display', serif; font-style: italic; color: #f5f7ff; margin: 0 0 12px; font-size: 1.5rem;">Verificação em duas etapas</h2>
+            <p style="color: #a4b2ca; font-size: .9rem; line-height: 1.6; margin: 0 0 24px;">
+                Abra o <strong style="color:#f5f7ff;">Google Authenticator</strong> e digite o código de 6 dígitos da conta <strong style="color:#7fb0ff;">Seyn clothing</strong>.
+            </p>
+
+            <input type="text" id="totpCodigoVerif" placeholder="000000" maxlength="6" autocomplete="off"
+                   style="width: 100%; padding: 16px; background: #04060b; border: 1px solid rgba(127,176,255,.28); color: #f5f7ff; font-size: 1.6rem; letter-spacing: .3em; text-align: center; border-radius: 6px; outline: none; margin-bottom: 20px;">
+
+            <button type="button" id="totpVerificar"
+                    style="width: 100%; padding: 14px; background: #1a4dff; border: none; color: #fff; font-weight: 700; cursor: pointer; border-radius: 6px;">
+                Verificar
+            </button>
+
+            <p id="totpErroVerif" style="color: #ef4444; font-size: .8rem; text-align: center; margin: 12px 0 0; display: none;"></p>
+
+            <button type="button" id="totpSair"
+                    style="width: 100%; margin-top: 12px; padding: 12px; background: transparent; border: none; color: #5d6b83; font-size: .75rem; cursor: pointer;">
+                Sair
+            </button>
+        </div>
+    `;
+
+    document.body.appendChild(modal);
+
+    setTimeout(function () {
+        document.getElementById('totpCodigoVerif').focus();
+    }, 300);
+
+    document.getElementById('totpSair').addEventListener('click', function () {
+        modal.remove();
+        resolve(false);
+    });
+
+    document.getElementById('totpVerificar').addEventListener('click', function () {
+
+        var codigo = document.getElementById('totpCodigoVerif').value.trim();
+        var erroEl = document.getElementById('totpErroVerif');
+
+        if (codigo.length !== 6) {
+            erroEl.textContent = 'Digite os 6 dígitos.';
+            erroEl.style.display = 'block';
+            return;
+        }
+
+        var valido = totp.validate({ token: codigo, window: 1 }) !== null;
+
+        if (valido) {
+            console.log('[TOTP] ✅ Código correto');
+            modal.remove();
+            resolve(true);
+        } else {
+            erroEl.textContent = 'Código incorreto. Tente novamente.';
+            erroEl.style.display = 'block';
+            document.getElementById('totpCodigoVerif').value = '';
+            document.getElementById('totpCodigoVerif').focus();
+        }
+    });
+
+    document.getElementById('totpCodigoVerif').addEventListener('keydown', function (e) {
+        if (e.key === 'Enter') {
+            document.getElementById('totpVerificar').click();
+        }
+    });
+}
+
+
 /* ---------------------------------------------------------
    AGUARDA FIREBASE-READY E CARREGA DADOS INICIAIS
    --------------------------------------------------------- */
@@ -86,7 +338,6 @@ function aguardarFirebaseEIniciar() {
         if (typeof carregarPedidosRemotos === 'function') {
             carregarPedidosRemotos()
                 .then(function () {
-                    console.log('[admin] ✅ Pedidos carregados:', (window.__pedidos || []).length);
                     if (typeof renderizarDashboard === 'function') renderizarDashboard();
                     if (typeof renderizarPedidos === 'function') renderizarPedidos();
                     if (typeof renderizarClientes === 'function') renderizarClientes();
@@ -97,7 +348,6 @@ function aguardarFirebaseEIniciar() {
                 });
         }
 
-        /* 🔥 Carrega reembolsos uma vez também */
         if (typeof carregarReembolsosUmaVez === 'function') {
             carregarReembolsosUmaVez();
         }
@@ -112,50 +362,24 @@ function aguardarFirebaseEIniciar() {
 
 
 /* ---------------------------------------------------------
-   🔥 RECRIA LISTENERS JÁ AUTENTICADO
-   Essa é a chave do problema — os listeners criados antes
-   do login falhavam por permission-denied e nunca mais
-   eram recriados. Aqui a gente recria depois do login OK.
+   RECRIA LISTENERS JÁ AUTENTICADO
    --------------------------------------------------------- */
 function reiniciarListenersAutenticado() {
 
     console.log('[admin] 🔥 Recriando listeners autenticado...');
 
-    /* Só roda se o admin estiver logado */
-    if (!auth.currentUser || auth.currentUser.email !== ADMIN_EMAIL) {
-        console.log('[admin] Não está logado ainda — abortando recriação');
-        return;
-    }
+    if (!auth.currentUser || auth.currentUser.email !== ADMIN_EMAIL) return;
 
-    /* Recria listener de pedidos */
     if (typeof escutarPedidosRealtime === 'function') {
-        try {
-            escutarPedidosRealtime();
-            console.log('[admin] ✅ Listener de pedidos recriado');
-        } catch (e) {
-            console.warn('[admin] Erro listener pedidos:', e);
-        }
+        try { escutarPedidosRealtime(); } catch (e) {}
     }
 
-    /* Recria listener de reembolsos */
     if (typeof escutarReembolsosRealtime === 'function') {
-        try {
-            escutarReembolsosRealtime();
-            console.log('[admin] ✅ Listener de reembolsos recriado');
-        } catch (e) {
-            console.warn('[admin] Erro listener reembolsos:', e);
-        }
+        try { escutarReembolsosRealtime(); } catch (e) {}
     }
 
-    /* Recarrega reembolsos uma vez também */
     if (typeof carregarReembolsosUmaVez === 'function') {
-        carregarReembolsosUmaVez()
-            .then(function () {
-                console.log('[admin] ✅ Reembolsos recarregados após login');
-            })
-            .catch(function (e) {
-                console.warn('[admin] Erro recarregar reembolsos:', e);
-            });
+        carregarReembolsosUmaVez().catch(function (e) {});
     }
 }
 
@@ -169,8 +393,7 @@ function mostrarLogin(overlay, input) {
     overlay.style.pointerEvents = 'auto';
     document.body.classList.add('admin-locked');
     if (input) setTimeout(function () { input.focus(); }, 200);
-} 
-
+}
 
 function esconderLogin(overlay) {
     overlay.style.opacity = '0';
@@ -196,17 +419,10 @@ function tentarLogin() {
 
     if (erro) erro.textContent = 'Verificando...';
 
-    console.log('[admin] Tentando login com:', ADMIN_EMAIL);
-
     auth.signInWithEmailAndPassword(ADMIN_EMAIL, senha)
         .then(function (cred) {
             console.log('[admin] ✅ Login OK:', cred.user.email);
             if (erro) erro.textContent = '';
-
-            /* 🔥 Recria listeners após login */
-            setTimeout(function () {
-                reiniciarListenersAutenticado();
-            }, 800);
         })
         .catch(function (e) {
             console.error('[admin] ❌ Erro login:', e.code, e.message);
