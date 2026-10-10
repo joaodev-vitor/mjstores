@@ -16,7 +16,7 @@
 
     <link rel="stylesheet" href="css/style.css">
 
-    <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js"></script>
+    <script src="https://unpkg.com/qrcode@1.5.3/build/qrcode.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
 </head>
 
@@ -601,7 +601,6 @@ async function salvarPedido(status) {
 
     /* =====================================================
        📧 NOTIFICA O ADMIN SOBRE O NOVO PEDIDO
-       Roda ANTES do cliente receber email
        ===================================================== */
     if (typeof enviarEmailNovoPedidoProAdmin === 'function') {
         try {
@@ -646,8 +645,6 @@ window.finalizarPedidoAposPix = async function () {
     } catch (e) {}
 
     if (window.__pedidoAtual) window.__pedidoAtual.status = 'pago';
-
-    /* Sem e-mail de "pagamento confirmado" pro cliente — só o admin é notificado via painel */
 
     document.getElementById('successCode').textContent = `#${window.__pedidoNumeroAtual || '0000'}`;
     salvarCarrinho([]);
