@@ -9881,4 +9881,64 @@ img, video, canvas, svg {
         transform: translateY(-50%) !important;
         z-index: 250 !important;
     }
+}/* =========================================================
+   HAMBURGER NA ESQUERDA — VERSÃO FORÇADA (VAI OU VAI)
+   ========================================================= */
+
+/* Botão hamburger — fora de qualquer container, canto esquerdo */
+body .header .menu-button,
+body #header .menu-button,
+body header#header .menu-button,
+html body header.header .menu-button {
+    position: fixed !important;
+    top: 28px !important;
+    left: 28px !important;
+    right: auto !important;
+    bottom: auto !important;
+    width: 42px !important;
+    height: 42px !important;
+    display: grid !important;
+    place-items: center !important;
+    color: #a4b2ca !important;
+    background: transparent !important;
+    border: 1px solid transparent !important;
+    border-radius: 50% !important;
+    z-index: 9999 !important;
+    transform: none !important;
+    transition: color .3s, background .3s, border-color .3s !important;
+}
+
+body .header .menu-button:hover,
+body #header .menu-button:hover {
+    color: #f5f7ff !important;
+    background: rgba(127, 176, 255, .08) !important;
+    border-color: rgba(127, 176, 255, .28) !important;
+}
+
+body .header .menu-button svg {
+    width: 22px !important;
+    height: 22px !important;
+    stroke: currentColor !important;
+}
+
+/* Header scrolled — ajusta top */
+body .header.scrolled .menu-button {
+    top: 14px !important;
+}
+
+/* Logo — empurra um pouco pra não colidir */
+.header {
+    padding-left: 90px !important;
+}
+
+@media (max-width: 720px) {
+    body .header .menu-button {
+        top: 18px !important;
+        left: 14px !important;
+        width: 38px !important;
+        height: 38px !important;
+    }
+    .header {
+        padding-left: 70px !important;
+    }
 }
