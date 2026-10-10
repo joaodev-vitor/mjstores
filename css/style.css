@@ -9708,3 +9708,124 @@ img, video, canvas, svg {
         font-size: 1.3rem;
     }
 }
+
+/* ---------------------------------------------------------
+   COOKIE BANNER — adaptação por data-tema no próprio elemento
+   --------------------------------------------------------- */
+[data-tema="claro"].cookie-banner-inner,
+[data-tema="claro"] .cookie-banner-inner {
+    background: #f7f9fc;
+    border-top-color: #1a4dff;
+    box-shadow: 0 -10px 40px rgba(0, 0, 0, .12);
+}
+
+[data-tema="claro"].cookie-banner-inner .cookie-banner-text strong,
+[data-tema="claro"] .cookie-banner-text strong {
+    color: #000000;
+}
+
+[data-tema="claro"].cookie-banner-inner .cookie-banner-text p,
+[data-tema="claro"] .cookie-banner-text p {
+    color: #1f2937;
+}
+
+[data-tema="claro"] .cookie-banner-text a {
+    color: #1a4dff;
+}
+
+[data-tema="claro"] .cookie-btn-reject {
+    color: #1f2937;
+    border-color: rgba(0, 0, 0, .3);
+}
+
+[data-tema="claro"] .cookie-btn-reject:hover {
+    background: rgba(26, 77, 255, .08);
+    border-color: #1a4dff;
+    color: #1a4dff;
+}
+
+[data-tema="claro"] .cookie-btn-custom {
+    color: #1a4dff;
+    border-color: #1a4dff;
+}
+
+[data-tema="claro"] .cookie-btn-custom:hover {
+    background: rgba(26, 77, 255, .1);
+}
+
+[data-tema="claro"].cookie-modal-box,
+[data-tema="claro"] .cookie-modal-box {
+    background: #ffffff;
+    border-color: rgba(0, 0, 0, .15);
+}
+
+[data-tema="claro"] .cookie-modal-box h3 {
+    color: #000000;
+}
+
+[data-tema="claro"] .cookie-modal-box > p {
+    color: #1f2937;
+}
+
+[data-tema="claro"] .cookie-cat {
+    border-bottom-color: rgba(0, 0, 0, .1);
+}
+
+[data-tema="claro"] .cookie-cat-info strong {
+    color: #000000;
+}
+
+[data-tema="claro"] .cookie-cat-info small {
+    color: #4b5563;
+}
+
+[data-tema="claro"] .cookie-cat-status {
+    color: #1a4dff;
+    background: rgba(26, 77, 255, .08);
+    border-color: rgba(26, 77, 255, .3);
+}
+
+[data-tema="claro"] .cookie-slider {
+    background: rgba(0, 0, 0, .25);
+}
+
+[data-tema="claro"] .cookie-slider:before {
+    background: #ffffff;
+}
+
+[data-tema="claro"] .cookie-switch input:checked + .cookie-slider {
+    background: #1a4dff;
+}
+
+/* Força tema claro no próprio elemento com data-tema="claro" */
+#cookieBanner[data-tema="claro"] .cookie-banner-inner {
+    background: #f7f9fc;
+}
+
+#cookieBanner[data-tema="claro"] .cookie-banner-text strong {
+    color: #000000;
+}
+
+#cookieBanner[data-tema="claro"] .cookie-banner-text p {
+    color: #1f2937;
+}
+
+#cookieModal[data-tema="claro"] .cookie-modal-box {
+    background: #ffffff;
+}
+
+#cookieModal[data-tema="claro"] .cookie-modal-box h3 {
+    color: #000000;
+}
+
+#cookieModal[data-tema="claro"] .cookie-modal-box > p {
+    color: #1f2937;
+}
+
+#cookieModal[data-tema="claro"] .cookie-cat-info strong {
+    color: #000000;
+}
+
+#cookieModal[data-tema="claro"] .cookie-cat-info small {
+    color: #4b5563;
+}

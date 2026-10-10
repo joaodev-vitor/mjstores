@@ -1,5 +1,5 @@
 /* =========================================================
-   COOKIE CONSENT — Banner LGPD
+   COOKIE CONSENT — Banner LGPD (com detecção de tema)
    ========================================================= */
 
 'use strict';
@@ -9,7 +9,45 @@
     const STORAGE_KEY = 'seyn_cookie_consent';
     const VERSION = '1.0';
 
-    /* Se já aceitou/recusou, não mostra o banner */
+    /* =========================================================
+       DETECÇÃO DE TEMA
+       Aplica o data-tema atual no elemento pra herdar CSS
+       ========================================================= */
+    function obterTemaAtual() {
+        return document.documentElement.getAttribute('data-tema')
+            || document.body.getAttribute('data-tema')
+            || 'escuro';
+    }
+
+    function aplicarTemaNoElemento(elemento) {
+        if (!elemento) return;
+        elemento.setAttribute('data-tema', obterTemaAtual());
+    }
+
+    /* Escuta mudanças de tema (clique no botão sol/lua) */
+    function observarMudancaDeTema(callback) {
+        const observer = new MutationObserver(function() {
+            callback(obterTemaAtual());
+        });
+
+        observer.observe(document.documentElement, {
+            attributes: true,
+            attributeFilter: ['data-tema']
+        });
+
+        if (document.body) {
+            observer.observe(document.body, {
+                attributes: true,
+                attributeFilter: ['data-tema']
+            });
+        }
+
+        return observer;
+    }
+
+    /* =========================================================
+       STORAGE
+       ========================================================= */
     function jaDecidiu() {
         try {
             const salvo = localStorage.getItem(STORAGE_KEY);
@@ -21,7 +59,6 @@
         }
     }
 
-    /* Salva a decisão do usuário */
     function salvarDecisao(decisao) {
         const dados = {
             versao: VERSION,
@@ -34,11 +71,17 @@
         } catch (e) {}
     }
 
-    /* Cria o HTML do banner */
+    /* =========================================================
+       BANNER PRINCIPAL
+       ========================================================= */
     function criarBanner() {
 
         const banner = document.createElement('div');
         banner.id = 'cookieBanner';
+
+        /* ✅ Aplica o tema atual no próprio banner */
+        aplicarTemaNoElemento(banner);
+
         banner.innerHTML = `
             <div class="cookie-banner-inner">
                 <div class="cookie-banner-text">
@@ -56,6 +99,11 @@
         `;
 
         document.body.appendChild(banner);
+
+        /* ✅ Escuta mudanças de tema e atualiza o banner em tempo real */
+        observarMudancaDeTema(function(novoTema) {
+            banner.setAttribute('data-tema', novoTema);
+        });
 
         /* Registra cliques */
         banner.querySelectorAll('[data-acao]').forEach(function(btn) {
@@ -82,7 +130,9 @@
         }, 1000);
     }
 
-    /* Fecha o banner */
+    /* =========================================================
+       FECHAR BANNER
+       ========================================================= */
     function fecharBanner() {
         const banner = document.getElementById('cookieBanner');
         if (banner) {
@@ -93,11 +143,17 @@
         }
     }
 
-    /* Modal de personalização */
+    /* =========================================================
+       MODAL DE PERSONALIZAÇÃO
+       ========================================================= */
     function abrirModalPersonalizar() {
 
         const modal = document.createElement('div');
         modal.id = 'cookieModal';
+
+        /* ✅ Aplica o tema atual no modal também */
+        aplicarTemaNoElemento(modal);
+
         modal.innerHTML = `
             <div class="cookie-modal-backdrop"></div>
             <div class="cookie-modal-box">
@@ -142,6 +198,12 @@
         `;
 
         document.body.appendChild(modal);
+
+        /* ✅ Escuta mudanças de tema e atualiza o modal em tempo real */
+        observarMudancaDeTema(function(novoTema) {
+            modal.setAttribute('data-tema', novoTema);
+        });
+
         setTimeout(function() { modal.classList.add('show'); }, 50);
 
         /* Fechar ao clicar no backdrop */
@@ -174,17 +236,21 @@
         });
     }
 
-    /* Aqui você ativa scripts de analytics (Google Analytics, etc) */
+    /* =========================================================
+       ANALYTICS (placeholder)
+       ========================================================= */
     function ativarCookiesAnaliticos() {
         console.log('[cookies] Cookies analíticos ativados');
-        /* 
+        /*
         if (typeof gtag === 'function') {
             gtag('consent', 'update', { analytics_storage: 'granted' });
         }
         */
     }
 
-    /* Inicializa */
+    /* =========================================================
+       INIT
+       ========================================================= */
     function init() {
         if (jaDecidiu()) return;
         criarBanner();
